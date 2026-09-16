@@ -1022,6 +1022,15 @@ Anforderung an den Seed-Bestand (Definition of Done für Meilenstein M2):
   Ergibt **64 Texte je Thema**, also 10 × 64 = **640 Texte** als Zielbestand.
   Davon sind 400 der Pflichtteil (`alle` + `A2`), die übrigen 240 dürfen
   lückenhaft bleiben — der Rückfall aus 9.8 fängt jede Lücke stumm ab.
+
+  **Stand 2026-09-16: Der Pflichtteil ist vollständig** — 400 Texte, dazu 90
+  aus `A1` und `A3`, zusammen 490. `text-provider.test.ts` prüft je Thema und
+  Stufe auf acht **verschiedene** Texte.
+
+  Acht ist keine gegriffene Zahl: `provideText()` wählt nach Versuchsnummer
+  aus. Vorher standen in `S3` bis `S5` je Thema **ein** A2-Text; wer eine
+  Lektion zweimal anfing, bekam zwangsläufig denselben Text und schrieb ihn
+  beim dritten Mal auswendig ab, statt zu tippen.
 - Die Texte dürfen maschinell erzeugt werden, müssen aber denselben
   `validate_text()`-Check bestehen wie KI-Texte (inklusive DIN-5008-Prüfung).
   Der Validator wird dafür als CLI-Skript (`scripts/validate-seed.ts`)

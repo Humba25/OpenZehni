@@ -69,15 +69,26 @@ describe('provideText — SPEC.md 4.1 und 9.7', () => {
     expect(() => provideText({ lessonId: 'L99', ageBand: 'A2', attempt: 0 })).toThrow();
   });
 
+  /**
+   * Zwei Versuche derselben Lektion dürfen nicht denselben Text bekommen —
+   * sonst übt ein Kind beim zweiten Anlauf auswendig statt zu schreiben.
+   *
+   * Die Prüfung stand früher darauf, dass `tiere` in S3 **genau einen**
+   * A2-Text hat, und erwartete dort denselben Rückgabewert. Diese Annahme ist
+   * am 2026-09-16 mit dem Aufstocken des Seeds auf den Pflichtteil von 40
+   * Texten je Thema verfallen (SPEC.md 9.6). Ein Test, der die Knappheit des
+   * Bestands festschreibt, geht kaputt, sobald der Bestand wächst — deshalb
+   * steht hier jetzt die Eigenschaft, um die es wirklich geht.
+   */
   it('liefert bei verschiedenen Versuchen verschiedene Texte', () => {
-    const a = provideText({ lessonId: 'L19', topicId: 'tiere', ageBand: 'A2', attempt: 0 }).body;
-    const b = provideText({ lessonId: 'L19', topicId: 'tiere', ageBand: 'A2', attempt: 1 }).body;
-    // tiere hat in S3 drei Texte (A1, A2, A3) - bei A2 gibt es nur einen,
-    // deshalb hier die Stufe mit mehreren: S1 hat zwei altersneutrale.
-    const c = provideText({ lessonId: 'L04', topicId: 'tiere', ageBand: 'A2', attempt: 0 }).body;
-    const d = provideText({ lessonId: 'L04', topicId: 'tiere', ageBand: 'A2', attempt: 1 }).body;
-    expect(a).toBe(b); // nur ein A2-Text in S3 vorhanden
-    expect(c).not.toBe(d);
+    for (const lessonId of ['L04', 'L19']) {
+      const gesehen = new Set(
+        [0, 1, 2].map(
+          (attempt) => provideText({ lessonId, topicId: 'tiere', ageBand: 'A2', attempt }).body,
+        ),
+      );
+      expect(gesehen.size, `${lessonId} wiederholt sich zwischen den Versuchen`).toBe(3);
+    }
   });
 
   it('liefert bei gleichem Versuch immer denselben Text', () => {
@@ -190,5 +201,44 @@ describe('Themenbestand', () => {
   it('benutzt für L25 den vollen Zeichenvorrat', () => {
     const lesson = getLesson('L25')!;
     expect(lesson.stage).toBe('S5');
+  });
+
+  /**
+   * Der Pflichtteil aus SPEC.md 9.6: **acht Texte je Zeichensatzstufe und
+   * Thema** für alles, worauf jede Altersstufe zurückfällt — `alle` in `S1`
+   * und `S2`, `A2` ab `S3`. Zusammen 40 Texte je Thema, 400 insgesamt.
+   *
+   * **Warum acht und nicht weniger.** `provideText` wählt nach Versuchsnummer
+   * aus. Bei zwei Texten bekommt ein Kind im dritten Anlauf denselben Text
+   * wieder vorgesetzt und schreibt ihn auswendig statt zu tippen. Genau in dem
+   * Zustand war der Seed bis zum 2026-09-16: 13 Texte je Thema, in `S3` bis
+   * `S5` je **einer** für `A2`.
+   *
+   * Die ergänzenden Stufen `A1` und `A3` sind hier bewusst nicht geprüft —
+   * sie dürfen lückenhaft bleiben, der Rückfall aus 9.8 fängt das ab.
+   */
+  it('hat je Thema den Pflichtteil von acht Texten pro Stufe', () => {
+    const PFLICHT: readonly (readonly ['S1' | 'S2' | 'S3' | 'S4' | 'S5', 'A2'])[] = [
+      ['S1', 'A2'],
+      ['S2', 'A2'],
+      ['S3', 'A2'],
+      ['S4', 'A2'],
+      ['S5', 'A2'],
+    ];
+
+    for (const topic of allTopics()) {
+      for (const [stage, age] of PFLICHT) {
+        const verschieden = new Set<string>();
+        for (let attempt = 0; attempt < 8; attempt++) {
+          const t = pickSeedText(topic.id, stage, age, attempt);
+          if (t) verschieden.add(t);
+        }
+        expect(
+          verschieden.size,
+          `${topic.id}/${stage} hat nur ${verschieden.size} verschiedene Texte, ` +
+            `gefordert sind acht (SPEC.md 9.6).`,
+        ).toBeGreaterThanOrEqual(8);
+      }
+    }
   });
 });
