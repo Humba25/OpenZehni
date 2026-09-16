@@ -51,6 +51,12 @@ fn migrations() -> Vec<Migration> {
             sql: include_str!("../migrations/0005_minispiele.sql"),
             kind: MigrationKind::Up,
         },
+        Migration {
+            version: 6,
+            description: "Schriftgroesse nach SPEC.md 12.2",
+            sql: include_str!("../migrations/0006_schriftgroesse.sql"),
+            kind: MigrationKind::Up,
+        },
     ]
 }
 

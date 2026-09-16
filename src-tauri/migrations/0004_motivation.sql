@@ -1,7 +1,7 @@
 -- Zehni, vierte Migration: Blindmodus, Geisterschreiber und die Zahlen, die
 -- Tagesaufgabe und Wochenziel brauchen (SPEC.md 8.6 bis 8.9).
 --
--- ACHTUNG: 0001 bis 0003 werden nicht angefasst (ARCHITEKTUR.md, Architekturregel 3).
+-- ACHTUNG: 0001 bis 0003 werden nicht angefasst (CLAUDE.md, Architekturregel 3).
 --
 -- Die Tabellen daily_challenge und weekly_goal gibt es bereits seit 0001. Hier
 -- fehlen nur die Angaben an der Runde selbst.

@@ -285,6 +285,7 @@ export interface Einstellungen {
   readonly aiEnabled: boolean;
   readonly ghostEnabled: boolean;
   readonly blindMode: boolean;
+  readonly fontScale: string;
   readonly topicIds: readonly string[];
 }
 
@@ -304,6 +305,7 @@ export async function saveEinstellungen(e: Einstellungen): Promise<void> {
     e.aiEnabled ? 1 : 0,
     e.ghostEnabled ? 1 : 0,
     e.blindMode ? 1 : 0,
+    e.fontScale,
   ]);
 
   await d.execute(INTERESTS_CLEAR, []);

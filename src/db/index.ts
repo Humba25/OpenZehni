@@ -55,6 +55,8 @@ export interface Profile {
   readonly ghostEnabled: boolean;
   /** Zuletzt gewählter Blindmodus (SPEC.md 8.1). */
   readonly blindMode: boolean;
+  /** Schriftgröße: normal | gross | sehr-gross (SPEC.md 12.2). */
+  readonly fontScale: string;
 }
 
 interface ProfileRow {
@@ -69,6 +71,7 @@ interface ProfileRow {
   onboarded_at: string | null;
   ghost_enabled: number;
   blind_mode: number;
+  font_scale: string;
 }
 
 /**
@@ -99,6 +102,7 @@ export async function getOrCreateProfile(): Promise<Profile> {
       // anfaengt, braucht die Tastaturgrafik.
       ghostEnabled: true,
       blindMode: false,
+      fontScale: 'normal',
     };
   }
 
@@ -117,6 +121,7 @@ export async function getOrCreateProfile(): Promise<Profile> {
     onboardedAt: r.onboarded_at,
     ghostEnabled: r.ghost_enabled === 1,
     blindMode: r.blind_mode === 1,
+    fontScale: r.font_scale,
   };
 }
 

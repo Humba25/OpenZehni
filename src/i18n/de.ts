@@ -623,6 +623,13 @@ export const de = {
     themaDunkel: 'Dunkel',
     themaKontrast: 'Hoher Kontrast',
 
+    schriftgroesse: 'Schriftgröße',
+    schriftErklaerung:
+      'Größer macht alles größer, nicht nur die Buchstaben — auch die Tastatur und die Abstände.',
+    schriftNormal: 'Normal',
+    schriftGross: 'Größer',
+    schriftSehrGross: 'Am größten',
+
     geist: 'Geisterschreiber',
     geistErklaerung:
       'Ein blasser zweiter Cursor läuft im Tempo deiner besten Runde mit. Im Abschlusstest ist er immer aus.',

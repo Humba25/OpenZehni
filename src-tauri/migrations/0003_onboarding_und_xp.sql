@@ -1,6 +1,6 @@
 -- Zehni, dritte Migration: Onboarding und Gamification (SPEC.md 8).
 --
--- ACHTUNG: 0001 und 0002 werden nicht angefasst (ARCHITEKTUR.md, Architekturregel 3).
+-- ACHTUNG: 0001 und 0002 werden nicht angefasst (CLAUDE.md, Architekturregel 3).
 
 -- Wann das Onboarding durchlaufen wurde. NULL heisst: noch nie.
 -- Ohne diese Spalte liesse sich "schon eingerichtet" nicht von "Name absichtlich

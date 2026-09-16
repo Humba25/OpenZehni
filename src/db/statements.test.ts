@@ -36,6 +36,8 @@ import {
   LESSONS_PASSED_BETWEEN,
   BLIND_MS,
   SETTINGS_SET,
+  PROFILE_EINSTELLUNGEN_SET,
+  PROFILE_UPDATE,
 } from './statements';
 
 const HIER = dirname(fileURLToPath(import.meta.url));
@@ -437,5 +439,51 @@ describe('Einstellungen — SPEC.md 8.7', () => {
     p = alle<{ ghost_enabled: number; blind_mode: number }>(PROFILE_SELECT)[0]!;
     expect(p.ghost_enabled).toBe(0);
     expect(p.blind_mode).toBe(1);
+  });
+});
+
+describe('Schriftgroesse — SPEC.md 12.2', () => {
+  it('beginnt bei normal', () => {
+    run(PROFILE_INSERT, ['', 'maus', '2026-09-16T10:00:00Z', 10, 1, 'hell', 'A2']);
+    expect(alle<{ font_scale: string }>(PROFILE_SELECT)[0]!.font_scale).toBe('normal');
+  });
+
+  it('laesst sich mit den uebrigen Einstellungen speichern', () => {
+    run(PROFILE_INSERT, ['', 'maus', '2026-09-16T10:00:00Z', 10, 1, 'hell', 'A2']);
+    run(PROFILE_EINSTELLUNGEN_SET, ['Mia', 'A1', 15, 'dunkel', 0, 0, 1, 'sehr-gross']);
+
+    const p = alle<{
+      name: string;
+      age_band: string;
+      daily_goal_min: number;
+      theme: string;
+      ai_enabled: number;
+      ghost_enabled: number;
+      blind_mode: number;
+      font_scale: string;
+    }>(PROFILE_SELECT)[0]!;
+
+    expect(p.name).toBe('Mia');
+    expect(p.age_band).toBe('A1');
+    expect(p.daily_goal_min).toBe(15);
+    expect(p.theme).toBe('dunkel');
+    expect(p.ai_enabled).toBe(0);
+    expect(p.ghost_enabled).toBe(0);
+    expect(p.blind_mode).toBe(1);
+    expect(p.font_scale).toBe('sehr-gross');
+  });
+
+  /**
+   * Das Onboarding ist nach den Einstellungen nicht erneut zu durchlaufen
+   * (SPEC.md 8.12). Die Einstellungen duerfen `onboarded_at` also nicht
+   * ueberschreiben.
+   */
+  it('laesst das Onboarding-Datum unangetastet', () => {
+    run(PROFILE_INSERT, ['', 'maus', '2026-09-16T10:00:00Z', 10, 1, 'hell', 'A2']);
+    run(PROFILE_UPDATE, ['Mia', 'A2', 10, '2026-09-16T11:00:00Z']);
+    run(PROFILE_EINSTELLUNGEN_SET, ['Mia', 'A1', 15, 'dunkel', 0, 0, 1, 'gross']);
+    expect(alle<{ onboarded_at: string }>(PROFILE_SELECT)[0]!.onboarded_at).toBe(
+      '2026-09-16T11:00:00Z',
+    );
   });
 });

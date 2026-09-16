@@ -223,7 +223,7 @@ export const SETTINGS_SET = 'UPDATE profile SET ghost_enabled = $1, blind_mode =
  */
 export const PROFILE_EINSTELLUNGEN_SET =
   'UPDATE profile SET name = $1, age_band = $2, daily_goal_min = $3, theme = $4, ' +
-  'ai_enabled = $5, ghost_enabled = $6, blind_mode = $7 WHERE id = 1';
+  'ai_enabled = $5, ghost_enabled = $6, blind_mode = $7, font_scale = $8 WHERE id = 1';
 
 /** Abzeichen mit dem Datum, an dem sie vergeben wurden — für die Galerie (8.2). */
 export const REWARDS_SELECT_DATES = 'SELECT id, earned_at FROM rewards';

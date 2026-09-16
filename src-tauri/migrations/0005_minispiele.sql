@@ -1,6 +1,6 @@
 -- Zehni, fuenfte Migration: gespielte Minispiele je Tag (SPEC.md 8.10).
 --
--- ACHTUNG: 0001 bis 0004 werden nicht angefasst (ARCHITEKTUR.md, Architekturregel 3).
+-- ACHTUNG: 0001 bis 0004 werden nicht angefasst (CLAUDE.md, Architekturregel 3).
 --
 -- Gezaehlt wird ausschliesslich, um die XP-Deckelung aus SPEC.md 8.1 umzusetzen:
 -- hoechstens dreimal je Tag gibt es XP fuers Minispiel. Die Deckelung ist

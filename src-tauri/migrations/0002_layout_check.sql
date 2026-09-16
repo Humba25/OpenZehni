@@ -2,7 +2,7 @@
 --
 -- ACHTUNG: 0001_initial.sql wird dabei NICHT angefasst. Eine ausgelieferte
 -- Migration zu ändern zerstört die Datenbanken aller, die sie schon ausgeführt
--- haben (ARCHITEKTUR.md, Architekturregel 3).
+-- haben (CLAUDE.md, Architekturregel 3).
 
 -- Wann die Tastaturbelegung zuletzt als T1 bestaetigt wurde.
 -- NULL heisst: noch nie geprueft -> der Lernpfad bleibt gesperrt.

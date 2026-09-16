@@ -79,7 +79,16 @@ am 2026-09-15 passiert und wäre beinahe ausgeliefert worden.
    ausschließlich Tauri-Commands.
 3. **Datenbankzugriff nur über `src/db/`.** Keine SQL-Strings in Komponenten.
    Jede Schemaänderung ist eine neue Datei in `src-tauri/migrations/`;
-   bestehende Migrationen werden nie verändert.
+   **bestehende Migrationen werden nie verändert — auch kein Komma im
+   Kommentar.** Die Datenbank merkt sich eine Prüfsumme jeder angewandten
+   Migration; weicht der Text ab, verweigert sie den ganzen Satz, und die App
+   kann bei jedem, der die alte Fassung ausgeführt hat, nichts mehr speichern.
+   Abgesichert durch `src/db/migrationen.test.ts` gegen
+   `src-tauri/migrations/PRUEFSUMMEN.txt`.
+
+   **Nach einer Schemaänderung reicht es nicht, die App zu starten** — sie
+   startet auch, wenn die Datenbank streikt. Nachsehen, ob die neue Migration
+   in `_sqlx_migrations` steht.
 4. **Inhalte sind Daten, kein Code.** Lektionen, Themen, Texte, Modulaufgaben
    liegen als JSON in `content/` und werden typisiert eingelesen.
 5. **Ein Feature pro Ordner** unter `src/features/`; gemeinsame UI-Bausteine in

@@ -3,6 +3,48 @@
 @tailwind utilities;
 
 /*
+ * Schriften. Lokal eingebunden, nie ueber ein Netz (ARCHITEKTUR.md).
+ *
+ * Atkinson Hyperlegible fuer alles zum Lesen: eigens fuer eingeschraenktes
+ * Sehvermoegen entworfen, mit eindeutig unterscheidbarem I, l und 1.
+ * JetBrains Mono fuer alles zum Abtippen: dicktengleich, damit die Vorlage
+ * beim Tippen stillsteht (SPEC.md 12.2).
+ *
+ * Herkunft und Lizenzen: src/assets/fonts/LIESMICH.md
+ */
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('./assets/fonts/AtkinsonHyperlegible-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Atkinson Hyperlegible';
+  src: url('./assets/fonts/AtkinsonHyperlegible-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('./assets/fonts/JetBrainsMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('./assets/fonts/JetBrainsMono-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+}
+
+/*
  * Themes über CSS-Variablen (SPEC.md 3). Der Wechsel setzt nur das Attribut
  * `data-theme` am <html>-Element um, es wird nichts neu geladen.
  *
@@ -52,6 +94,27 @@ html,
 body,
 #root {
   height: 100%;
+}
+
+/*
+ * Schriftgröße in drei Stufen (SPEC.md 12.2).
+ *
+ * Gesetzt wird `data-schrift` am <html>-Element, genau wie beim Farbschema.
+ * Die Größe hängt an `font-size` der Wurzel, und die ganze Oberfläche rechnet
+ * in `rem` — dadurch wächst alles mit, auch Abstände und Tastaturgrafik. Ein
+ * einzelner Wert statt vieler Schalter: Wer größere Schrift braucht, braucht
+ * sie überall.
+ */
+html {
+  font-size: 16px;
+}
+
+html[data-schrift='gross'] {
+  font-size: 18px;
+}
+
+html[data-schrift='sehr-gross'] {
+  font-size: 20px;
 }
 
 body {

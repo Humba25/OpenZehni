@@ -164,6 +164,31 @@ export function Einstellungen({
             </div>
           </Feld>
 
+          {/* Drei Stufen, wie SPEC.md 12.2 sie verlangt. */}
+          <Feld
+            titel={de.einstellungen.schriftgroesse}
+            erklaerung={de.einstellungen.schriftErklaerung}
+          >
+            <div className="flex flex-wrap items-baseline gap-2">
+              {(
+                [
+                  ['normal', de.einstellungen.schriftNormal, 'text-base'],
+                  ['gross', de.einstellungen.schriftGross, 'text-lg'],
+                  ['sehr-gross', de.einstellungen.schriftSehrGross, 'text-xl'],
+                ] as readonly [string, string, string][]
+              ).map(([wert, label, groesse]) => (
+                <Wahl
+                  key={wert}
+                  aktiv={daten.fontScale === wert}
+                  onClick={() => aendern({ fontScale: wert })}
+                >
+                  {/* Die Schaltfläche zeigt selbst, wie groß es wird. */}
+                  <span className={groesse}>{label}</span>
+                </Wahl>
+              ))}
+            </div>
+          </Feld>
+
           <Schalter
             titel={de.einstellungen.geist}
             erklaerung={de.einstellungen.geistErklaerung}

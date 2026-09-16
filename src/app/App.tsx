@@ -291,6 +291,12 @@ export function App() {
     document.documentElement.dataset['theme'] = profile?.theme ?? 'hell';
   }, [profile?.theme]);
 
+  // Schriftgroesse in drei Stufen (SPEC.md 12.2). Sie haengt an der
+  // Wurzel-Schriftgroesse, damit die ganze Oberflaeche mitwaechst.
+  useEffect(() => {
+    document.documentElement.dataset['schrift'] = profile?.fontScale ?? 'normal';
+  }, [profile?.fontScale]);
+
   const blindUmschalten = useCallback(
     (an: boolean) => {
       setBlind(an);
@@ -335,6 +341,7 @@ export function App() {
             aiEnabled: e.aiEnabled,
             ghostEnabled: e.ghostEnabled,
             blindMode: e.blindMode,
+            fontScale: e.fontScale,
           }
         : p,
     );
@@ -829,6 +836,7 @@ export function App() {
               aiEnabled: profile.aiEnabled,
               ghostEnabled: profile.ghostEnabled,
               blindMode: profile.blindMode,
+              fontScale: profile.fontScale,
               topicIds: themen,
             }}
             onSpeichern={einstellungenSpeichern}

@@ -1,0 +1,19 @@
+# Pruefsummen der ausgelieferten Migrationen.
+#
+# Eine einmal ausgelieferte Migration wird NIE veraendert -- auch kein Komma im
+# Kommentar. Die Datenbank merkt sich eine Pruefsumme jeder angewandten
+# Migration; weicht der Text spaeter ab, verweigert sie den GANZEN Satz. Die
+# App kann dann nichts mehr speichern, und zwar bei jedem, der die alte Fassung
+# schon einmal ausgefuehrt hat.
+#
+# Genau das ist am 2026-09-16 passiert (STAND.md 4.29).
+#
+# Eine NEUE Migration bekommt hier eine neue Zeile. Eine bestehende Zeile zu
+# aendern heisst, die Datenbanken aller Nutzer zu zerstoeren.
+
+0001_initial.sql  84de1d46f83f36f1867943598c01da4108abd5d4e97a9c2c9897271bb2779545
+0002_layout_check.sql  e6983238da2aea1f93e193ba3bc2ac541d4143070c2e40ad064a8c806103185a
+0003_onboarding_und_xp.sql  e8db6807080c5652badf1861d5692c0e93883b4df3749d0a0623821475a053b1
+0004_motivation.sql  735edfde7af576c80d4fd3b8d605f67b89158536ca07c549cd03b06161108c65
+0005_minispiele.sql  5951aad4192eacb4b2e810013e6b73506894af1c57a0507d7a6453fa4f4959de
+0006_schriftgroesse.sql  3a1aeeb9026681c39ad8a877e306f172c30d4aa36578f23450706adbaf0c0e5b

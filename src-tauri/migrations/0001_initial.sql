@@ -1,6 +1,6 @@
 -- Zehni, erste Migration. Datenmodell nach SPEC.md 5.
 --
--- ACHTUNG: Bestehende Migrationen werden nie verändert (ARCHITEKTUR.md,
+-- ACHTUNG: Bestehende Migrationen werden nie verändert (CLAUDE.md,
 -- Architekturregel 3). Jede Schemaänderung ist eine neue Datei mit der
 -- nächsten Nummer. Wer hier etwas korrigiert, zerstört die Datenbanken aller,
 -- die diese Migration schon ausgeführt haben.

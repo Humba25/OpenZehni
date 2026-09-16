@@ -17,10 +17,12 @@ export default {
         korrigiert: 'rgb(var(--farbe-korrigiert) / <alpha-value>)',
       },
       fontFamily: {
-        // Keine Web-Fonts, keine CDN-Einbindung (ARCHITEKTUR.md). Bis eigene
-        // Schriften mitgeliefert werden, die systemeigenen benutzen.
-        lesen: ['Segoe UI', 'system-ui', 'sans-serif'],
-        tippen: ['Consolas', 'Courier New', 'monospace'],
+        // Lokal eingebunden, nie ueber ein Netz (ARCHITEKTUR.md). Die
+        // Systemschriften stehen als Rueckfall dahinter, falls eine Datei
+        // fehlt -- dann sieht es anders aus, aber nichts bricht.
+        // Herkunft und Lizenzen: src/assets/fonts/LIESMICH.md
+        lesen: ['Atkinson Hyperlegible', 'Segoe UI', 'system-ui', 'sans-serif'],
+        tippen: ['JetBrains Mono', 'Consolas', 'Courier New', 'monospace'],
       },
     },
   },
