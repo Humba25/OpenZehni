@@ -114,7 +114,17 @@ jobs:
 
             Beim ersten Start warnt Windows, weil Zehni kein gekauftes
             Zertifikat hat. Wie man daran vorbeikommt, steht in docs/INSTALL.md.
-          releaseDraft: true
+          # Direkt veroeffentlichen, nicht als Entwurf.
+          #
+          # Ein Entwurf liefert keine Dateien aus: `releases/latest/download/...`
+          # findet ihn nicht, und der Updater sieht nichts. Am 2026-09-16 lagen
+          # deshalb zwei fertige Versionen unbemerkt herum, waehrend die
+          # installierte Zehni weiter meldete, sie sei aktuell.
+          #
+          # Was hier herausgeht, hat vorher den Job `pruefen` bestanden: Lint,
+          # alle Tests, Seed-Pruefung und DIN-5008-Pruefung. Ein Tag ist damit
+          # die bewusste Entscheidung, und sie ist eine Handlung statt zwei.
+          releaseDraft: false
           prerelease: false
           includeUpdaterJson: true
           args: --config src-tauri/tauri.release.conf.json
