@@ -1,0 +1,123 @@
+{
+  "schema": 1,
+  "comment": "Katalog der Tagesaufgaben (SPEC.md 8.6). Inhalte sind Daten, kein Code (ARCHITEKTUR.md, Architekturregel 4). Gezogen wird nur, was mit den bereits freigeschalteten Lektionen erfuellbar ist -- deshalb traegt jede Aufgabe ein Feld abLektion.",
+  "regeln": [
+    "Nicht geschafft heisst gar nichts. Um Mitternacht verschwindet die Karte stillschweigend: keine Meldung, kein Zaehler verpasster Tage, kein Verlust (SPEC.md 8.6).",
+    "Die Aufgabe ist freiwillig und wegklickbar. Sie schaltet nie eine Lektion frei.",
+    "Eine Aufgabe, die ein Zeichen aus einer spaeteren Lektion verlangt, darf frueher nicht erscheinen. Das regelt abLektion."
+  ],
+  "aufgaben": [
+    {
+      "id": "runden-zwei",
+      "text": "Übe heute zwei Runden.",
+      "kind": "runden",
+      "ziel": 2,
+      "messung": "summe",
+      "abLektion": "L01"
+    },
+    {
+      "id": "runden-drei",
+      "text": "Übe heute drei Runden.",
+      "kind": "runden",
+      "ziel": 3,
+      "messung": "summe",
+      "abLektion": "L04"
+    },
+    {
+      "id": "minuten-zwei",
+      "text": "Übe zwei Minuten am Stück.",
+      "kind": "minuten-am-stueck",
+      "ziel": 2,
+      "messung": "bestwert",
+      "abLektion": "L01"
+    },
+    {
+      "id": "minuten-fuenf",
+      "text": "Übe fünf Minuten am Stück.",
+      "kind": "minuten-am-stueck",
+      "ziel": 5,
+      "messung": "bestwert",
+      "abLektion": "L08"
+    },
+    {
+      "id": "strecke-100",
+      "text": "Schaffe 100 Anschläge ohne Vertipper.",
+      "kind": "anschlaege-ohne-fehler",
+      "ziel": 100,
+      "messung": "bestwert",
+      "abLektion": "L02"
+    },
+    {
+      "id": "strecke-200",
+      "text": "Schaffe 200 Anschläge ohne Vertipper.",
+      "kind": "anschlaege-ohne-fehler",
+      "ziel": 200,
+      "messung": "bestwert",
+      "abLektion": "L06"
+    },
+    {
+      "id": "strecke-400",
+      "text": "Schaffe 400 Anschläge ohne Vertipper.",
+      "kind": "anschlaege-ohne-fehler",
+      "ziel": 400,
+      "messung": "bestwert",
+      "abLektion": "L14"
+    },
+    {
+      "id": "sterne-zwei",
+      "text": "Schließe eine Lektion mit zwei Sternen ab.",
+      "kind": "sterne",
+      "ziel": 2,
+      "messung": "bestwert",
+      "abLektion": "L02"
+    },
+    {
+      "id": "sterne-drei",
+      "text": "Schließe eine Lektion mit drei Sternen ab.",
+      "kind": "sterne",
+      "ziel": 3,
+      "messung": "bestwert",
+      "abLektion": "L06"
+    },
+    {
+      "id": "blind-eine",
+      "text": "Übe eine Runde im Blindmodus.",
+      "kind": "blindrunden",
+      "ziel": 1,
+      "messung": "summe",
+      "abLektion": "L05"
+    },
+    {
+      "id": "blind-drei",
+      "text": "Übe drei Runden im Blindmodus.",
+      "kind": "blindrunden",
+      "ziel": 3,
+      "messung": "summe",
+      "abLektion": "L10"
+    },
+    {
+      "id": "jagd-eine",
+      "text": "Geh einmal auf Tastenjagd.",
+      "kind": "tastenjagd",
+      "ziel": 1,
+      "messung": "summe",
+      "abLektion": "L03"
+    },
+    {
+      "id": "lektion-neu",
+      "text": "Schaffe heute eine Lektion.",
+      "kind": "lektion-bestanden",
+      "ziel": 1,
+      "messung": "summe",
+      "abLektion": "L01"
+    },
+    {
+      "id": "zwischenstueck-eins",
+      "text": "Sieh dir ein Zwischenstück an.",
+      "kind": "zwischenstueck",
+      "ziel": 1,
+      "messung": "summe",
+      "abLektion": "L03"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+[package]
+name = "zehni"
+version = "0.1.1"
+description = "Zehni - 10-Finger-Tastschreiben lernen, offline und kostenlos"
+authors = ["Mika Schlundt"]
+edition = "2021"
+# MSRV nach SPEC.md 3.1.
+rust-version = "1.77"
+
+[lib]
+name = "zehni_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-sql = { version = "2", features = ["sqlite"] }
+
+# Auto-Update nach SPEC.md 11.1. Der Updater laeuft ausschliesslich hier:
+# Netzwerk gehoert nach Rust (ARCHITEKTUR.md, Architekturregel 2).
+tauri-plugin-updater = "2"
+tauri-plugin-process = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Der Installer darf hoechstens 20 MB gross werden und die App soll auf alten
+# Laptops schnell starten (SPEC.md 12.1). Deshalb wird auf Groesse optimiert,
+# nicht auf Geschwindigkeit -- die Rust-Seite rechnet ohnehin kaum etwas.
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

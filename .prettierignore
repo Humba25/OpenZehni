@@ -1,0 +1,9 @@
+node_modules
+dist
+src-tauri/target
+package-lock.json
+
+# Markdown bleibt aussen vor: Die Doku ist deutscher Fliesstext, von Hand auf
+# 80 Zeichen umbrochen. Prettier wuerde daran nichts verbessern, aber bei jedem
+# Lauf Unruhe in die Diffs bringen.
+*.md

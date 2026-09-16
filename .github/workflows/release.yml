@@ -1,0 +1,120 @@
+# Baut und veroeffentlicht eine Version (SPEC.md 11.3).
+#
+# Ausgeloest durch einen Tag `v*`, also zum Beispiel `git tag v0.2.0 && git push
+# origin v0.2.0`. Ablauf: Tests -> Build -> Signieren -> Release anlegen ->
+# Zehni-Setup.exe und latest.json anhaengen.
+#
+# WAS VORHER EINMALIG ZU TUN IST, steht in der Release-Anleitung. Ohne die beiden
+# Secrets laeuft dieser Workflow absichtlich auf einen Fehler, statt ein
+# unsigniertes Release zu veroeffentlichen, das kein Updater je annimmt.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pruefen:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      - run: npm run validate:seed
+      - run: npm run check:din5008
+
+  bauen:
+    needs: pruefen
+    runs-on: windows-latest
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - run: npm ci
+
+      # Lieber hier klar scheitern als spaeter ein Release herausgeben, das
+      # niemand aktualisieren kann.
+      #
+      # Geprueft wird tauri.conf.json, nicht tauri.release.conf.json: Endpunkt
+      # und oeffentlicher Schluessel stehen dort, weil der Updater ohne sie gar
+      # nicht erst startet.
+      - name: Vorbereitung pruefen
+        shell: bash
+        run: |
+          set -e
+          if [ -z "${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}" ]; then
+            echo "Secret TAURI_SIGNING_PRIVATE_KEY fehlt. Siehe Release-Anleitung."
+            exit 1
+          fi
+          if grep -q "HIER-" src-tauri/tauri.conf.json; then
+            echo "In src-tauri/tauri.conf.json steht noch ein Platzhalter statt"
+            echo "des oeffentlichen Schluessels oder der Release-URL."
+            echo "Siehe Release-Anleitung."
+            exit 1
+          fi
+          # Ohne diesen Block startet die gebaute App gar nicht.
+          node -e "
+            const c = require('./src-tauri/tauri.conf.json');
+            const u = c.plugins && c.plugins.updater;
+            if (!u || !u.pubkey || !u.endpoints || u.endpoints.length === 0) {
+              console.error('plugins.updater fehlt oder ist unvollstaendig in tauri.conf.json.');
+              console.error('Ohne diesen Block stuerzt die App beim Start ab.');
+              process.exit(1);
+            }
+          "
+
+      # Die Version im Tag und die in tauri.conf.json muessen zusammenpassen.
+      # Sonst bietet der Updater eine Version an, die die App nicht als neuer
+      # erkennt -- ein Fehler, den man sonst erst beim Anwender merkt.
+      - name: Version gegen den Tag pruefen
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        run: |
+          set -e
+          TAG="${GITHUB_REF_NAME#v}"
+          CONF=$(node -p "require('./src-tauri/tauri.conf.json').version")
+          if [ "$TAG" != "$CONF" ]; then
+            echo "Tag ist $TAG, tauri.conf.json sagt $CONF. Bitte angleichen."
+            exit 1
+          fi
+
+      - name: Bauen, signieren und Release anlegen
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: Zehni ${{ github.ref_name }}
+          releaseBody: |
+            Installer herunterladen, doppelklicken, fertig.
+
+            Beim ersten Start warnt Windows, weil Zehni kein gekauftes
+            Zertifikat hat. Wie man daran vorbeikommt, steht in docs/INSTALL.md.
+          releaseDraft: true
+          prerelease: false
+          includeUpdaterJson: true
+          args: --config src-tauri/tauri.release.conf.json

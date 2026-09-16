@@ -1,0 +1,164 @@
+{
+  "schema": 1,
+  "comment": "Die acht Zwischenstuecke im Lernpfad (SPEC.md 6.6). Inhalte sind Daten, kein Code (ARCHITEKTUR.md, Architekturregel 4). Die Felder kmk und digcomp sind Metadaten fuer die Elternansicht und erscheinen nicht in der Kinderoberflaeche (NORMEN.md 6).",
+  "regeln": [
+    "Die drei Fallen halten SPEC.md 6.6.1 ein: kein Formular nimmt echte persoenliche Daten entgegen, nichts wird gespeichert ausser zwei Wahrheitswerten, nichts verlaesst das Geraet.",
+    "Wer in eine Falle tappt, bekommt dieselbe Aufmerksamkeit wie wer sie erkennt. Keine Haeme, kein Punktabzug, kein Wiederholungszwang.",
+    "Aussagen ueber das Lernen der Nutzerin werden mit ihren echten Daten belegt oder gar nicht gemacht (MODUL-LERNEN.md 1.1). Unter fuenf Sitzungen greift die neutrale Fassung."
+  ],
+  "units": [
+    {
+      "id": "medien-f1",
+      "type": "falle-gewinn",
+      "afterLesson": "L03",
+      "title": "Eine Überraschung",
+      "kmk": 4,
+      "digcomp": "4.2",
+      "aufloesung": {
+        "erkanntTitel": "Genau richtig.",
+        "erkanntText": "Du hast nicht mitgemacht, und das war die richtige Entscheidung. Drei Dinge waren verdächtig, und die kannst du dir merken:",
+        "getapptTitel": "Jetzt kennst du den Trick.",
+        "getapptText": "Du hast auf Abschicken geklickt. Das ist nicht schlimm, es passiert auch Erwachsenen ständig. Genau deshalb üben wir es hier und nicht im echten Internet. Drei Dinge waren verdächtig:",
+        "merkmale": [
+          "Du hast bei keinem Gewinnspiel mitgemacht. Wer nie mitgemacht hat, kann auch nichts gewinnen.",
+          "Es lief eine Uhr ab. Zeitdruck soll verhindern, dass du in Ruhe nachdenkst. Echte Gewinne laufen nicht davon.",
+          "Es wurden Daten verlangt, die für einen Gewinn gar nicht nötig sind. Deine Telefonnummer braucht niemand, um dir etwas zu schicken."
+        ],
+        "folgen": "Im echten Internet wäre die Nummer danach bei Firmen gelandet, die damit handeln. Es hätten Werbeanrufe angefangen, und im schlimmsten Fall wäre ein Vertrag untergeschoben worden, den jemand später bezahlen soll."
+      }
+    },
+    {
+      "id": "lernen-e1",
+      "type": "lernen",
+      "afterLesson": "L06",
+      "title": "Kann das jemand von Geburt an?",
+      "bloecke": [
+        "Niemand kommt auf die Welt und kann ein Flugzeug fliegen. Niemand kommt auf die Welt und kann tippen. Auch die Leute, die es heute blitzschnell können, saßen irgendwann da und haben mit zwei Fingern nach dem f gesucht.",
+        "Das klingt selbstverständlich. Ist es aber nicht, denn im Kopf passiert oft etwas anderes: Wenn etwas nicht sofort klappt, denkt man schnell „dafür bin ich wohl nicht gemacht“. Dabei heißt es nur: Ich habe es noch nicht oft genug gemacht.",
+        "Tippen ist dafür ein gutes Beispiel, weil man den Unterschied messen kann. Deine Finger wissen heute schon Dinge, die sie vor ein paar Tagen nicht wussten."
+      ],
+      "frage": {
+        "text": "Was stimmt?",
+        "optionen": [
+          "Manche Menschen können von Geburt an gut tippen.",
+          "Tippen lernt man durch Üben, alle fangen bei null an.",
+          "Wer es nach einer Woche nicht kann, kann es nie."
+        ],
+        "richtig": 1,
+        "erklaerung": "Alle fangen bei null an. Der Unterschied zwischen Menschen, die es können, und Menschen, die es nicht können, ist fast immer die Übungszeit."
+      }
+    },
+    {
+      "id": "medien-passwoerter",
+      "type": "wissen",
+      "afterLesson": "L09",
+      "title": "Passwörter",
+      "kmk": 4,
+      "digcomp": "4.1",
+      "bloecke": [
+        "Ein Passwort ist wie ein Schlüssel. Und wie bei Schlüsseln gilt: Für jede Tür einen eigenen. Wer überall denselben nimmt, verliert alles auf einmal, wenn einer wegkommt.",
+        "Lang schlägt kompliziert. Ein Passwort aus vier zufälligen Wörtern ist sicherer als „P@ssw0rt!“ und viel leichter zu merken. Denk dir vier Dinge aus, die nichts miteinander zu tun haben, zum Beispiel Gießkanne, Rakete, Butter, Socke.",
+        "Was nicht ins Passwort gehört: dein Name, dein Geburtstag, der Name deines Haustiers. Das steht oft schon irgendwo im Internet."
+      ],
+      "frage": {
+        "text": "Welches Passwort ist am sichersten?",
+        "optionen": ["Lisa2015", "Gieskanne-Rakete-Butter-Socke", "Pa$$w0rt"],
+        "richtig": 1,
+        "erklaerung": "Vier zufällige Wörter ergeben ein sehr langes Passwort, und Länge ist das Wichtigste. Namen und Jahreszahlen sind dagegen schnell geraten, und Zeichenersetzungen wie Dollar statt s kennen die Rateprogramme längst."
+      }
+    },
+    {
+      "id": "lernen-e2",
+      "type": "lernen-kurve",
+      "afterLesson": "L12",
+      "title": "Deine eigene Kurve",
+      "bloecke": [
+        "Lernen fühlt sich selten nach Fortschritt an, während es passiert. Man merkt es erst, wenn man zurückschaut.",
+        "Genau dafür merkt sich Zehni jede Runde: nicht um dich zu bewerten, sondern damit du sehen kannst, was sich verändert hat."
+      ],
+      "neutraleFassung": "Du hast noch nicht genug Runden gespielt, damit ich dir deine Kurve zeigen kann. Ab fünf Runden wird es interessant. Bis dahin gilt: Einfach weitermachen.",
+      "erklaerungNachDaten": "Das ist keine ausgedachte Zahl, sondern deine eigene. Sie kommt aus den Runden, die du wirklich getippt hast."
+    },
+    {
+      "id": "medien-f2",
+      "type": "falle-steckbrief",
+      "afterLesson": "L15",
+      "title": "Dein Profil",
+      "kmk": 2,
+      "digcomp": "2.6",
+      "aufloesung": {
+        "titel": "Das Internet vergisst nie",
+        "text": "Was du gerade gesehen hast, ist kein Zufall: Sobald etwas im Netz steht, kann es jemand kopieren. Und eine Kopie kannst du nicht mehr löschen, auch wenn du das Original wegmachst.",
+        "merkmale": [
+          "Löschen hilft nur, wenn es noch niemand kopiert hat. Das weißt du nie.",
+          "Auch harmlose Angaben ergeben zusammen ein Bild: Schule, Verein, Lieblingsort, dazu ein Foto.",
+          "Bevor du etwas hochlädst, überleg dir: Wäre es schlimm, wenn das in fünf Jahren noch jemand findet?"
+        ],
+        "geloescht": "Wir haben deinen Steckbrief jetzt gelöscht. Das echte Internet hätte das nicht getan.",
+        "nichtsGespeichert": "Übrigens: Zehni hat davon nichts gespeichert. Es stand nur so lange im Arbeitsspeicher, wie diese Seite offen war."
+      }
+    },
+    {
+      "id": "lernen-e5",
+      "type": "lernen",
+      "afterLesson": "L18",
+      "title": "Die Delle",
+      "bloecke": [
+        "Es gibt eine Stelle, an der fast alle aufhören wollen. Sie kommt nicht am Anfang, sondern in der Mitte. Am Anfang geht es schnell voran, weil alles neu ist. In der Mitte kennt man schon viel, aber es fühlt sich an, als würde nichts mehr besser.",
+        "Diese Stelle hat einen Namen: die Delle. Sie ist kein Zeichen dafür, dass du am Ende deiner Möglichkeiten bist. Sie ist ein Zeichen dafür, dass du die leichten Fortschritte hinter dir hast.",
+        "Was in der Delle hilft, ist unspektakulär: kürzere Einheiten, dafür regelmäßig. Fünf Minuten an fünf Tagen bringen mehr als eine halbe Stunde am Sonntag."
+      ],
+      "frage": {
+        "text": "Du übst seit drei Wochen und hast das Gefühl, es geht nicht mehr voran. Was ist wahrscheinlich los?",
+        "optionen": [
+          "Du hast dein Maximum erreicht.",
+          "Du bist in der Delle. Das geht vorbei, wenn du dranbleibst.",
+          "Du übst falsch und solltest von vorn anfangen."
+        ],
+        "richtig": 1,
+        "erklaerung": "Die Delle gehört dazu. Wer sie aussitzt, kommt danach weiter als vorher. Von vorn anfangen wäre das Schlechteste, was du tun könntest."
+      }
+    },
+    {
+      "id": "medien-f3",
+      "type": "falle-kleingedrucktes",
+      "afterLesson": "L21",
+      "title": "Ein Spiel, kostenlos",
+      "kmk": 6,
+      "digcomp": "2.5",
+      "aufloesung": {
+        "erkanntTitel": "Gefunden.",
+        "erkanntText": "Du hast nachgesehen, bevor du geklickt hast. Genau das ist der ganze Trick.",
+        "getapptTitel": "Das war die Falle.",
+        "getapptText": "Du hast auf den großen Knopf geklickt, ohne das Kleingedruckte zu lesen. Genau darauf ist die Seite gebaut. Schau dir an, was da wirklich stand:",
+        "merkmale": [
+          "„Gratis“ bezog sich nur auf die ersten sieben Tage. Danach kostet es jeden Monat Geld.",
+          "Das Häkchen bei den Bedingungen war schon gesetzt. Das ist Absicht, damit niemand hinschaut.",
+          "Kündigen musste man selbst. Wer es vergisst, zahlt weiter."
+        ],
+        "rechtlich": "Übrigens: Unter 18 Jahren kannst du solche Verträge ohne deine Eltern gar nicht wirksam abschließen. Das heißt aber nicht, dass es keinen Ärger gibt, wenn Rechnungen kommen. Sag in so einem Fall sofort jemandem Bescheid."
+      }
+    },
+    {
+      "id": "lernen-e8",
+      "type": "lernen",
+      "afterLesson": "L24",
+      "title": "Aufschreiben, damit du es nicht zweimal lernst",
+      "bloecke": [
+        "Du hast jetzt fast den ganzen Lernweg hinter dir. Unterwegs hast du Dinge herausgefunden, die niemand dir gesagt hat: welche Taste dir Ärger macht, wann du am besten übst, was hilft, wenn es hakt.",
+        "Solche Erkenntnisse verschwinden wieder, wenn man sie nicht festhält. Und dann lernt man sie ein zweites Mal, was Zeit kostet.",
+        "Schreib in eigenen Worten auf, was du gelernt hast. Nicht abschreiben, sondern selbst formulieren. Genau das Umformulieren ist die Arbeit, die es im Kopf verankert."
+      ],
+      "frage": {
+        "text": "Warum bringt es mehr, etwas in eigenen Worten aufzuschreiben, als es abzuschreiben?",
+        "optionen": [
+          "Weil es schneller geht.",
+          "Weil man dabei verstehen muss, was man sagen will.",
+          "Weil die eigene Handschrift besser lesbar ist."
+        ],
+        "richtig": 1,
+        "erklaerung": "Abschreiben geht auch ohne Verstehen. Umformulieren nicht: Man muss erst begreifen, was gemeint ist, und genau diese Arbeit bleibt hängen."
+      }
+    }
+  ]
+}

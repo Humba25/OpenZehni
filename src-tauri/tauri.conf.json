@@ -1,0 +1,60 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Zehni",
+  "version": "0.1.1",
+  "identifier": "de.zehni.app",
+  "build": {
+    "beforeDevCommand": "npm run dev:web",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build:web",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Zehni",
+        "width": 1120,
+        "height": 780,
+        "minWidth": 900,
+        "minHeight": 620,
+        "resizable": true,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "publisher": "Mika Schlundt",
+    "copyright": "Zehni ist kostenlos und werbefrei.",
+    "category": "Education",
+    "shortDescription": "10-Finger-Tastschreiben lernen, offline und kostenlos",
+    "longDescription": "Zehni bringt Kindern ab der 5. Klasse das Zehnfingersystem bei. Dazu Medienkompetenz, Textverarbeitung nach DIN 5008 und Lerntechniken. Ohne Konto, ohne Abo, ohne Werbung. Alles laeuft auf dem eigenen Rechner.",
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.ico"],
+    "createUpdaterArtifacts": false,
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      },
+      "nsis": {
+        "installMode": "currentUser",
+        "languages": ["German"],
+        "displayLanguageSelector": false,
+        "installerHooks": "installer-hooks.nsh",
+        "startMenuFolder": "Zehni"
+      }
+    }
+  },
+  "plugins": {
+    "updater": {
+      "endpoints": ["https://github.com/Humba25/Zehni/releases/latest/download/latest.json"],
+      "windows": {
+        "installMode": "passive"
+      },
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDE2OUUxQkIxN0E3QTI1RjUKUldUMUpYcDZzUnVlRm1oY3hKQzlLWkFLb3FNRXZkQjdnV1BCOW03N1c0bHNLZkwrcUFLQWRuOSsK"
+    }
+  }
+}

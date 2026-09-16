@@ -1,0 +1,68 @@
+# Abhaengigkeiten
+node_modules/
+.pnp
+.pnp.js
+
+# Buildergebnisse
+dist/
+dist-ssr/
+build/
+src-tauri/target/
+src-tauri/gen/
+
+# Schluessel und Geheimnisse -- gehoeren nie ins Repository (ARCHITEKTUR.md)
+# Signierschluessel des Updaters liegen ausschliesslich in den GitHub-Secrets,
+# API-Schluessel ausschliesslich in der Remote-Konfiguration (SPEC.md 9.3, 11.1).
+*.key
+*.pem
+*.pfx
+*.p12
+.env
+.env.*
+!.env.example
+remote.json
+tauri-signing-key*
+
+# Lokale Datenbank und Sicherungskopien (SPEC.md 5)
+*.db
+*.db-journal
+*.db.bak
+*.sqlite
+*.sqlite3
+
+# Testberichte und Werkzeug-Zwischenstaende
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+.vitest/
+*.tsbuildinfo
+.eslintcache
+
+# Editoren
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Betriebssystem
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Nextcloud-Reste (das Projekt lag urspruenglich in einem Sync-Ordner)
+.sync_*
+*.~lock*
+
+# Der Elternbrief des kommerziellen Kursangebots. Bleibt lokal liegen:
+# er enthaelt Anschrift, Telefonnummer und den Namen der Institutsleiterin,
+# und fuer das Projekt ist nur sein Inhalt nuetzlich -- der steht in
+# der Projektdokumentation.
+fiellascript.jpeg
+fiellascript.jpg

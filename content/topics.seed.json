@@ -1,0 +1,820 @@
+{
+  "schema": 2,
+  "comment": "Lokale Textdatenbank von Zehni. Schema 2 ergaenzt das Feld 'age' (SPEC.md 9.8). S1/S2 sind Silbendrills und altersneutral ('alle'); ab S3 wird nach Altersstufe unterschieden. Vollbestand ist A2, A1 und A3 duerfen lueckenhaft bleiben - fehlt eine Zelle, greift stumm die Nachbarstufe. Zielmenge laut SPEC.md 9.6: 64 Texte je Thema, davon 40 Pflichtteil.",
+  "rules": [
+    "Jedes Zeichen eines Textes muss im Vorrat seiner Zeichensatzstufe liegen. Ein Verstoss ist ein Fehler, kein Schoenheitsfehler.",
+    "Umlaute ausschreiben, wo der Vorrat sie hergibt. 'schlaeft' statt 'schlaeft' ist eine falsche Schreibweise und hat in einem Schreibtrainer nichts zu suchen. Achtung: S2 enthaelt oe und ue, aber KEIN ae.",
+    "S2 enthaelt weder b c m n v x y noch ae. Damit entfallen 'und', 'ein', 'nicht', 'immer', 'man'. Das ist beim Schreiben mitzudenken.",
+    "In S1 und S2 fehlt das scharfe s. Woerter, die es brauchen, werden GEMIEDEN, nicht mit ss umschrieben. Wer 'gross' schreibt, weil das scharfe s fehlt, uebt eine falsche Schreibweise ein - und genau das darf ein Schreibtrainer nicht. Statt 'gross' also 'riesig' oder 'weit', statt 'heiss' eben 'rot'. Dasselbe gilt fuer ae in S2. Geprueft von checkSchreibweise() in src/lib/schreibweise.ts.",
+    "Kein Gedankenstrich in Texten. Der Bindestrich '-' steht nur in Zusammensetzungen; als Gedankenstrich verlangt DIN 5008 den Halbgeviertstrich, der in keinem Zeichenvorrat liegt.",
+    "S3 hat NUR Komma, Punkt und Bindestrich. Kein Fragezeichen, kein Doppelpunkt, kein Semikolon, kein Ausrufezeichen. Eine Frage laesst sich dort also nicht stellen - sie wird als Aussage formuliert. Ausserdem gibt es in S3 keine Grossbuchstaben, auch nicht fuer Eigennamen; Eigennamen werden dort besser ganz gemieden.",
+    "Zahlengliederung nach NORMEN.md 5.1: ab fuenf Stellen in Dreiergruppen mit Leerzeichen (45 000), vierstellige bleiben ungegliedert (8000). Jahreszahlen werden nie gegliedert. Geprueft von checkDin5008().",
+    "Der Zeichensatzpruefer findet keinen Unsinn. 'die gasse ist eig die haeuser stehtt' besteht aus lauter erlaubten Zeichen und ist trotzdem Kauderwelsch. Jeden Text nach dem Schreiben einmal selbst lesen.",
+    "Texte sind sachlich richtig. Keine Wirkungsversprechen, keine erfundenen Zahlen."
+  ],
+  "ageBands": {
+    "alle": "Altersneutral. Nur fuer Silbendrills in S1 und S2.",
+    "A1": "8 bis 10 Jahre. Hauptsaetze von 6 bis 12 Woertern, Alltagswortschatz, konkrete Bilder.",
+    "A2": "11 bis 13 Jahre. Saetze von 10 bis 18 Woertern, Nebensaetze erlaubt, Fachwoerter im Zusammenhang.",
+    "A3": "ab 14 Jahren. Saetze von 12 bis 25 Woertern, sachlicher Ton, keine Verniedlichung."
+  },
+  "charsets": {
+    "S1": {
+      "lessons": ["L01", "L02", "L03", "L04", "L05"],
+      "chars": "asdfjklö ",
+      "note": "Grundreihe. Nur Kleinbuchstaben und Leerzeichen. Kein Vokal ausser a und oe - echte Woerter sind kaum moeglich."
+    },
+    "S2": {
+      "lessons": ["L06", "L07", "L08", "L09", "L10", "L11", "L12", "L13"],
+      "chars": "asdfjklögheirutzwoqpü ",
+      "note": "Grundreihe + obere Reihe. Es fehlen b c m n v x y und ae."
+    },
+    "S3": {
+      "lessons": ["L14", "L15", "L16", "L17", "L18", "L19"],
+      "chars": "asdfjklögheirutzwoqpüvmcxynbäß,.- ",
+      "note": "Alle Buchstaben, Komma, Punkt, Bindestrich. Keine Grossbuchstaben, keine Ziffern."
+    },
+    "S4": {
+      "lessons": ["L20", "L21"],
+      "chars": "abcdefghijklmnopqrstuvwxyzäöüßABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ,.-!?;: ",
+      "note": "Mit Umschalttaste: Grossbuchstaben und Satzzeichen. Noch keine Ziffern."
+    },
+    "S5": {
+      "lessons": ["L22", "L23", "L24", "L25"],
+      "chars": "abcdefghijklmnopqrstuvwxyzäöüßABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ0123456789,.-!?;:@/()\" ",
+      "note": "Voller Zeichenvorrat inklusive Ziffern und Sonderzeichen."
+    }
+  },
+  "topics": [
+    {
+      "id": "tiere",
+      "label": "Tiere & Natur",
+      "icon": "paw",
+      "texts": [
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "fff jjj fjf jfj fa ja la da ka sa fal jal das all als fad saal aal falk jask dala kala safa lasa dösa sölf dakl fajs falls lass fass dass"
+        },
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "asd jkl asd jkl sad lka dak sal fask jalk salsa alaska falk kalk das dösa sölf kasa dafs jask alfa dalak lasa safa falls lass dass all als"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "der hase sitzt hier das gras ist gut er hört alles der otter ruht wo das wasser ist das tier frisst gerste du siehst es gut hier"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "der adler jagt hier er sieht das feld die ziege steht dort sie frisst gras der falke ruht auf der weide es ist heiter du hörst das tier"
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "der igel läuft nachts durch den garten. er sucht käfer und würmer. wenn er angst hat, rollt er sich zu einer kugel zusammen. seine stacheln schützen ihn dann gut."
+        },
+        {
+          "charset": "S3",
+          "age": "A2",
+          "body": "der luchs lebt im wald und jagt vor allem nachts. an seinen ohren sitzen kleine haarpinsel, die ihm beim hören helfen. tagsüber schläft er versteckt unter dichten zweigen, weil er dort kaum auffällt."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "luchse waren in mitteleuropa lange ausgerottet und wurden erst in den siebziger jahren wieder angesiedelt. ihr bestand gilt bis heute als gefährdet, weil zusammenhängende waldgebiete fehlen und einzelne tiere dem straßenverkehr zum opfer fallen."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Der Igel ist nachtaktiv. Im Winter hält er einen echten Winterschlaf. Wusstest du, dass sein Herz dann viel langsamer schlägt? Man sollte ihn niemals wecken!"
+        },
+        {
+          "charset": "S4",
+          "age": "A2",
+          "body": "Wale sind keine Fische, sondern Säugetiere: Sie atmen Luft und bringen lebende Junge zur Welt. Der Blauwal ist das größte Tier, das je auf der Erde gelebt hat; sein Herz allein wiegt so viel wie ein kleines Auto."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Der Rückgang vieler Insektenarten ist inzwischen gut belegt und betrifft auch Vögel, die auf sie als Nahrung angewiesen sind. Als Ursachen gelten der Verlust von Lebensräumen, intensive Landwirtschaft und der Einsatz von Pflanzenschutzmitteln."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Igel wiegt 800 bis 900 Gramm und wird 3 bis 7 Jahre alt. Wer ihm helfen will, lässt eine Ecke im Garten wild wachsen (Laub und Äste reichen schon). Nie Milch hinstellen, davon wird er krank!"
+        },
+        {
+          "charset": "S5",
+          "age": "A2",
+          "body": "Fledermäuse orientieren sich mit Ultraschall: Sie stoßen Laute aus und hören auf das Echo. So erkennen sie sogar Beute von 2 bis 3 Millimetern Größe. Am Tag hängen sie kopfüber in Spalten und schlafen bis zu 20 Stunden."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Der Wanderfalke erreicht im Sturzflug über 300 Kilometer pro Stunde und gilt damit als schnellstes Tier der Welt. In den 1970er Jahren war er in Mitteleuropa fast verschwunden; erst das Verbot bestimmter Pflanzenschutzmittel ließ die Bestände wieder wachsen."
+        }
+      ],
+      "facts": [
+        "Ein Igel hat rund 8000 Stacheln. Das sind umgebaute Haare.",
+        "Kolibris können als einzige Vögel rückwärts fliegen.",
+        "Ein Eichhörnchen vergisst viele seiner Verstecke. Aus den vergessenen Nüssen werden Bäume."
+      ]
+    },
+    {
+      "id": "weltall",
+      "label": "Weltall & Planeten",
+      "icon": "planet",
+      "texts": [
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "fa ja da ka la sa fal jal kal sal das all als falls lass fass dass saal aal kalk fask jald kals safa lasa dösa sölf dakl fajs alfa dalak"
+        },
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "fjf jfj dkd kdk sls lsl aöa öaö fad das all sal falls lass fass dass kalk saal jask dala kala lösa dakl fajs safa lasa alfa sölf"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "die erde ist riesig das all ist weit hier steht die rakete sie fliegt heute los dort oder da du siehst sie sehr gut die stelle ist frei"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "die erde dreht sie ist alt das feuer ist rot die luft ist dort rar der weg ist weit du siehst raus dort ist die helle glut sie ist so weit fort hier"
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "die erde dreht sich einmal am tag um sich selbst. deshalb wird es morgens hell und abends dunkel. der mond ist viel kleiner als die erde und leuchtet nicht selbst, sondern wirft nur sonnenlicht zurück."
+        },
+        {
+          "charset": "S3",
+          "age": "A2",
+          "body": "unser sonnensystem hat acht planeten. die vier inneren bestehen aus gestein, die vier äußeren vor allem aus gas und eis. der jupiter ist so groß, dass alle anderen planeten zusammen bequem in ihn hineinpassen würden."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "weil selbst der nächste stern über vier lichtjahre entfernt ist, sehen wir ihn immer so, wie er vor jahren aussah. jeder blick in den nachthimmel ist damit auch ein blick in die vergangenheit, und zwar umso weiter zurück, je ferner das objekt steht."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Der Mond hat keine Luft. Deshalb gibt es dort keinen Wind und kein Wetter. Die Fußspuren der Astronauten liegen noch genauso da wie damals. Wie lange sie wohl bleiben?"
+        },
+        {
+          "charset": "S4",
+          "age": "A2",
+          "body": "Auf dem Mars ist ein Tag fast genauso lang wie bei uns; ein Marsjahr dauert dagegen etwa doppelt so lange wie ein Jahr auf der Erde. Der größte Vulkan des Sonnensystems steht dort und heißt Olympus Mons."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Schwarze Löcher sind keine Löcher, sondern Objekte mit so großer Masse auf so kleinem Raum, dass nicht einmal Licht ihnen entkommt. Nachgewiesen werden sie indirekt: über die Bahnen von Sternen in ihrer Nähe und über Strahlung, die beim Einfall von Materie entsteht."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Die Erde dreht sich in 24 Stunden einmal um sich selbst. Für eine Runde um die Sonne braucht sie 365 Tage. Vom Mond bis zu uns braucht das Licht nur gut 1 Sekunde."
+        },
+        {
+          "charset": "S5",
+          "age": "A2",
+          "body": "Die Raumstation ISS umkreist die Erde in rund 400 Kilometern Höhe und braucht dafür etwa 90 Minuten. Die Besatzung erlebt also 16 Sonnenaufgänge am Tag. Wer mitschauen will, findet die Bahndaten frei im Netz (Stichwort \"Tracking\")."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Der Start einer Rakete ist vor allem ein Energieproblem: Rund 90 Prozent der Startmasse sind Treibstoff. Wiederverwendbare Erststufen haben die Kosten pro Kilogramm Nutzlast in den Jahren nach 2015 deutlich gesenkt, ohne dieses Grundproblem zu beseitigen."
+        }
+      ],
+      "facts": [
+        "Auf der Venus dauert ein Tag länger als ein Jahr.",
+        "Im Weltall ist es still, weil Schall ein Material zum Schwingen braucht.",
+        "Die Sonne enthält mehr als 99 Prozent der Masse des ganzen Sonnensystems."
+      ]
+    },
+    {
+      "id": "sport",
+      "label": "Sport & Bewegung",
+      "icon": "ball",
+      "texts": [
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "fal jal das all als fad kal sal falls lass fass dass saal aal kalk dösa fask jald kals safa lasa dakl sölf alfa dalak fajs lösa"
+        },
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "asd jkl asd jkl fjf jfj dkd kdk sls lsl aöa öaö lad dal kaf fak sal las das all fask jalk dafs kölsa safa lasa falls lass dass"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "der sport ist heute gut das tor steht dort der werfer holt weit aus die gruppe wartet er wirft sehr gut das tor gilt die freude ist riesig"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "du gehst los der weg ist steil das ziel liegt weit dort du ruhst kurz die uhr lief so gut sie hat zeit du gehst ja wieder los"
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "beim laufen ist das aufwärmen wichtig. wenn die muskeln warm sind, ziehst du dir seltener etwas zu. fang langsam an und werde erst dann schneller. am ende gehst du noch ein paar minuten locker aus."
+        },
+        {
+          "charset": "S3",
+          "age": "A2",
+          "body": "beim weitsprung zählt nicht nur die kraft, sondern vor allem der anlauf. wer zu schnell startet, trifft das brett nicht sauber und verliert am absprung mehr, als er durch tempo gewinnt. deshalb üben springer den anlauf öfter als den sprung selbst."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "ausdauertraining wirkt vor allem über die häufigkeit, nicht über die einzelne einheit. drei ruhige läufe pro woche bringen mehr als ein harter lauf, weil sich herz, kreislauf und sehnen unterschiedlich schnell anpassen. sehnen brauchen dabei am längsten."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Fußball ist die beliebteste Sportart der Welt. Ein Spiel dauert zweimal fünfundvierzig Minuten. Kannst du den Ball mit dem schwächeren Fuß treffen? Das ist am Anfang schwer, lohnt sich aber!"
+        },
+        {
+          "charset": "S4",
+          "age": "A2",
+          "body": "Beim Basketball zählt ein Korb aus dem Feld zwei Punkte, von hinter der Linie drei. Wer verteidigt, sollte nicht auf den Ball schauen, sondern auf die Hüfte des Gegners: Die verrät die Richtung früher als alles andere."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Leistung im Sport entsteht nicht im Training, sondern in der Erholung danach. Der Reiz setzt einen Anpassungsvorgang in Gang, der Tage dauern kann; wer zu früh den nächsten harten Reiz setzt, sammelt Ermüdung statt Form."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Fußballfeld ist etwa 105 Meter lang und 68 Meter breit. Das Tor ist 7,32 Meter breit, also so viel wie 4 Autos nebeneinander. Ein Spiel dauert 90 Minuten plus Nachspielzeit."
+        },
+        {
+          "charset": "S5",
+          "age": "A2",
+          "body": "Der Marathon ist 42,195 Kilometer lang. Die Strecke geht auf die Spiele von 1908 in London zurück: Sie wurde so gelegt, dass der Start am Schloss Windsor lag. Wer unter 4 Stunden bleibt, gilt als gut trainiert."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Die Trainingssteuerung im Ausdauersport arbeitet meist mit 3 bis 5 Intensitätsbereichen, die über Herzfrequenz oder Laktat abgegrenzt werden. Rund 80 Prozent des Umfangs sollten im untersten Bereich liegen (\"polarisiertes Training\")."
+        }
+      ],
+      "facts": [
+        "Beim Gehen berührt immer ein Fuß den Boden. Sobald beide gleichzeitig in der Luft sind, heißt es Laufen.",
+        "Der längste Tennisballwechsel bei einem Profiturnier dauerte über 29 Minuten.",
+        "Muskeln wachsen nicht während des Trainings, sondern in der Pause danach."
+      ]
+    },
+    {
+      "id": "musik",
+      "label": "Musik & Instrumente",
+      "icon": "note",
+      "texts": [
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "fa la da sa ka ja fal jal kal sal das all als falls lass fass dass saal kalk dösa fask jald safa lasa dakl fajs alfa dalak sölf"
+        },
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "asd jkl fjf jfj dkd kdk sls lsl aöa öaö lad dal kaf fak safa lasa dasa kölsa falk jask dafs alfa falls lass fass dass saal aal"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "die gitarre ist da du hörst das lied es ist leise dort steht die flöte sie spielt hell die harfe ist riesig das ist gut so"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "die orgel steht hier sie ist alt das pedal ist riesig du trittst darauf die luft geht los sie heult tief das hallt weit ihr sitzt da sehr still"
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "eine gitarre hat sechs saiten. je dünner eine saite ist, desto höher klingt sie. wenn du mit dem finger auf das griffbrett drückst, wird der schwingende teil kürzer und der ton steigt. probier es einfach aus."
+        },
+        {
+          "charset": "S3",
+          "age": "A2",
+          "body": "ein klavier hat achtundachtzig tasten und im inneren über zweihundert saiten. beim anschlag schlägt ein filzhammer gegen die saite und fällt sofort zurück, damit der ton weiterklingen kann. tritt man das rechte pedal, heben sich alle dämpfer gleichzeitig."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "unser gehör nimmt tonhöhe logarithmisch wahr. eine verdopplung der frequenz entspricht immer einer oktave, egal ob von hundert auf zweihundert hertz oder von tausend auf zweitausend. deshalb wirken musikalische intervalle über den ganzen tonumfang gleich groß."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Ein Schlagzeug besteht aus mehreren Trommeln und Becken. Der Fuß bedient die große Trommel, die Hände spielen den Rest. Am Anfang ist das verwirrend; nach ein paar Wochen läuft es von allein!"
+        },
+        {
+          "charset": "S4",
+          "age": "A2",
+          "body": "Die meisten Popsongs stehen im Viervierteltakt und dauern zwischen drei und vier Minuten. Das ist kein Zufall: Das Format stammt noch aus der Zeit der Single, auf deren Seite nicht mehr Platz war."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Gehörbildung lässt sich trainieren, absolutes Gehör dagegen kaum: Es entsteht offenbar in einem frühen Zeitfenster der Kindheit. Für das Musizieren ist das relative Gehör ohnehin wichtiger, weil es Beziehungen zwischen Tönen erfasst statt einzelne Tonhöhen."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Der Kammerton a schwingt 440-mal in der Sekunde. Eine Oktave höher sind es 880 Schwingungen, also genau doppelt so viele. Ein Klavier hat 88 Tasten, davon 52 weiße und 36 schwarze."
+        },
+        {
+          "charset": "S5",
+          "age": "A2",
+          "body": "Eine Schallplatte dreht sich 33 oder 45 Mal pro Minute. Die Zahl steht auf jedem Plattenlabel. Wer zu schnell abspielt, macht aus jeder Stimme ein Gequietsche (das nutzen Discjockeys seit jeher bewusst aus)."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Digitale Aufnahmen arbeiten mit einer Abtastrate, die mindestens doppelt so hoch sein muss wie die höchste aufzunehmende Frequenz. Weil das menschliche Gehör bei etwa 20 Kilohertz endet, liegen übliche Raten bei 44 oder 48 Kilohertz."
+        }
+      ],
+      "facts": [
+        "Die Panflöte ist eines der ältesten Instrumente der Welt.",
+        "Ein Flügel hat rund 230 Saiten, die zusammen mehrere Tonnen ziehen.",
+        "Ohrwürmer sind meist kurze Stellen von 15 bis 30 Sekunden, nicht ganze Lieder."
+      ]
+    },
+    {
+      "id": "technik",
+      "label": "Technik & Erfindungen",
+      "icon": "gear",
+      "texts": [
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "fa ja la da ka sa fal jal kal sal das all als fad falls lass fass dass saal kalk fask jald dösa sölf dakl fajs alfa dalak lasa"
+        },
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "fjf jfj dkd kdk sls lsl aöa öaö das all als lad dal kaf fak safa lasa dakl kölsa jask alfa dalak falls lass fass dass saal"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "die uhr ist alt sie geht gut das rad dreht dort der draht ist lose du drehst die feder toll das werk ist wieder heil das ist gut so"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "hier liegt der draht du drehst das rad es sitzt fest die feder ruht der halter geht steif das alte werk ist gut es tut seit jeher was du willst"
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "ein fahrrad hat viele zahnräder. wenn du schaltest, springt die kette auf ein anderes rad. bei einem kleinen rad trittst du leichter, kommst aber langsamer voran. am berg ist das genau richtig."
+        },
+        {
+          "charset": "S3",
+          "age": "A2",
+          "body": "eine glühlampe wandelt nur einen kleinen teil des stroms in licht um, der rest wird wärme. leuchtdioden schaffen ein vielfaches davon und halten deutlich länger, weshalb sie die alten lampen inzwischen fast vollständig ersetzt haben."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "die rechenleistung von prozessoren wuchs jahrzehntelang, weil sich die zahl der transistoren regelmäßig verdoppelte. dieser trend stößt inzwischen an physikalische grenzen, weshalb hersteller auf mehrere rechenkerne und spezialisierte einheiten ausweichen."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Ein Kompass zeigt immer nach Norden. Das liegt am Magnetfeld der Erde. Hältst du ihn neben ein Handy, zeigt er falsch. Probier es aus, aber wundere dich nicht!"
+        },
+        {
+          "charset": "S4",
+          "age": "A2",
+          "body": "Der Reißverschluss wurde mehrfach erfunden, bevor er wirklich funktionierte: Die ersten Modelle sprangen ständig auf. Erst die heutige Form mit ineinandergreifenden Zähnen war zuverlässig genug, und selbst die brauchte Jahre bis zum Erfolg."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Verschlüsselung im Netz beruht darauf, dass sich zwei Rechner auf einen gemeinsamen Schlüssel einigen können, ohne ihn jemals zu übertragen. Möglich wird das durch Rechenoperationen, die sich leicht ausführen, aber praktisch nicht umkehren lassen."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Handyakku hält meist 1 bis 2 Tage. Nach etwa 500 Ladungen speichert er deutlich weniger. Wer ihn nicht ständig ganz voll lädt, verlängert seine Lebensdauer (30 bis 80 Prozent sind ideal)."
+        },
+        {
+          "charset": "S5",
+          "age": "A2",
+          "body": "Die erste E-Mail wurde 1971 verschickt. Das Zeichen @ trennt seitdem zwei Angaben: links steht, wer gemeint ist, rechts, wo dieser Jemand zu finden ist. Vorher hatte das Zeichen vor allem in der Buchhaltung eine Bedeutung."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Ein Passwort mit 8 Zeichen lässt sich heute in Minuten durchprobieren; mit 16 Zeichen dauert dasselbe praktisch unbegrenzt lange. Länge schlägt Komplexität, weshalb Passphrasen aus 4 bis 5 zufälligen Wörtern eine gute Wahl sind."
+        }
+      ],
+      "facts": [
+        "Das @ hieß früher im Deutschen Klammeraffe.",
+        "Der erste Computerfehler war angeblich eine echte Motte in einem Relais. Daher das Wort Bug.",
+        "Klettverschluss wurde erfunden, nachdem Kletten im Fell eines Hundes hängen blieben."
+      ]
+    },
+    {
+      "id": "geschichte",
+      "label": "Geschichte & Abenteuer",
+      "icon": "castle",
+      "texts": [
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "fa ja la da ka sa fal jal kal sal das all als falls lass fass dass saal aal kalk fask jald dösa sölf dakl fajs alfa dalak lasa safa"
+        },
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "asd jkl asd jkl fjf jfj dkd kdk sls lsl aöa öaö lad dal kaf fak safa lasa dasa kölsa falk jask dafs alfa das all als falls lass"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "das tor ist alt der wall steht dort du siehst das gold die sage sagt der held ritt hier die leute jagt das pferd sie sitzt fest die zeit ist hart"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "hier steht die alte stadt sie hat drei tore der weg ist steil das wasser holt sie aus der tiefe die gasse ist glatt das dorf liegt tief"
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "die pyramiden sind uralt. damals gab es keine maschinen, und trotzdem haben die leute riesige steine bewegt. sie zogen sie auf schlitten über den sand und gossen wasser davor, damit es besser rutschte."
+        },
+        {
+          "charset": "S3",
+          "age": "A2",
+          "body": "lange zeit konnte fast niemand lesen und schreiben. wer es lernte, wurde gebraucht und geachtet, denn ohne schrift ließ sich nichts festhalten. erst der buchdruck machte bücher billig genug, dass viele menschen lesen lernten."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "geschichtsschreibung ist immer auch eine auswahl. was überliefert ist, stammt meist von denen, die schreiben konnten, und das waren selten die armen. wer das vergisst, hält die überlieferung für die ganze wirklichkeit."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Ritter trugen eine Rüstung aus Eisen. Sie war so schwer wie ein kleines Kind. Ohne Hilfe kam niemand hinein. Wie sie damit wohl auf ein Pferd gekommen sind?"
+        },
+        {
+          "charset": "S4",
+          "age": "A2",
+          "body": "Im Mittelalter lebten die meisten Menschen auf dem Land und sahen ihr ganzes Leben lang kaum mehr als ihr eigenes Dorf. Eine Reise in die nächste Stadt dauerte Tage; wer sie machte, hatte einen guten Grund."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Jahreszahlen sind das Gerüst der Geschichte, aber nicht ihr Inhalt. Interessant wird es dort, wo sich zeigt, warum Menschen so gehandelt haben, wie sie es taten: welche Mittel sie hatten, was sie wussten und wovor sie sich fürchteten."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Die große Pyramide ist rund 140 Meter hoch. Sie wurde vor etwa 4500 Jahren gebaut und war 3800 Jahre lang das höchste Bauwerk der Welt. Erst 1889 wurde sie überholt, und zwar vom Eiffelturm."
+        },
+        {
+          "charset": "S5",
+          "age": "A2",
+          "body": "Der Buchdruck mit beweglichen Lettern kam um 1450 nach Europa. Vorher wurde jedes Buch von Hand abgeschrieben, was Monate dauerte. Innerhalb von 50 Jahren entstanden dann mehrere Millionen gedruckte Bücher."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Quellenkritik fragt bei jedem Text drei Dinge: Wer hat ihn geschrieben, wann, und mit welcher Absicht? Ein Bericht aus dem Jahr 1520 über ein Ereignis von 1490 ist etwas anderes als eine Aufzeichnung, die am selben Tag entstand."
+        }
+      ],
+      "facts": [
+        "Die Pyramiden waren schon zur Zeit der Römer uralte Sehenswürdigkeiten.",
+        "Im Mittelalter tranken viele Menschen dünnes Bier statt Wasser, weil es sauberer war.",
+        "Das Wort Buchstabe kommt von Stäben aus Buchenholz, in die Zeichen geritzt wurden."
+      ]
+    },
+    {
+      "id": "kochen",
+      "label": "Kochen & Backen",
+      "icon": "pot",
+      "texts": [
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "fal jal das all als fad kal sal falls lass fass dass saal aal kalk dösa fask jald kals safa lasa dakl sölf alfa dalak fajs lösa"
+        },
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "fjf jfj dkd kdk sls lsl aöa öaö fad das all sal falls lass fass dass kalk saal jask dala kala lösa dakl fajs safa lasa alfa sölf"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "der teig liegt da du rührst gut die hefe geht auf das salz gehört dazu das öl steht dort die torte ist fertig sie isst sofort"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "das wasser sprudelt der reis ist gut du legst die eier dazu der topf steht fest die tasse ist leer die suppe ist fertig heute"
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "hefe ist lebendig. sie frisst zucker und macht dabei winzige gasblasen. genau die lassen den teig aufgehen. wenn es zu kalt ist, wird die hefe müde und der teig bleibt flach."
+        },
+        {
+          "charset": "S3",
+          "age": "A2",
+          "body": "beim anbraten wird fleisch nicht deshalb saftig, weil sich die poren schließen. das ist ein altes gerücht. was wirklich passiert, ist eine reaktion zwischen eiweiß und zucker, und die sorgt für die braune kruste und den geschmack."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "salz verstärkt nicht nur den eigenen geschmack, es dämpft auch bitterkeit. deshalb schmeckt eine leicht gesalzene grapefruit süßer als eine ungesalzene. wer beim abschmecken nur an schärfe und süße denkt, übersieht den wichtigsten hebel."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Nudeln gehören in sprudelndes Wasser. Wenn das Wasser nur leise blubbert, kleben sie zusammen. Salz kommt hinein, bevor die Nudeln kommen. Und umrühren nicht vergessen!"
+        },
+        {
+          "charset": "S4",
+          "age": "A2",
+          "body": "Ein Eigelb kann erstaunlich viel Öl binden; so entsteht Mayonnaise. Wichtig ist nur, das Öl anfangs tropfenweise zuzugeben. Wer zu schnell schüttet, bekommt statt einer Creme eine getrennte Pampe."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Rezepte sind Näherungswerte, keine Vorschriften. Mehl nimmt je nach Feuchtigkeit unterschiedlich viel Wasser auf, Öfen heizen ungleichmäßig, und Zutaten schwanken. Wer kochen lernen will, lernt deshalb zu schmecken und nicht zu messen."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Wasser kocht bei 100 Grad. Ein Ei braucht dann etwa 5 Minuten, wenn es weich werden soll, und rund 9 Minuten für hart. Auf einem Berg kocht Wasser schon früher, und das Ei braucht länger."
+        },
+        {
+          "charset": "S5",
+          "age": "A2",
+          "body": "Brotteig geht am besten bei 24 bis 28 Grad. Kühler dauert es länger, wärmer wird der Geschmack flach. Viele Bäcker lassen den Teig über Nacht bei 5 Grad im Kühlschrank stehen, weil er dabei mehr Aroma bildet."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Ein Backofen mit Umluft überträgt Wärme schneller als Ober- und Unterhitze. Deshalb gilt die Faustregel, die Temperatur um 20 Grad zu senken. Bei 180 Grad Ober- und Unterhitze wären das also etwa 160 Grad Umluft."
+        }
+      ],
+      "facts": [
+        "Honig verdirbt praktisch nie. In ägyptischen Gräbern wurde essbarer Honig gefunden.",
+        "Zwiebeln lassen einen weinen, weil sie beim Schneiden einen Reizstoff freisetzen.",
+        "Kartoffeln galten in Europa lange als Zierpflanze, bevor jemand sie aß."
+      ]
+    },
+    {
+      "id": "reisen",
+      "label": "Länder & Reisen",
+      "icon": "compass",
+      "texts": [
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "fa ja da ka la sa fal jal kal sal das all als falls lass fass dass saal aal kalk fask jald kals safa lasa dösa sölf dakl fajs"
+        },
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "asd jkl fjf jfj dkd kdk sls lsl aöa öaö lad dal kaf fak safa lasa dasa kölsa falk jask dafs alfa falls lass fass dass saal aal"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "die reise geht los der zug rollt weit du siehst das ufer die see ist ruhig dort steht das hotel es ist gut die luft ist klar"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "hier ist die karte du legst sie fort der ort liegt weit die tour geht los ihr lauft heute die welt ist weit sie wartet dort"
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "in island gibt es heiße quellen mitten in der landschaft. das wasser kommt aus der tiefe und dampft. manche leute baden darin, sogar im winter, wenn ringsum alles voller schnee liegt."
+        },
+        {
+          "charset": "S3",
+          "age": "A2",
+          "body": "die sahara ist nicht überall eine sanddüne. der größte teil besteht aus stein und kies. nachts kühlt es dort stark ab, weil ohne wolken die wärme des tages ungehindert nach oben entweicht."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "zeitzonen sind eine erfindung der eisenbahn. vorher stellte jeder ort die uhr nach dem eigenen sonnenstand, was für fahrpläne unbrauchbar war. erst der bedarf an gemeinsamen abfahrtszeiten schuf die einteilung, die wir heute benutzen."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "In Norwegen geht im Sommer die Sonne wochenlang nicht unter. Man nennt das Mitternachtssonne. Im Winter ist es dafür lange dunkel. Wie man da wohl schläft?"
+        },
+        {
+          "charset": "S4",
+          "age": "A2",
+          "body": "Die Niederlande liegen zum großen Teil unter dem Meeresspiegel. Ohne Deiche und Pumpen stünde ein Viertel des Landes unter Wasser. Deshalb gehört Wasserbau dort seit Jahrhunderten zum Alltag."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Tourismus verändert Orte schneller als jede andere Wirtschaftsform. Er bringt Geld, treibt aber Mieten und Preise so weit hoch, dass Einheimische wegziehen. Was übrig bleibt, ist oft eine Kulisse für Besucher."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Der längste Zug fährt durch Russland und braucht 7 Tage. Er hält an über 100 Bahnhöfen. Wer die ganze Strecke fährt, überquert 8 Zeitzonen und schläft dabei im Zug."
+        },
+        {
+          "charset": "S5",
+          "age": "A2",
+          "body": "Ein Flug von Deutschland nach New York dauert etwa 8 Stunden hin und 9 Stunden zurück. Der Unterschied kommt vom Jetstream, einem Starkwindband in rund 10 Kilometern Höhe, das von Westen nach Osten weht."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Die Erde hat 24 Zeitzonen, aber deutlich mehr als 24 Uhrzeiten: Einige Länder weichen um 30 oder 45 Minuten ab. Nepal etwa liegt 5 Stunden und 45 Minuten vor der Weltzeit, und China nutzt trotz seiner Breite nur eine einzige Zone."
+        }
+      ],
+      "facts": [
+        "Russland erstreckt sich über elf Zeitzonen.",
+        "Der kleinste Staat der Welt ist die Vatikanstadt. Sie passt mehrfach in einen großen Stadtpark.",
+        "In Island gibt es fast keine Mücken, obwohl es viele Seen gibt."
+      ]
+    },
+    {
+      "id": "kunst",
+      "label": "Kunst & Basteln",
+      "icon": "brush",
+      "texts": [
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "fa la da sa ka ja fal jal kal sal das all als falls lass fass dass saal kalk dösa fask jald safa lasa dakl fajs alfa dalak sölf"
+        },
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "fjf jfj dkd kdk sls lsl aöa öaö das all als lad dal kaf fak safa lasa dakl kölsa jask alfa dalak falls lass fass dass saal aal"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "das papier liegt hier der stift ist rot du ziehst die spur sie ist gerade das gold glitzert du legst gips dazu das ist gut so"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "die kreide liegt da du pustest sie fort das werk ist fertig dort steht die staffelei sie ist alt du legst das papier weg heute ist gut"
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "aus rot, gelb und blau lassen sich fast alle farben mischen. wer rot und gelb rührt, bekommt orange. blau und gelb ergeben grün. nur rot, gelb und blau selbst kann man aus nichts anderem mischen."
+        },
+        {
+          "charset": "S3",
+          "age": "A2",
+          "body": "perspektive wirkt, weil parallele linien in der ferne zusammenlaufen. maler haben das lange nicht genutzt. auf alten bildern sind wichtige personen einfach größer gemalt als unwichtige, ganz unabhängig davon, wo sie stehen."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "ob etwas als kunst gilt, entscheidet nicht das werk allein, sondern auch der zusammenhang. dasselbe objekt wirkt im museum anders als im baumarkt. genau damit haben künstler im zwanzigsten jahrhundert immer wieder gespielt."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Papier lässt sich durch Falten erstaunlich stabil machen. Eine flache Seite knickt sofort ein; dieselbe Seite als Ziehharmonika gefaltet trägt ein ganzes Buch. Probier es aus!"
+        },
+        {
+          "charset": "S4",
+          "age": "A2",
+          "body": "Die alten Meister mischten ihre Farben selbst aus Pigment und Öl. Manche Pigmente waren so teuer wie Gold, weshalb Blau lange nur für besonders wichtige Stellen benutzt wurde."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Ein Bild funktioniert selten wegen des Motivs, sondern wegen seines Aufbaus: wohin das Auge zuerst schaut, wie es weitergeführt wird und wo es zur Ruhe kommt. Wer das sehen lernt, versteht auch schlechte Bilder besser."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Regenbogen hat 7 Farben, die immer in derselben Reihenfolge stehen. Male sie einmal auf und drehe das Blatt schnell: Ab etwa 20 Umdrehungen je Sekunde sieht das Auge nur noch ein blasses Weiß."
+        },
+        {
+          "charset": "S5",
+          "age": "A2",
+          "body": "Bildschirme mischen Farbe aus Rot, Grün und Blau, Drucker dagegen aus Cyan, Magenta und Gelb. Deshalb sieht ein Bild gedruckt oft anders aus als am Schirm, obwohl beide dieselbe Datei benutzen."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Der Goldene Schnitt teilt eine Strecke im Verhältnis von etwa 1 zu 1,618. Er taucht in vielen Bildern auf, wird aber auch oft hineingedeutet: Wer lange genug misst, findet in fast jedem Werk irgendeine Linie, die passt."
+        }
+      ],
+      "facts": [
+        "Die ältesten bekannten Höhlenbilder sind über 40 000 Jahre alt.",
+        "Blaue Farbe war jahrhundertelang teurer als Gold, weil das Pigment aus einem seltenen Stein kam.",
+        "Van Gogh verkaufte zu Lebzeiten so gut wie kein Bild."
+      ]
+    },
+    {
+      "id": "raetsel",
+      "label": "Rätsel & Witze",
+      "icon": "bulb",
+      "texts": [
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "fa ja la da ka sa fal jal kal sal das all als fad falls lass fass dass saal kalk fask jald dösa sölf dakl fajs alfa dalak lasa"
+        },
+        {
+          "charset": "S1",
+          "age": "alle",
+          "body": "asd jkl asd jkl fjf jfj dkd kdk sls lsl aöa öaö lad dal kaf fak sal las das all fask jalk dafs kölsa safa lasa falls lass dass"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "wer sitzt da wer steht dort was liegt hier du siehst es gut es ist gold es ist alt es ist rot es ist die uhr sie geht heute"
+        },
+        {
+          "charset": "S2",
+          "age": "alle",
+          "body": "die frage ist gut die idee sitzt du sagst es er hört zu sie sagt es auf so geht das weiter jetzt hast du es das ist stark tut gut"
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "hier kommt ein rätsel. etwas wird immer nasser, je mehr es trocknet. die antwort ist das handtuch. so etwas nennt man ein wortspiel, weil trocknen zwei bedeutungen hat."
+        },
+        {
+          "charset": "S3",
+          "age": "A2",
+          "body": "ein klassiker. zwei väter und zwei söhne gehen angeln, jeder fängt einen fisch, und trotzdem sind es nur drei fische. das geht, weil es großvater, vater und sohn sind. der vater ist beides zugleich."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "viele rätsel funktionieren, weil wir eine annahme mitbringen, die niemand ausgesprochen hat. sobald man sie bemerkt, wirkt die lösung selbstverständlich. genau deshalb sind sie gute übung im genauen lesen."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Was hat viele Zähne, kann aber nicht beißen? Ein Kamm! Solche Fragen spielen damit, dass ein Wort mehrere Bedeutungen hat. Kennst du noch eins?"
+        },
+        {
+          "charset": "S4",
+          "age": "A2",
+          "body": "Ein Bauer soll einen Wolf, eine Ziege und einen Kohlkopf über einen Fluss bringen. Im Boot ist nur für eines davon Platz. Allein gelassen frisst der Wolf die Ziege und die Ziege den Kohl. Wie schafft er es?"
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Beim Ziegenproblem hat man die Wahl zwischen drei Türen; hinter einer steht ein Preis. Nach der ersten Wahl wird eine leere Tür geöffnet. Wechseln lohnt sich, und zwar doppelt so oft wie Bleiben. Fast alle tippen zuerst auf unentschieden."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Denk dir eine Zahl von 1 bis 9. Nimm sie mal 9. Zähle die beiden Ziffern zusammen. Du bekommst immer 9, egal womit du angefangen hast. Probier es mit 3, mit 7 und mit 8!"
+        },
+        {
+          "charset": "S5",
+          "age": "A2",
+          "body": "In einem Raum mit 23 Leuten haben zwei mit über 50 Prozent Wahrscheinlichkeit am selben Tag Geburtstag. Das klingt falsch, weil man an sich selbst denkt. Gezählt werden aber alle Paare, und davon gibt es 253."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Faltet man ein Blatt Papier 42 Mal, reicht es rechnerisch bis zum Mond. Jede Faltung verdoppelt die Dicke, und 2 hoch 42 ist eine gewaltige Zahl. In Wirklichkeit ist nach etwa 7 Faltungen Schluss."
+        }
+      ],
+      "facts": [
+        "Das älteste bekannte Rätsel stammt aus Mesopotamien und ist rund 4000 Jahre alt.",
+        "Kreuzworträtsel gibt es erst seit 1913.",
+        "Ein Sudoku hat nur dann genau eine Lösung, wenn mindestens 17 Zahlen vorgegeben sind."
+      ]
+    }
+  ]
+}

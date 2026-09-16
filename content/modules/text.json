@@ -1,0 +1,177 @@
+{
+  "id": "modul-text",
+  "schema": 1,
+  "title": "Textverarbeitung",
+  "beschreibung": "Die paar Regeln, an die sich jeder hält, der einen Text abgibt.",
+  "comment": "SPEC.md 10.2, Grundlage DIN 5008:2020-03 in kindgerechter Auswahl (NORMEN.md 5.1). Ziel ist nicht Vollstaendigkeit -- die Norm hat rund 70 Seiten --, sondern dass das Kind weiss, dass es eine Norm gibt und welche Regeln im Alltag staendig vorkommen. Die Textproben werden mit checkDin5008() geprueft, also mit derselben Funktion, an die sich Zehni selbst haelt.",
+  "units": [
+    {
+      "id": "text-norm",
+      "title": "Es gibt eine Regel dafür",
+      "bloecke": [
+        "Für die Frage, wie ein Text auszusehen hat, gibt es tatsächlich eine Norm. Sie heißt DIN 5008 und regelt so ziemlich alles, von Satzzeichen bis zum Aufbau eines Briefs.",
+        "Das klingt kleinlich und ist es auch ein bisschen. Der Grund dahinter ist trotzdem gut: Wenn alle Texte gleich gebaut sind, findet man in jedem sofort, was man sucht.",
+        "Du musst die Norm nicht auswendig können. Zehni hält sich in allem, was es dir anzeigt, selbst daran, und du lernst hier die Handvoll Regeln, die im Alltag ständig vorkommen."
+      ],
+      "aufgabe": {
+        "art": "quiz",
+        "text": "Wozu ist so eine Norm gut?",
+        "optionen": [
+          "Damit man Leute ärgern kann, die sie nicht kennen.",
+          "Damit Texte überall gleich aufgebaut sind und man sich sofort zurechtfindet.",
+          "Damit Computer Texte lesen können."
+        ],
+        "richtig": 1,
+        "erklaerung": "Eine Norm ist eine Verabredung. Ihr Nutzen entsteht dadurch, dass viele sich daran halten, nicht dadurch, dass sie besonders schlau wäre."
+      },
+      "abschluss": "Eine Norm ist keine Meinung. Sie ist eine Verabredung, damit nicht jeder alles anders macht."
+    },
+
+    {
+      "id": "text-satzzeichen",
+      "title": "Satzzeichen kleben nach links",
+      "bloecke": [
+        "Die häufigste Regel überhaupt: Ein Satzzeichen steht direkt am Wort davor, ohne Leerzeichen. Danach kommt ein Leerzeichen.",
+        "Richtig ist also: „Hallo, wie geht es dir?“ Falsch wäre, ein Leerzeichen vor das Komma und vor das Fragezeichen zu setzen und danach keines.",
+        "Das gilt für Komma, Punkt, Doppelpunkt, Semikolon, Frage- und Ausrufezeichen gleichermaßen. Merksatz: Satzzeichen kleben nach links."
+      ],
+      "aufgabe": {
+        "art": "textprobe",
+        "text": "Berichtige den Text. Es sind vier Stellen.",
+        "vorgabe": "Hallo ,wie geht es dir ?Ich habe heute geübt.",
+        "loesung": "Hallo, wie geht es dir? Ich habe heute geübt.",
+        "erklaerung": "Vor Komma und Fragezeichen stand ein Leerzeichen zu viel, danach fehlte eines."
+      },
+      "abschluss": "Wenn du sonst nichts aus diesem Modul behältst: Satzzeichen kleben nach links."
+    },
+
+    {
+      "id": "text-zahlen",
+      "title": "Datum, Uhrzeit, Zahlen",
+      "bloecke": [
+        "Ein Datum wird zweistellig geschrieben, mit vierstelliger Jahreszahl: 05.09.2026. Ein einstelliger Tag ohne Null davor und ein zweistelliges Jahr sind nicht erlaubt, weil beides sich verlesen lässt.",
+        "Uhrzeiten bekommen einen Doppelpunkt und das Wort Uhr: 14:30 Uhr.",
+        "Und Zahlen ab fünf Stellen werden von rechts in Dreiergruppen gegliedert, mit Leerzeichen: 12 345. Vierstellige bleiben, wie sie sind: 8000.",
+        "Zwischen Zahl und Einheit steht ein Leerzeichen: 5 kg, 20 %, 12 EUR."
+      ],
+      "aufgabe": {
+        "art": "textprobe",
+        "text": "Berichtige das Datum und die Zahl.",
+        "vorgabe": "Am 5.9.26 haben wir 24500 Schritte gezählt.",
+        "loesung": "Am 05.09.2026 haben wir 24 500 Schritte gezählt.",
+        "erklaerung": "Tag und Monat brauchen die führende Null, das Jahr vier Stellen. Die Zahl hat fünf Stellen und wird deshalb gegliedert."
+      },
+      "abschluss": "Das Datum von hinten nach vorn zu schreiben, also 2026-09-05, ist übrigens auch erlaubt und praktisch für Dateinamen."
+    },
+
+    {
+      "id": "text-striche",
+      "title": "Zwei Striche, die anders aussehen",
+      "bloecke": [
+        "Es gibt zwei Striche, die man ständig verwechselt. Der kurze ist der Bindestrich. Er verbindet Wörter und steht ohne Leerzeichen: Sommer-Ferien, E-Mail.",
+        "Der lange ist der Gedankenstrich. Er trennt einen Einschub ab und hat auf beiden Seiten ein Leerzeichen: „Wir sind — was für ein Zufall — zur selben Zeit da gewesen.“",
+        "Ein Bindestrich mit Leerzeichen drumherum ist also falsch. Er sieht nur so aus, als wäre er ein Gedankenstrich."
+      ],
+      "aufgabe": {
+        "art": "zuordnen",
+        "text": "Welcher Strich gehört wohin?",
+        "faecher": [
+          { "id": "binde", "label": "Bindestrich, ohne Leerzeichen" },
+          { "id": "gedanke", "label": "Gedankenstrich, mit Leerzeichen" }
+        ],
+        "karten": [
+          { "text": "E-Mail", "fach": "binde" },
+          { "text": "Nord-Süd-Richtung", "fach": "binde" },
+          { "text": "Fußball-Verein", "fach": "binde" },
+          { "text": "Kaffee-Ersatz", "fach": "binde" },
+          { "text": "Ich kam an — leider zu spät.", "fach": "gedanke" },
+          { "text": "Das Spiel war — man muss es zugeben — langweilig.", "fach": "gedanke" },
+          { "text": "Er ging weg — ohne ein Wort.", "fach": "gedanke" }
+        ],
+        "erklaerung": "Merkhilfe: Der Bindestrich bindet zwei Teile zu einem Wort. Der Gedankenstrich schiebt einen Gedanken dazwischen und braucht deshalb Platz."
+      },
+      "abschluss": "Den langen Strich bekommst du auf der deutschen Tastatur über die Zeichenauswahl deines Programms oder in Zehni ab Lektion 23."
+    },
+
+    {
+      "id": "text-aufbau",
+      "title": "Überschriften und Aufzählungen",
+      "bloecke": [
+        "Eine Überschrift bekommt keinen Punkt am Ende. Sie ist kein Satz, sondern ein Schild.",
+        "Überschriften bilden eine Reihenfolge: Erst die große, darunter die kleineren. Man überspringt keine Stufe, so wie man beim Inhaltsverzeichnis keine Stufe überspringt.",
+        "Aufzählungen bekommen entweder alle einen Punkt am Ende oder keiner. Gemischt sieht es unordentlich aus, und genau darum geht es bei der ganzen Norm: nicht um Schönheit, sondern um Einheitlichkeit."
+      ],
+      "aufgabe": {
+        "art": "zuordnen",
+        "text": "Was ist in Ordnung, was nicht?",
+        "faecher": [
+          { "id": "gut", "label": "So ist es richtig" },
+          { "id": "schlecht", "label": "Da stimmt etwas nicht" }
+        ],
+        "karten": [
+          { "text": "Überschrift ohne Punkt am Ende", "fach": "gut" },
+          { "text": "Erst Hauptüberschrift, dann Unterüberschrift", "fach": "gut" },
+          { "text": "In einer Aufzählung enden alle Punkte gleich", "fach": "gut" },
+          { "text": "Überschrift mit Punkt am Ende.", "fach": "schlecht" },
+          { "text": "Direkt mit einer Unterüberschrift anfangen", "fach": "schlecht" },
+          { "text": "In einer Aufzählung mal mit, mal ohne Punkt", "fach": "schlecht" }
+        ],
+        "erklaerung": "Eine Überschrift ist ein Schild, kein Satz. Und eine Aufzählung ist dann gut, wenn man nicht über die Form stolpert."
+      },
+      "abschluss": "Formatvorlagen machen das von allein. Wer Überschriften mit fett und größer von Hand baut, macht dieselbe Arbeit dreimal."
+    },
+
+    {
+      "id": "text-brief",
+      "title": "Wie ein Brief aufgebaut ist",
+      "bloecke": [
+        "Ein Brief hat eine feste Reihenfolge, und die kennt jeder, der schon einmal einen bekommen hat: oben die Anschrift, darunter das Datum, dann der Betreff, dann die Anrede, der Text und zum Schluss der Gruß mit dem Namen.",
+        "Der Betreff ist die Zeile, die sagt, worum es geht. Er bekommt keine Überschrift „Betreff“ davor und keinen Punkt am Ende.",
+        "Nach der Anrede steht ein Komma, und danach geht es klein weiter: „Sehr geehrte Frau Berg,“ und in der nächsten Zeile „vielen Dank für …“",
+        "Das gilt genauso für eine E-Mail. Nur die Anschrift fällt weg."
+      ],
+      "aufgabe": {
+        "art": "zuordnen",
+        "text": "Was gehört in den Kopf des Briefs, was in den Schluss?",
+        "faecher": [
+          { "id": "kopf", "label": "Oben" },
+          { "id": "schluss", "label": "Unten" }
+        ],
+        "karten": [
+          { "text": "Anschrift der Empfängerin", "fach": "kopf" },
+          { "text": "Datum", "fach": "kopf" },
+          { "text": "Betreff", "fach": "kopf" },
+          { "text": "Anrede", "fach": "kopf" },
+          { "text": "Mit freundlichen Grüßen", "fach": "schluss" },
+          { "text": "Dein Name", "fach": "schluss" },
+          { "text": "Hinweis auf eine Anlage", "fach": "schluss" }
+        ],
+        "erklaerung": "Die Reihenfolge ist immer dieselbe. Deshalb weiß man bei einem fremden Brief sofort, wo man hinschauen muss."
+      },
+      "abschluss": "Ein Brief nach dieser Ordnung wirkt erwachsen, auch wenn er von dir ist. Das ist kein Trick, sondern einfach Übung."
+    },
+
+    {
+      "id": "text-werkzeuge",
+      "title": "Was das Programm für dich macht",
+      "bloecke": [
+        "Ein Schreibprogramm kann eine Menge, was viele von Hand machen. Formatvorlagen zum Beispiel: Du sagst einmal, wie eine Überschrift aussehen soll, und alle sehen so aus. Änderst du die Vorlage, ändern sich alle mit.",
+        "Seitenzahlen gehören in die Kopf- oder Fußzeile, nicht getippt. Sonst stimmen sie beim nächsten Absatz nicht mehr.",
+        "Die Rechtschreibprüfung findet Tippfehler, aber keine falschen Wörter. „Der Hund biss den Man“ wird angestrichen, „Der Hund biss den Mann“ mit falschem Sinn nicht. Lesen musst du trotzdem selbst.",
+        "Und wenn du etwas abgibst: als PDF. Dann sieht es bei allen so aus wie bei dir."
+      ],
+      "aufgabe": {
+        "art": "quiz",
+        "text": "Du hast ein Referat geschrieben und sollst es abgeben. Wie?",
+        "optionen": [
+          "Als Datei des Schreibprogramms, dann kann es jeder ändern.",
+          "Als PDF, dann sieht es überall gleich aus.",
+          "Ausgedruckt und abfotografiert."
+        ],
+        "richtig": 1,
+        "erklaerung": "Ein PDF behält Schrift, Abstände und Seitenumbrüche. Eine Programmdatei sieht auf einem anderen Rechner schnell anders aus, wenn dort die Schrift fehlt."
+      },
+      "abschluss": "Alles, was das Programm für dich erledigt, kann auch nicht mehr kaputtgehen, wenn du später etwas änderst."
+    }
+  ]
+}

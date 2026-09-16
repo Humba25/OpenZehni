@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Themes über CSS-Variablen (SPEC.md 3). Der Wechsel setzt nur das Attribut
+ * `data-theme` am <html>-Element um, es wird nichts neu geladen.
+ *
+ * Die Farben für richtig/falsch sind bewusst nicht allein durch den Farbton
+ * unterschieden: Falsche Zeichen bekommen zusätzlich eine Unterstreichung, das
+ * aktuelle Zeichen einen Rahmen. Rot-Grün-Blindheit ist die häufigste Form der
+ * Farbfehlsichtigkeit (SPEC.md 12.2).
+ */
+:root,
+[data-theme='hell'] {
+  --farbe-grund: 246 247 250;
+  --farbe-flaeche: 255 255 255;
+  --farbe-rand: 219 223 232;
+  --farbe-text: 26 32 44;
+  --farbe-gedaempft: 108 118 138;
+  --farbe-akzent: 37 99 173;
+  --farbe-richtig: 22 122 90;
+  --farbe-falsch: 190 45 55;
+  --farbe-korrigiert: 176 122 20;
+}
+
+[data-theme='dunkel'] {
+  --farbe-grund: 22 26 34;
+  --farbe-flaeche: 32 38 48;
+  --farbe-rand: 58 66 80;
+  --farbe-text: 232 236 243;
+  --farbe-gedaempft: 150 160 178;
+  --farbe-akzent: 106 168 240;
+  --farbe-richtig: 80 190 150;
+  --farbe-falsch: 245 120 125;
+  --farbe-korrigiert: 235 185 90;
+}
+
+[data-theme='kontrast'] {
+  --farbe-grund: 0 0 0;
+  --farbe-flaeche: 0 0 0;
+  --farbe-rand: 255 255 255;
+  --farbe-text: 255 255 255;
+  --farbe-gedaempft: 220 220 220;
+  --farbe-akzent: 255 220 0;
+  --farbe-richtig: 0 255 140;
+  --farbe-falsch: 255 120 120;
+  --farbe-korrigiert: 255 200 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-grund text-text font-lesen antialiased;
+  /* Beim Tippen soll nichts versehentlich markiert werden. */
+  user-select: none;
+  overflow: hidden;
+}
+
+/*
+ * Wer mit der Tastatur navigiert, muss sehen, wo er ist. Der Fokusring wird
+ * nirgends entfernt (SPEC.md 12.2).
+ */
+:focus-visible {
+  @apply outline-none ring-4 ring-akzent/50;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

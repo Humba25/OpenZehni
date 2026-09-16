@@ -1,0 +1,201 @@
+{
+  "id": "modul-medien",
+  "schema": 1,
+  "title": "Medien",
+  "beschreibung": "Wie du im Internet erkennst, was gespielt ist, und was besser bei dir bleibt.",
+  "comment": "Die Einheiten aus SPEC.md 10.1, die nicht als Zwischenstueck im Lernpfad liegen. Einheit 1 (Passwoerter) und die drei Fallen stehen in content/interludes.json. Die Felder kmk und digcomp sind Metadaten fuer die Elternansicht und erscheinen nicht in der Kinderoberflaeche (NORMEN.md 6).",
+  "units": [
+    {
+      "id": "medien-daten",
+      "title": "Was besser bei dir bleibt",
+      "kmk": 4,
+      "digcomp": "4.2",
+      "bloecke": [
+        "Manche Angaben über dich sind harmlos. Deine Lieblingsfarbe kennt niemand besser als du, und selbst wenn sie jemand erfährt, passiert nichts.",
+        "Andere Angaben sind ein Schlüssel. Nicht weil eine davon gefährlich wäre, sondern weil sie sich zusammensetzen lassen: Schule, Verein, Vorname, ein Foto vom Schulweg. Vier harmlose Sachen ergeben zusammen eine Wegbeschreibung zu dir.",
+        "Die Faustregel ist einfach: Alles, womit man dich finden kann, bleibt bei dir. Alles andere darfst du erzählen."
+      ],
+      "aufgabe": {
+        "art": "zuordnen",
+        "text": "Was darf in ein Spieleprofil, was nicht?",
+        "faecher": [
+          { "id": "ok", "label": "Kann rein" },
+          { "id": "nein", "label": "Bleibt bei mir" }
+        ],
+        "karten": [
+          { "text": "Lieblingstier", "fach": "ok" },
+          { "text": "Spitzname", "fach": "ok" },
+          { "text": "Lieblingsfarbe", "fach": "ok" },
+          { "text": "Lieblingsspiel", "fach": "ok" },
+          { "text": "Name deiner Schule", "fach": "nein" },
+          { "text": "Straße, in der du wohnst", "fach": "nein" },
+          { "text": "Telefonnummer", "fach": "nein" },
+          { "text": "Foto vor deiner Haustür", "fach": "nein" },
+          { "text": "Geburtsdatum", "fach": "nein" }
+        ],
+        "erklaerung": "Alles im rechten Fach sagt, wo du bist oder wer genau du bist. Das Geburtsdatum wirkt harmlos, ist aber die Angabe, mit der sich Leute bei Diensten als du ausgeben."
+      },
+      "abschluss": "Wenn du unsicher bist, stell dir vor, die Angabe hängt als Zettel am Schwarzen Brett deiner Schule. Wäre das in Ordnung?"
+    },
+
+    {
+      "id": "medien-quellen",
+      "title": "Echt oder erfunden?",
+      "kmk": 2,
+      "digcomp": "1.2",
+      "bloecke": [
+        "Im Internet darf jeder alles schreiben. Das ist das Gute daran und zugleich das Schwierige: Es steht nirgends dabei, ob es stimmt.",
+        "Drei Fragen helfen fast immer. Erstens: Wer sagt das, und steht ein Name dabei? Zweitens: Steht es noch woanders, bei jemandem, der nichts davon hat? Drittens: Will mich der Text informieren oder aufregen?",
+        "Besonders verdächtig sind Überschriften, die schon wütend klingen. Wer dich aufregt, will, dass du weiterleitest, bevor du nachdenkst."
+      ],
+      "aufgabe": {
+        "art": "zuordnen",
+        "text": "Was klingt nach einer Nachricht, was nach einer Masche?",
+        "faecher": [
+          { "id": "pruefen", "label": "Klingt glaubwürdig" },
+          { "id": "unsinn", "label": "Da stimmt was nicht" }
+        ],
+        "karten": [
+          {
+            "text": "Die Stadt baut eine neue Turnhalle. Beschluss vom Stadtrat, mit Datum und Namen.",
+            "fach": "pruefen"
+          },
+          {
+            "text": "Forscher einer Universität berichten von einem neuen Frosch. Die Studie ist verlinkt.",
+            "fach": "pruefen"
+          },
+          {
+            "text": "Wetterdienst warnt vor Sturm am Wochenende.",
+            "fach": "pruefen"
+          },
+          {
+            "text": "Diesen Trick hassen Lehrer! Nie wieder Hausaufgaben!",
+            "fach": "unsinn"
+          },
+          {
+            "text": "Teile das sofort, sonst passiert etwas Schlimmes.",
+            "fach": "unsinn"
+          },
+          {
+            "text": "Wissenschaftler verschweigen, was wirklich hinter dem Mond ist.",
+            "fach": "unsinn"
+          }
+        ],
+        "erklaerung": "Die drei glaubwürdigen Meldungen haben eines gemeinsam: Man kann nachsehen, wer sie sagt. Die drei anderen wollen, dass du fühlst statt prüfst."
+      },
+      "abschluss": "Du musst nichts auswendig wissen. Es reicht, kurz zu stutzen und nachzusehen, bevor du etwas weitergibst."
+    },
+
+    {
+      "id": "medien-werbung",
+      "title": "Werbung erkennen",
+      "kmk": 2,
+      "digcomp": "2.4",
+      "bloecke": [
+        "Werbung sieht heute oft nicht mehr wie Werbung aus. Sie steht mitten im Video, mitten im Beitrag, und sie wird von jemandem gesagt, den du magst.",
+        "Das ist erlaubt, muss aber gekennzeichnet sein. Wörter wie Anzeige, Werbung oder bezahlte Partnerschaft sind keine Höflichkeit, sondern Pflicht.",
+        "Der einfachste Test: Verdient jemand Geld, wenn ich das kaufe? Wenn ja, ist es Werbung, auch wenn es wie ein Tipp klingt."
+      ],
+      "aufgabe": {
+        "art": "zuordnen",
+        "text": "Werbung oder nicht?",
+        "faecher": [
+          { "id": "werbung", "label": "Das ist Werbung" },
+          { "id": "inhalt", "label": "Das ist kein Verkauf" }
+        ],
+        "karten": [
+          { "text": "Mit meinem Code bekommst du zehn Prozent Rabatt.", "fach": "werbung" },
+          { "text": "Anzeige: Die neue Trinkflasche von …", "fach": "werbung" },
+          { "text": "Dieses Video enthält bezahlte Werbung.", "fach": "werbung" },
+          { "text": "Ich zeige euch heute, wie man einen Knoten bindet.", "fach": "inhalt" },
+          { "text": "Ein Zuschauer hat gefragt, wie tief das Meer ist.", "fach": "inhalt" },
+          { "text": "Die Stadtbücherei hat ab Montag länger geöffnet.", "fach": "inhalt" }
+        ],
+        "erklaerung": "Ein Rabattcode ist immer Werbung: Der Code sagt der Firma, wer dich geschickt hat, und dafür gibt es Geld."
+      },
+      "abschluss": "Werbung ist nichts Schlimmes. Schlimm ist nur, sie für einen ehrlichen Tipp zu halten."
+    },
+
+    {
+      "id": "medien-hilfe",
+      "title": "Kettenbriefe und Ärger im Netz",
+      "kmk": 5,
+      "digcomp": "4.3",
+      "bloecke": [
+        "Kettenbriefe drohen mit etwas Schlimmem, falls du nicht weiterleitest. Sie sind seit über hundert Jahren dieselbe Masche, früher auf Papier. Es ist noch nie etwas passiert, weil jemand nicht weitergeleitet hat.",
+        "Was passiert: Der Kettenbrief macht Angst. Genau dafür ist er gemacht. Weiterleiten gibt die Angst an den nächsten weiter, sonst nichts.",
+        "Manchmal geht es weiter als das. Wenn dich jemand im Netz beschimpft, ausschließt oder bloßstellt, ist das nicht deine Schuld, und du musst es nicht allein lösen. Bildschirmfoto machen, nicht antworten, einer erwachsenen Person zeigen. Es gibt auch kostenlose Nummern für Kinder und Jugendliche, die man anonym anrufen kann."
+      ],
+      "aufgabe": {
+        "art": "quiz",
+        "text": "Du bekommst eine Nachricht: „Schick das an zehn Leute, sonst passiert dir heute Nacht etwas.“ Was tust du?",
+        "optionen": [
+          "Weiterleiten, sicherheitshalber.",
+          "Nicht weiterleiten, löschen und jemandem erzählen, wenn es dich beunruhigt.",
+          "Zurückschreiben und schimpfen."
+        ],
+        "richtig": 1,
+        "erklaerung": "Weiterleiten hilft nur dem Kettenbrief. Zurückschimpfen bringt dich in eine Auseinandersetzung mit jemandem, der die Nachricht wahrscheinlich selbst nur weitergereicht hat. Löschen kostet nichts."
+      },
+      "abschluss": "Sich Hilfe zu holen ist keine Petzerei und keine Schwäche. Es ist die schnellste Abkürzung, die es gibt."
+    },
+
+    {
+      "id": "medien-ordner",
+      "title": "Ordnung in Dateien",
+      "kmk": 1,
+      "digcomp": "1.3",
+      "bloecke": [
+        "Eine Datei, die du nicht wiederfindest, hast du nicht. Deshalb lohnt sich Ordnung nicht für den Computer, sondern für dich in drei Wochen.",
+        "Zwei Regeln reichen weit. Erstens: Der Name sagt, was drin ist. Nicht neu, nicht Dokument1, sondern Referat Island. Zweitens: Wenn ein Datum dazugehört, schreibt man es von hinten nach vorn, also 2026-09-15. Dann sortiert sich die Liste von allein richtig.",
+        "Und das Wichtigste: Eine Sicherungskopie ist kein Luxus. Eine Datei, die es nur einmal gibt, gibt es fast nicht."
+      ],
+      "aufgabe": {
+        "art": "zuordnen",
+        "text": "Räum das Chaos auf. Wohin gehört was?",
+        "faecher": [
+          { "id": "schule", "label": "Ordner „Schule“" },
+          { "id": "bilder", "label": "Ordner „Bilder“" },
+          { "id": "weg", "label": "Kann weg" }
+        ],
+        "karten": [
+          { "text": "Referat Island.odt", "fach": "schule" },
+          { "text": "Mathe Hausaufgabe 2026-09-12.pdf", "fach": "schule" },
+          { "text": "Vokabeln Englisch.txt", "fach": "schule" },
+          { "text": "Urlaub Ostsee 2026-07-30.jpg", "fach": "bilder" },
+          { "text": "Katze schläft.jpg", "fach": "bilder" },
+          { "text": "neu (3) Kopie.txt", "fach": "weg" },
+          { "text": "Unbenannt1.odt", "fach": "weg" }
+        ],
+        "erklaerung": "Die beiden letzten sind nicht deshalb Müll, weil sie leer wären, sondern weil niemand mehr weiß, was drin ist. Genau das verhindert ein sprechender Name."
+      },
+      "abschluss": "Ein guter Dateiname ist eine Nachricht an dich selbst, die du in drei Wochen liest."
+    },
+
+    {
+      "id": "medien-kuerzel",
+      "title": "Tastenkürzel",
+      "kmk": 1,
+      "digcomp": "5.2",
+      "bloecke": [
+        "Die Maus ist bequem, aber langsam. Wer den Weg zur Maus und zurück spart, spart bei jeder Kleinigkeit eine Sekunde und am Tag ziemlich viel.",
+        "Sechs Kürzel decken fast alles ab, was du im Alltag brauchst. Sie sind in nahezu jedem Programm gleich, vom Schreibprogramm bis zum Browser.",
+        "Übe sie hier ein paar Mal. Danach denkst du nicht mehr darüber nach, genau wie beim Tippen."
+      ],
+      "aufgabe": {
+        "art": "tastenkuerzel",
+        "text": "Drücke das Kürzel, das gesucht wird.",
+        "kuerzel": [
+          { "label": "Kopieren", "code": "KeyC", "ctrl": true, "shift": false },
+          { "label": "Einfügen", "code": "KeyV", "ctrl": true, "shift": false },
+          { "label": "Ausschneiden", "code": "KeyX", "ctrl": true, "shift": false },
+          { "label": "Rückgängig", "code": "KeyZ", "ctrl": true, "shift": false },
+          { "label": "Suchen", "code": "KeyF", "ctrl": true, "shift": false },
+          { "label": "Speichern", "code": "KeyS", "ctrl": true, "shift": false }
+        ],
+        "erklaerung": "Alle sechs liegen links unten, in Reichweite derselben Hand. Das ist kein Zufall: Die andere Hand soll auf der Maus bleiben können."
+      },
+      "abschluss": "Das wichtigste Kürzel ist Rückgängig. Solange du es kennst, kannst du am Computer fast nichts kaputt machen."
+    }
+  ]
+}

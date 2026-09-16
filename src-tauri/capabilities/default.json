@@ -1,0 +1,18 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Rechte des Hauptfensters. Bewusst knapp gehalten: Zehni braucht keinen Dateizugriff, keine Shell und kein allgemeines Netzwerk aus der WebView heraus (ARCHITEKTUR.md, Architekturregel 2). Die einzige Ausnahme ist der Updater, und auch der laedt ausschliesslich in Rust.",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "sql:default",
+    "sql:allow-load",
+    "sql:allow-execute",
+    "sql:allow-select",
+    "sql:allow-close",
+
+    "updater:default",
+
+    "process:allow-restart"
+  ]
+}

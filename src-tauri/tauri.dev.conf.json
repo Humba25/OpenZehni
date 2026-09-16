@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Zehni (Entwicklung)",
+  "identifier": "de.zehni.app.entwicklung",
+  "app": {
+    "windows": [
+      {
+        "title": "Zehni (Entwicklung)"
+      }
+    ]
+  }
+}

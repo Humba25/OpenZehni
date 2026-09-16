@@ -1,0 +1,62 @@
+# Blocklist fuer die Textvalidierung (SPEC.md 9.4, Punkt 3).
+#
+# Zeilen mit # sind Kommentare. Ein Eintrag je Zeile, kleingeschrieben.
+# Geprueft wird WORTGRENZENBASIERT: "waffe" trifft "waffe" und "waffen",
+# aber nicht "schlafwaffel". Ohne Wortgrenzen wuerde die Liste harmlose
+# Woerter sperren und die Textquelle unbrauchbar machen.
+#
+# Diese Liste ist bewusst kurz. Sie ist die letzte Bremse fuer KI-Antworten,
+# nicht der eigentliche Schutz -- der liegt im Prompt (SPEC.md 9.4) und darin,
+# dass Uebungstexte zu Themen wie Tieren und Weltall entstehen.
+# Wer sie erweitert: Ein falsch gesperrtes Alltagswort faellt niemandem auf,
+# kostet aber jedes Mal einen Text.
+
+# Gewalt
+waffe
+waffen
+pistole
+gewehr
+messerstich
+toeten
+ermorden
+mord
+blut
+folter
+krieg
+schlagen
+pruegel
+
+# Tod und Selbstverletzung
+selbstmord
+suizid
+ritzen
+umbringen
+
+# Drogen
+droge
+drogen
+kokain
+heroin
+cannabis
+rauschgift
+besoffen
+betrunken
+
+# Sexualitaet
+sex
+porno
+nackt
+
+# Beleidigungen
+idiot
+dumm
+bloed
+haesslich
+versager
+loser
+depp
+
+# Angstthemen fuer Kinder
+entfuehrung
+entfuehrt
+missbrauch

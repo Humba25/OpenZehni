@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "comment": "Zusaetzliche Stationen auf dem Lernweg (SPEC.md 6.7). Die acht Zwischenstuecke stehen in interludes.json und werden hier nicht wiederholt -- ihre Position ergibt sich aus dem Feld afterLesson. Hier stehen die Modul-Einheiten und die Minispiele, die frueher nur ueber ein eigenes Menue erreichbar waren.",
+  "regeln": [
+    "Keine Station haelt auf. Die naechste Lektion wird allein durch die vorige freigeschaltet, nie durch eine Station.",
+    "Stationen liegen nur nach Lektionen ohne Zwischenstueck. Zwei Unterbrechungen hintereinander waeren eine zu viel.",
+    "Wortsalat erst ab L07 -- vorher gibt der Zeichenvorrat keine Woerter her.",
+    "Die beiden Textproben (text-satzzeichen, text-zahlen) verlangen Satzzeichen und Ziffern und stehen deshalb erst ab L22.",
+    "Jede freie Modul-Einheit kommt genau einmal vor. Ein Test haelt das fest."
+  ],
+  "stationen": [
+    { "nachLektion": "L01", "art": "modul", "einheit": "medien-daten" },
+    { "nachLektion": "L02", "art": "modul", "einheit": "lernen-e3" },
+    { "nachLektion": "L04", "art": "spiel", "spiel": "buchstabenregen" },
+    { "nachLektion": "L05", "art": "modul", "einheit": "medien-quellen" },
+    { "nachLektion": "L07", "art": "modul", "einheit": "lernen-e4" },
+    { "nachLektion": "L08", "art": "spiel", "spiel": "wortsalat" },
+    { "nachLektion": "L08", "art": "modul", "einheit": "medien-ordner" },
+    { "nachLektion": "L10", "art": "modul", "einheit": "medien-werbung" },
+    { "nachLektion": "L11", "art": "modul", "einheit": "text-norm" },
+    { "nachLektion": "L13", "art": "spiel", "spiel": "buchstabenregen" },
+    { "nachLektion": "L13", "art": "modul", "einheit": "lernen-e7" },
+    { "nachLektion": "L14", "art": "modul", "einheit": "lernen-e6" },
+    { "nachLektion": "L16", "art": "modul", "einheit": "medien-hilfe" },
+    { "nachLektion": "L17", "art": "modul", "einheit": "text-striche" },
+    { "nachLektion": "L19", "art": "spiel", "spiel": "wortsalat" },
+    { "nachLektion": "L19", "art": "modul", "einheit": "text-brief" },
+    { "nachLektion": "L20", "art": "modul", "einheit": "medien-kuerzel" },
+    { "nachLektion": "L22", "art": "modul", "einheit": "text-satzzeichen" },
+    { "nachLektion": "L23", "art": "modul", "einheit": "text-zahlen" },
+    { "nachLektion": "L23", "art": "modul", "einheit": "text-aufbau" },
+    { "nachLektion": "L25", "art": "modul", "einheit": "text-werkzeuge" }
+  ]
+}

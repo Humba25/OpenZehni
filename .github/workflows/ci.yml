@@ -1,0 +1,58 @@
+# Prueft jeden Push und jeden Pull Request (SPEC.md 13).
+#
+# Genau die Befehle, die ARCHITEKTUR.md vor jedem Commit verlangt -- damit die CI
+# nichts anderes prueft als der Mensch an der Tastatur. Laeuft auf Windows,
+# weil Zehni eine Windows-Anwendung ist und die Rust-Seite dort gebaut wird.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Ein laufender Durchgang wird abgebrochen, wenn ein neuer Push kommt.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pruefen:
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Abhaengigkeiten installieren
+        run: npm ci
+
+      - name: Lint, Formatierung und Typen
+        run: npm run lint
+
+      - name: Unit-Tests
+        run: npm test
+
+      - name: Seed-Texte pruefen
+        run: npm run validate:seed
+
+      - name: Alle Texte gegen DIN 5008 pruefen
+        run: npm run check:din5008
+
+      - name: Rust-Werkzeuge einrichten
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - name: Rust-Abhaengigkeiten zwischenspeichern
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Clippy
+        run: cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings

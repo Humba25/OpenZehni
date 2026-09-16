@@ -1,0 +1,121 @@
+{
+  "id": "modul-lernen",
+  "schema": 1,
+  "title": "Lernen lernen",
+  "beschreibung": "Warum niemand etwas von Geburt an kann und was beim Üben wirklich hilft.",
+  "comment": "Die Einheiten E3, E4, E6 und E7 aus MODUL-LERNEN.md 4. E1, E2, E5 und E8 liegen als Zwischenstueck im Lernpfad (content/interludes.json). Tonfall verbindlich nach MODUL-LERNEN.md 6: kein Vorwurf, keine Ausrufezeichen-Paedagogik, der Satz gehoert der Nutzerin und nicht dem Programm.",
+  "units": [
+    {
+      "id": "lernen-e3",
+      "title": "Dafür bin ich zu spät dran",
+      "bloecke": [
+        "Es gibt einen Gedanken, der in jedem Alter auftaucht und jedes Mal gleich falsch ist: Dafür ist es jetzt zu spät.",
+        "In deinem Alter klingt er so: Die anderen in meiner Klasse können das längst. Das stimmt vielleicht sogar. Sie haben früher angefangen, nicht mit mehr Talent. Und du vergleichst dich mit ihrem Heute, nicht mit ihrem Anfang, den du nie gesehen hast.",
+        "Später klingt derselbe Gedanke so: Dafür bin ich zu alt. Wer mit vierzig sagt, er sei zu alt zum Anfangen, sagt das mit fünfzig wieder und hat dann zehn Jahre verloren. Jünger wirst du nicht.",
+        "Deshalb ist der früheste mögliche Anfang immer jetzt. Nicht weil jetzt ein guter Zeitpunkt wäre, sondern weil alle anderen später sind."
+      ],
+      "aufgabe": {
+        "art": "waage",
+        "text": "Schieb den Zeiger und sieh nach, wie die beiden Sätze in einem Jahr dastehen.",
+        "links": "Ich fange nicht an, weil es zu spät ist.",
+        "rechts": "In einem Jahr bin ich ein Jahr weiter oder ein Jahr älter. Beides passiert sowieso.",
+        "erklaerung": "Das Jahr vergeht in beiden Fällen. Der Unterschied ist nur, ob am Ende etwas dabei herauskommt."
+      },
+      "abschluss": "Dieser Satz gehört dir, nicht dem Programm. Du musst ihn niemandem sagen. Es reicht, wenn du ihn kennst, wenn du ihn das nächste Mal denkst."
+    },
+
+    {
+      "id": "lernen-e4",
+      "title": "„Noch nicht“ ist ein vollständiger Satz",
+      "bloecke": [
+        "Zwischen „ich kann das nicht“ und „ich kann das noch nicht“ liegt die ganze Sache. Der erste Satz ist ein Urteil über dich. Der zweite ist eine Angabe über die Zeit.",
+        "Genauso ist es mit Fehlern. Ein Fehler ist kein Urteil, sondern eine Auskunft: Er sagt dir ziemlich genau, was als Nächstes dran ist.",
+        "Zehni macht das ohnehin. Die Zeichen, die du oft verfehlst, kommen in den nächsten Übungstexten häufiger vor. Nicht als Strafe, sondern weil genau dort noch etwas zu holen ist."
+      ],
+      "aufgabe": {
+        "art": "umschreiben",
+        "text": "Schreib die Sätze um. Einer davon fehlt in jedem.",
+        "saetze": [
+          {
+            "vorgabe": "Ich kann das Ö nicht treffen.",
+            "mussEnthalten": ["noch nicht"],
+            "beispiel": "Ich treffe das Ö noch nicht sicher."
+          },
+          {
+            "vorgabe": "Ich kann nicht blind tippen.",
+            "mussEnthalten": ["noch nicht"],
+            "beispiel": "Ich kann noch nicht blind tippen."
+          },
+          {
+            "vorgabe": "Ich bin zu langsam.",
+            "mussEnthalten": ["noch nicht"],
+            "beispiel": "Ich bin noch nicht so schnell, wie ich sein will."
+          }
+        ],
+        "erklaerung": "Zwei Wörter, und aus einem Schlussstrich wird ein Zwischenstand."
+      },
+      "abschluss": "Es geht nicht darum, sich etwas schönzureden. Es geht darum, eine Sache richtig zu benennen: Du bist nicht fertig, und das ist etwas anderes als unfähig."
+    },
+
+    {
+      "id": "lernen-e6",
+      "title": "Üben, das wirklich wirkt",
+      "bloecke": [
+        "Zwei Dinge schlagen beim Lernen alle anderen: sich selbst abfragen und verteilt üben. Das ist gut untersucht und gilt für Vokabeln genauso wie für Tasten.",
+        "Sich abfragen heißt: den Stoff aus dem Kopf holen, statt ihn noch einmal anzusehen. Wer eine Vokabel nachschlägt, fühlt sich sicher. Wer sie aufsagt, lernt sie.",
+        "Verteilt üben heißt: Fünfmal zehn Minuten bringen mehr als einmal fünfzig. Genau dafür gibt es in Zehni das Tagesziel und die Serie.",
+        "Und ein ehrlicher Zusatz: Markieren, Abschreiben und Wiederlesen fühlen sich fleißig an, bringen aber wenig. Das darf man wissen, bevor man drei Abende damit verbringt."
+      ],
+      "aufgabe": {
+        "art": "zuordnen",
+        "text": "Was bringt beim Lernen wirklich etwas?",
+        "faecher": [
+          { "id": "wirkt", "label": "Bringt viel" },
+          { "id": "scheint", "label": "Fühlt sich nur fleißig an" }
+        ],
+        "karten": [
+          { "text": "Sich selbst abfragen, ohne nachzusehen", "fach": "wirkt" },
+          { "text": "An fünf Tagen je zehn Minuten üben", "fach": "wirkt" },
+          { "text": "Jemandem erklären, was man gerade gelernt hat", "fach": "wirkt" },
+          { "text": "Alte Fehler noch einmal gezielt üben", "fach": "wirkt" },
+          { "text": "Im Buch alles bunt markieren", "fach": "scheint" },
+          { "text": "Den Text dreimal durchlesen", "fach": "scheint" },
+          { "text": "Am Abend vorher fünf Stunden am Stück", "fach": "scheint" },
+          { "text": "Eine hübsche Zusammenfassung abschreiben", "fach": "scheint" }
+        ],
+        "erklaerung": "Alles im rechten Fach hat dasselbe Problem: Es fühlt sich an, als würde man etwas verstehen, aber man muss dabei nichts aus dem Kopf holen. Genau das Herausholen ist die Arbeit, die hängen bleibt."
+      },
+      "abschluss": "Du musst nicht mehr üben. Du musst anders üben, und meistens ist das sogar weniger."
+    },
+
+    {
+      "id": "lernen-e7",
+      "title": "Anfangen, obwohl man keine Lust hat",
+      "bloecke": [
+        "Auf Lust zu warten ist der langsamste Weg. Lust kommt selten vorher. Sie kommt meistens ein paar Minuten nachdem man angefangen hat.",
+        "Deshalb der Trick: nicht vornehmen, etwas durchzuziehen, sondern nur anzufangen. Zwei Minuten. Wenn es nach zwei Minuten immer noch furchtbar ist, darfst du aufhören. Meistens hörst du nicht auf.",
+        "Was dabei hilft: die große Sache in kleine Schritte zerlegen, von denen jeder in zwanzig Minuten zu schaffen ist. Und die Ablenkungen vorher wegräumen, statt ihnen später zu widerstehen.",
+        "Viele arbeiten dabei mit einem Wecker: 25 Minuten arbeiten, 5 Minuten Pause. Das Verfahren heißt nach der Küchenuhr, mit der es erfunden wurde."
+      ],
+      "aufgabe": {
+        "art": "zuordnen",
+        "text": "Du sollst ein Referat über Island halten. Welcher erste Schritt ist klein genug, um heute anzufangen?",
+        "faecher": [
+          { "id": "klein", "label": "Klein genug für heute" },
+          { "id": "gross", "label": "Zu groß zum Anfangen" }
+        ],
+        "karten": [
+          { "text": "Drei Seiten über Island öffnen und den ersten Absatz lesen", "fach": "klein" },
+          { "text": "Fünf Stichpunkte aufschreiben, über die ich reden will", "fach": "klein" },
+          { "text": "Eine Karte von Island suchen und abspeichern", "fach": "klein" },
+          { "text": "Die Überschrift auf das leere Blatt schreiben", "fach": "klein" },
+          { "text": "Das Referat schreiben", "fach": "gross" },
+          { "text": "Alles über Island herausfinden", "fach": "gross" },
+          { "text": "Das Referat fertig üben, bis es sitzt", "fach": "gross" }
+        ],
+        "erklaerung": "Die kleinen Schritte haben eines gemeinsam: Man weiß bei jedem genau, wann er fertig ist. Bei den großen weiß man das nicht, und deshalb fängt man sie nicht an."
+      },
+      "abschluss": "Der erste Schritt muss nicht gut sein. Er muss nur klein genug sein, dass du ihn machst."
+    }
+  ]
+}
