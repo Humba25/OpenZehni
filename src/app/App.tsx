@@ -678,7 +678,12 @@ export function App() {
         />
       )}
 
-      <div className="min-h-0 flex-1">
+      {/* `overflow-y-auto` ist hier keine Kosmetik: Ohne Scrollbereich wächst
+          ein zu hoher Bildschirm aus diesem Kasten heraus und malt über die
+          Kopfzeile — auf einem alten Laptop mit kleinem Bildschirm also fast
+          immer. Genau so sah die Auswertung am 2026-09-16 aus. Was hier nicht
+          hineinpasst, wird ab jetzt scrollbar, nicht abgeschnitten. */}
+      <div className="min-h-0 flex-1 overflow-y-auto">
         {ansicht.name === 'einrichtung' && (
           <Onboarding
             onDone={(e) => {

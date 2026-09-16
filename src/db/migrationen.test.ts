@@ -3,9 +3,9 @@
  * (`ARCHITEKTUR.md`, Architekturregel 3).
  *
  * **Warum es diesen Test gibt.** Am 2026-09-16 hat ein Skript, das im ganzen
- * Projekt `CLAUDE.md` durch `ARCHITEKTUR.md` ersetzte, auch die Kommentare in
- * allen fünf Migrationen angefasst. Am SQL änderte sich nichts — an der
- * Prüfsumme schon.
+ * Projekt einen Dateinamen in Kommentaren austauschte, dabei auch die
+ * Kommentare in allen fünf Migrationen angefasst. Am SQL änderte sich nichts —
+ * an der Prüfsumme schon.
  *
  * SQLite merkt sich über `sqlx` zu jeder angewandten Migration eine Prüfsumme.
  * Weicht der Text später ab, verweigert der Migrator **den ganzen Satz**: Keine

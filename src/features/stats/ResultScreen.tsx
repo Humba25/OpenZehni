@@ -90,8 +90,16 @@ export function ResultScreen({
   });
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-6 p-8">
-      <div className="w-full max-w-2xl rounded-2xl border border-rand bg-flaeche p-8">
+    /*
+     * `min-h-full` statt `h-full`: Passt die Auswertung ins Fenster, steht sie
+     * mittig. Ist sie länger — drei Sterne, neues Abzeichen, Levelaufstieg und
+     * Jagdangebot kommen leicht zusammen —, wächst der Kasten mit, statt den
+     * Inhalt nach oben und unten aus dem Fenster zu drücken. Mit `h-full` und
+     * `justify-center` lag die Karte über der Kopfzeile und die Knöpfe unten
+     * waren nicht erreichbar. `src/app/layout.test.ts` wacht darüber.
+     */
+    <div className="flex min-h-full flex-col items-center justify-center gap-6 p-8">
+      <div className="w-full max-w-2xl rounded-2xl border border-rand bg-flaeche p-8 shadow-lg">
         <p className="text-sm text-gedaempft">
           {de.lernpfad.lektion} {lesson.order} · {lesson.title}
         </p>

@@ -44,14 +44,35 @@ export const MAX_LEVEL = 30;
 /**
  * XP-Schwelle, ab der Level `n` erreicht ist.
  *
- * Formel aus SPEC.md 8.1: `XP(n) = 100 · n · 1,25^(n-1)`, auf 10 gerundet.
+ * Formel aus SPEC.md 8.1: **`XP(n) = 50 · n · (n − 1)`**.
+ *
+ * **Warum nicht mehr exponentiell.** Bis zum 2026-09-16 stand hier
+ * `100 · n · 1,25^(n-1)`. Das ergab für Level 30 rund 1,5 Millionen XP. Der
+ * gesamte Lernpfad bringt mit allen Sternen und allen Abzeichen 4 625 XP, ein
+ * Jahr täglichen Übens rund 55 000. Level 30 lag damit um den Faktor 27 daneben
+ * — die obere Hälfte der Leiste war Dekoration. Eine Anzeige „Level 12 von 30",
+ * bei der 30 nie kommt, ist genau die Sackgasse, die es hier nicht geben soll
+ * (SPEC.md 8.11).
+ *
+ * Die quadratische Kurve trifft die echten Größenordnungen:
+ *
+ * | Level | XP | erreicht etwa |
+ * |---|---|---|
+ * | 2 | 100 | nach der ersten Lektion |
+ * | 10 | 4 500 | Lernpfad zur Hälfte |
+ * | 18 | 15 300 | Lernpfad fertig, ein Vierteljahr dabei |
+ * | 30 | 43 500 | rund ein Jahr fast täglich |
+ *
+ * `50 · n · (n − 1)` ist immer ein Vielfaches von 100 — `n · (n − 1)` ist
+ * gerade. Deshalb wird hier nicht mehr gerundet; die Zahlen sind von sich aus
+ * glatt und damit für ein Kind lesbar.
+ *
  * Level 1 beginnt bei 0 — sonst stünde eine Nutzerin ohne jede Übung auf
  * Level 0, und das ist kein guter erster Eindruck.
  */
 export function xpSchwelle(level: number): number {
   if (level <= 1) return 0;
-  const roh = 100 * (level - 1) * Math.pow(1.25, level - 2);
-  return Math.round(roh / 10) * 10;
+  return 50 * level * (level - 1);
 }
 
 /** Das Level zu einem XP-Stand. */

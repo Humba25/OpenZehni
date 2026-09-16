@@ -678,8 +678,27 @@ als Kernmechanik.
 Die Deckelung beim Minispiel ist Absicht: XP sollen dem Lernpfad folgen, nicht
 der Spielzeit (8.10).
 
-Levelgrenzen: `XP(n) = 100 · n · 1,25^(n-1)` (gerundet auf 10). Level 1–30.
-Jedes Level vergibt ein Deko-Teil für die Lernstube (8.4).
+Levelgrenzen: **`XP(n) = 50 · n · (n − 1)`**. Level 1–30; Level 1 beginnt bei
+0 XP. Die Werte sind von sich aus glatt, es wird nicht gerundet.
+
+| Level | XP | erreicht etwa |
+|---|---|---|
+| 2 | 100 | nach der ersten Lektion |
+| 10 | 4 500 | Lernpfad zur Hälfte |
+| 18 | 15 300 | Lernpfad fertig, ein Vierteljahr dabei |
+| 30 | 43 500 | rund ein Jahr fast täglich |
+
+Die Kurve ist an den Zahlen dieser Tabelle ausgerichtet, nicht umgekehrt: Der
+gesamte Lernpfad bringt mit allen Sternen und allen Abzeichen 4 625 XP, ein
+Übungstag ohne neue Lektion höchstens 120, eine Woche mit Wochenziel 720. Bis
+zum 2026-09-16 stand hier `100 · n · 1,25^(n-1)`; das verlangte für Level 30
+rund 1,5 Millionen XP und machte die obere Hälfte der Leiste zur Dekoration
+(15.14). `gamification.test.ts` rechnet das XP-Angebot aus den echten Inhalten
+nach und schlägt an, wenn das Höchstlevel wieder unerreichbar wird.
+
+Jedes Level vergibt ein Deko-Teil für die Lernstube (8.4). Der Katalog hat 15
+erspielbare Teile; ist der Raum voll, kommt nichts mehr dazu — das ist kein
+Mangel, sondern ein Abschluss (`raumVoll()`).
 
 ### 8.2 Abzeichen (Auswahl, mindestens diese 15 in v1)
 
@@ -1522,13 +1541,27 @@ Punkt der Gamification und der einzige, der nichts zum Lernpfad beiträgt.
 13. **Altersstufe im Onboarding erfragen**: Wie fragt man ein Kind nach seinem
     Alter, ohne dass es sich geprüft fühlt, und was passiert, wenn ein
     Erwachsener das Gerät einrichtet? (9.8)
-14. **Level 30 ist mit der Formel aus 8.1 unerreichbar.** `XP(n) = 100 · n ·
-    1,25^(n-1)` ergibt für Level 30 rund 1,5 Millionen XP. Der gesamte
-    Lernpfad bringt mit allen Sternen und Abzeichen etwa 5 000 XP, ein Jahr
-    täglichen Übens vielleicht 20 000. Erreichbar sind damit Level 11 bis 13.
-    Entweder die Kurve wird flacher, oder die Obergrenze sinkt auf 15 — zu
-    entscheiden, wenn echte XP-Verläufe vorliegen. Bis dahin ist die Formel
-    unverändert umgesetzt; sie schadet nicht, sie ist nur großzügig bemessen.
+14. ~~**Level 30 ist mit der Formel aus 8.1 unerreichbar.**~~ — **erledigt am
+    2026-09-16.** Die Kurve ist flacher geworden: `XP(n) = 50 · n · (n − 1)`
+    statt `100 · n · 1,25^(n-1)`. Die Obergrenze bleibt bei 30.
+
+    Auf echte XP-Verläufe zu warten, war der falsche Plan — die Lücke war keine
+    Feinheit, sondern ein Faktor 27: Level 30 verlangte 1 499 260 XP, nach einem
+    Jahr fast täglichen Übens stehen 54 965 zur Verfügung. Dafür braucht es
+    keine Messung, nur eine Rechnung. Mit der neuen Kurve liegt Level 30 bei
+    43 500 XP und damit etwa ein Jahr entfernt; der fertige Lernpfad führt auf
+    Level 10 bis 18, je nachdem, über wie viele Wochen er verteilt war.
+
+    Die Obergrenze zu senken wäre der einfachere Weg gewesen, aber der
+    schlechtere: Wer ein Jahr durchhält, hätte dann nichts mehr vor sich. 30
+    Level, die man wirklich schaffen kann, sind ehrlicher als 15, die früh enden.
+
+    Abgesichert durch die vier Fälle in `gamification.test.ts` unter „Das
+    Höchstlevel ist erreichbar": Das XP-Angebot wird aus den echten Inhalten
+    gerechnet, nicht aus geschätzten Zahlen — wer Lektionen streicht, XP-Werte
+    senkt oder die Kurve wieder anzieht, bekommt es dort gesagt. Eine
+    unerreichbare Schwelle bricht sonst keinen Test; sie sieht für ein Kind nur
+    so aus, als käme sie irgendwann.
 15. **Die Textprüfung gibt es zweimal**: `validateText()` liegt seit dem
     2026-09-14 in TypeScript (`src/lib/validate-text.ts`) und prüft Seed- und
     Oberflächentexte. Für KI-Antworten braucht M5 dieselbe Prüfung in Rust,

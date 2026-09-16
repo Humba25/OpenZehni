@@ -7,6 +7,7 @@ import {
   xpSchwelle,
   levelFuerXp,
   levelFortschritt,
+  MINISPIEL_XP_PRO_TAG,
   verdienteAbzeichen,
   neueAbzeichen,
   serieFortschreiben,
@@ -15,6 +16,7 @@ import {
   type FortschrittsBild,
   type SerienStand,
 } from './gamification';
+import { allLessons } from './curriculum';
 
 const leer: FortschrittsBild = {
   bestandeneLektionen: new Set(),
@@ -76,6 +78,76 @@ describe('XP und Level — SPEC.md 8.1', () => {
     expect(f.level).toBe(MAX_LEVEL);
     expect(f.bisZumNaechsten).toBeNull();
     expect(f.anteil).toBe(1);
+  });
+});
+
+/**
+ * Wacht darüber, dass das Höchstlevel **erreichbar bleibt** (SPEC.md 8.1).
+ *
+ * Bis zum 2026-09-16 war es das nicht: Die alte Formel verlangte für Level 30
+ * rund 1,5 Millionen XP, erreichbar waren nach einem Jahr knapp 55 000. Gemerkt
+ * hat das niemand, weil eine unerreichbare Schwelle keinen Test bricht — sie
+ * sieht nur für ein Kind so aus, als käme sie irgendwann.
+ *
+ * Deshalb wird das XP-Angebot hier aus den **echten Inhalten** gerechnet und
+ * gegen die Kurve gehalten. Wer Lektionen streicht, XP-Werte senkt oder die
+ * Kurve anzieht, bekommt es hier gesagt.
+ */
+describe('Das Höchstlevel ist erreichbar — SPEC.md 8.1, 15.14', () => {
+  /** Ein Stand, an dem alles geschafft ist — daraus ergibt sich, was es an Abzeichen gibt. */
+  const allesGeschafft: FortschrittsBild = {
+    bestandeneLektionen: new Set(allLessons().map((l) => l.id)),
+    besteStrokesMin: 999,
+    jeFehlerfrei: true,
+    minutenHeute: 999,
+    blindMinuten: 999,
+    serieTage: 999,
+    themenProbiert: 99,
+    diplomBestanden: true,
+    fallenErkannt: 99,
+    zwischenstueckeFertig: 99,
+  };
+
+  /** Alles, was es genau einmal gibt: jede Lektion mit drei Sternen, alle Abzeichen. */
+  const einmalig =
+    allLessons().length * (XP.lektion + 3 * XP.stern) +
+    verdienteAbzeichen(allesGeschafft).length * XP.abzeichen;
+
+  /** Was ein Übungstag höchstens bringt, ohne neue Lektion (SPEC.md 8.1). */
+  const proTag =
+    XP.tagesziel + XP.tagesaufgabe + XP.tastenjagd + MINISPIEL_XP_PRO_TAG * XP.minispiel;
+
+  /** XP nach `tage` Tagen fast täglichen Übens, Lernpfad und Abzeichen inbegriffen. */
+  const nachTagen = (tage: number): number =>
+    einmalig + tage * proTag + Math.floor(tage / 7) * XP.wochenziel;
+
+  it('bringt den ganzen Lernpfad über die ersten Level hinaus', () => {
+    // Wer alles einmal durchgespielt hat, soll nicht bei Level 3 stehen.
+    expect(levelFuerXp(einmalig)).toBeGreaterThanOrEqual(8);
+  });
+
+  it('erreicht das Höchstlevel in etwa einem Jahr', () => {
+    expect(
+      levelFuerXp(nachTagen(365)),
+      `Nach einem Jahr stehen ${nachTagen(365)} XP zur Verfügung, ` +
+        `Level ${MAX_LEVEL} verlangt ${xpSchwelle(MAX_LEVEL)}.`,
+    ).toBe(MAX_LEVEL);
+  });
+
+  it('verschenkt das Höchstlevel nicht schon nach einem Monat', () => {
+    // Eine Leiste, die im ersten Monat endet, ist genauso wertlos wie eine,
+    // die nie endet.
+    expect(levelFuerXp(nachTagen(30))).toBeLessThan(MAX_LEVEL);
+  });
+
+  it('lässt kein Level länger als einen Monat täglichen Übens dauern', () => {
+    for (let n = 2; n <= MAX_LEVEL; n++) {
+      const spanne = xpSchwelle(n) - xpSchwelle(n - 1);
+      expect(
+        spanne,
+        `Level ${n} kostet ${spanne} XP — das sind ${Math.round(spanne / proTag)} Übungstage.`,
+      ).toBeLessThanOrEqual(30 * proTag);
+    }
   });
 });
 
