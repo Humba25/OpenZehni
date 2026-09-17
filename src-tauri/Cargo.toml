@@ -1,6 +1,6 @@
 [package]
 name = "zehni"
-version = "0.1.5"
+version = "0.1.6"
 description = "Zehni - 10-Finger-Tastschreiben lernen, offline und kostenlos"
 authors = ["Mika Schlundt"]
 edition = "2021"
@@ -17,6 +17,11 @@ tauri-build = { version = "2", features = [] }
 [dependencies]
 tauri = { version = "2", features = [] }
 tauri-plugin-sql = { version = "2", features = ["sqlite"] }
+
+# Direkt fuer die einmalige Pruefsummen-Reparatur aus 0.1.2 (src/pruefsummen.rs).
+# Dieselbe Fassung, die tauri-plugin-sql ohnehin mitbringt -- kostet also nichts
+# an Bundlegroesse (SPEC.md 12.1).
+sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio", "sqlite"] }
 
 # Auto-Update nach SPEC.md 11.1. Der Updater laeuft ausschliesslich hier:
 # Netzwerk gehoert nach Rust (ARCHITEKTUR.md, Architekturregel 2).

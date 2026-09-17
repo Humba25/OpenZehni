@@ -33,6 +33,21 @@ jobs:
       - run: npm run validate:seed
       - run: npm run check:din5008
 
+      # Seit 0.1.6 pruefen wir auch die Rust-Seite hier. Vorher lief vor einem
+      # Release nur npm -- und seit Releases direkt veroeffentlicht werden, ist
+      # dieser Job die einzige Bremse vor der Auslieferung. Die
+      # Pruefsummen-Reparatur in src/pruefsummen.rs schreibt in die Datenbank
+      # der Nutzerin; sie ungeprueft auszuliefern waere fahrlaessig.
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - run: cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings
+      - run: cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+      - run: cargo test --manifest-path src-tauri/Cargo.toml
+
   bauen:
     needs: pruefen
     runs-on: windows-latest

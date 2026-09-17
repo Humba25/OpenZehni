@@ -280,6 +280,96 @@
           "charset": "S5",
           "age": "A2",
           "body": "Der Kaiserpinguin taucht über 500 Meter tief und bleibt bis zu 20 Minuten unter Wasser. Er brütet im antarktischen Winter bei Temperaturen um minus 40 Grad."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "ameisen sind winzig, aber sehr stark. eine ameise trägt mehr, als sie selbst wiegt. im nest arbeiten alle zusammen, und jede weiß genau, was sie zu tun hat."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "ein specht hämmert mit dem schnabel gegen holz. dabei sucht er käfer und larven. sein kopf ist so gebaut, dass ihm das nicht wehtut. sein hals ist besonders kräftig."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "fledermäuse schlafen am tag kopfüber. nachts fliegen sie los und fangen mücken. sie rufen dabei ganz laut, aber wir können es nicht hören."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "wanderfalken brüten heute häufig an hohen gebäuden, weil felswände in vielen regionen fehlen. kirchtürme und schornsteine bieten ihnen einen ähnlichen schutz vor bodenfeinden."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "das artensterben verläuft derzeit deutlich schneller als im erdgeschichtlichen mittel. besonders betroffen sind arten mit kleinem verbreitungsgebiet, weil ihnen bei veränderungen kein ausweichraum bleibt."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "wölfe regulieren die bestände von rehen und wildschweinen und verändern dadurch auch die vegetation. dieser zusammenhang wurde im yellowstone-nationalpark erstmals systematisch untersucht."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Ein Maulwurf sieht fast nichts. Dafür hört und riecht er hervorragend. Seine Hände sind breite Schaufeln, mit denen er sich durch die Erde gräbt. Ganz schön praktisch!"
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Eichhörnchen vergraben im Herbst Nüsse. Viele finden sie nicht wieder. Daraus wachsen dann neue Bäume. So pflanzt ein Eichhörnchen einen ganzen Wald, ohne es zu merken."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Warum schnurrt eine Katze? Meistens, weil es ihr gut geht. Manchmal aber auch, wenn sie Schmerzen hat. Das Schnurren beruhigt sie dann selbst."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Zugvögel orientieren sich an Sonne, Sternen und am Erdmagnetfeld. Welche dieser Quellen sie bevorzugen, hängt von Art und Wetterlage ab; fällt eine aus, gleichen sie das mit den übrigen aus."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Die Unterscheidung zwischen Wildtier und Haustier ist weniger scharf, als sie klingt. Domestizierte Arten verändern über Generationen Körperbau und Verhalten, und einige kehren teilweise in den Wildzustand zurück."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Tierversuche sind in der Forschung streng geregelt und genehmigungspflichtig. Ersatzverfahren wie Zellkulturen und Computermodelle ersetzen inzwischen einen Teil davon, bislang aber nicht alle."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Kolibri schlägt bis zu 80 Mal pro Sekunde mit den Flügeln. Dabei summt es. Er muss fast ununterbrochen fressen, sonst geht ihm die Kraft aus (und das wäre gefährlich)."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Eine Schnecke hat über 10 000 winzige Zähne auf ihrer Zunge. Damit raspelt sie Blätter ab. Sehen kannst du die Zähne nicht, dafür sind sie viel zu klein."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Elefant trinkt bis zu 150 Liter Wasser am Tag. Das sind etwa 300 große Gläser! Mit dem Rüssel saugt er das Wasser auf und spritzt es sich in den Mund."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Der Blauwal wird bis zu 30 Meter lang und ist damit das größte Tier, das je gelebt hat. Sein Bestand ging durch den Walfang stark zurück und erholt sich seit dem Fangverbot von 1986 nur langsam."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Bienenvölker verlieren in manchen Jahren mehr als 20 Prozent ihrer Stöcke. Als Ursachen gelten Parasiten, Krankheitserreger und ein schwindendes Blütenangebot, die meist zusammenwirken."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Ein Oktopus besitzt rund 500 Millionen Nervenzellen, von denen zwei Drittel in den Armen liegen. Jeder Arm führt Bewegungen weitgehend eigenständig aus, ohne dass das Gehirn sie im Einzelnen steuert."
         }
       ],
       "facts": [
@@ -522,6 +612,96 @@
           "charset": "S5",
           "age": "A2",
           "body": "Ein Neutronenstern hat etwa 20 Kilometer Durchmesser, enthält aber mehr Masse als die Sonne. Ein Teelöffel dieses Materials würde auf der Erde Milliarden Tonnen wiegen."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "die sonne ist ein stern. sie sieht nur deshalb so groß aus, weil sie viel näher ist als alle anderen. die anderen sterne stehen unvorstellbar weit weg."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "auf dem mond gibt es keine luft. deshalb weht dort kein wind, und die fußspuren der astronauten liegen noch immer genau so da wie damals."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "der mars sieht rot aus, weil sein staub rost enthält. im grunde ist der ganze planet also ein wenig rostig. wind bläst den staub über die ganze oberfläche."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "die entfernungen im sonnensystem lassen sich kaum maßstabsgetreu darstellen. wäre die erde eine erbse, stünde die sonne gut hundert meter entfernt und hätte den durchmesser eines gymnastikballs."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "exoplaneten werden meist indirekt nachgewiesen. zieht ein planet vor seinem stern vorbei, sinkt dessen helligkeit messbar, und aus dieser regelmäßigkeit lässt sich seine umlaufzeit bestimmen."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "das alter des universums wird auf knapp vierzehn milliarden jahre geschätzt. die schätzung stützt sich auf die hintergrundstrahlung, die aus der frühzeit des kosmos stammt und heute noch messbar ist."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Warum sehen wir Sterne nur nachts? Sie sind auch tagsüber da. Die Sonne ist nur so hell, dass ihr Licht alles andere überstrahlt. Am Tag gehen die Sterne sozusagen unter."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Auf dem Mond wärst du viel leichter als hier. Du könntest hoch springen, ohne dich anzustrengen. Leichter wirst du dabei nicht wirklich, du fühlst dich nur so."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Sternschnuppen sind keine Sterne. Es sind winzige Staubkörner, die in der Luft verglühen. Sie sind meistens kleiner als ein Reiskorn, und trotzdem leuchten sie hell!"
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Raumfahrt erzeugt zunehmend Trümmerteile in der Erdumlaufbahn. Schon kleine Fragmente können bei den dort üblichen Geschwindigkeiten Satelliten zerstören, weshalb Ausweichmanöver inzwischen Routine sind."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Ob es außerirdisches Leben gibt, ist offen. Die Suche richtet sich auf Spuren in Atmosphären ferner Planeten; einzelne auffällige Moleküle gelten dabei nicht als Nachweis, sondern nur als Hinweis."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Die Schwerkraft eines Planeten hängt von Masse und Radius ab, nicht von der Größe allein. Auf dem Mars wirkt deshalb nur gut ein Drittel der irdischen Anziehung, obwohl sein Durchmesser halb so groß ist."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Die Sonne ist etwa 150 Millionen Kilometer entfernt. Ihr Licht braucht 8 Minuten bis zu uns. Wenn du zur Sonne schaust, siehst du sie so, wie sie vor 8 Minuten war."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Jahr auf dem Jupiter dauert fast 12 Erdjahre. Wenn du dort geboren wärst, hättest du deinen 1. Geburtstag noch lange vor dir! Der Jupiter braucht eben länger um die Sonne."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Die Raumstation fliegt 400 Kilometer über uns. Sie umrundet die Erde in 90 Minuten. Die Menschen dort sehen jeden Tag 16 Sonnenaufgänge (und genauso viele Untergänge)."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Ein Lichtjahr entspricht etwa 9,5 Billionen Kilometern. Der nächste Stern ist 4,2 Lichtjahre entfernt; mit heutiger Technik dauerte ein Flug dorthin mehrere zehntausend Jahre."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Das James-Webb-Teleskop arbeitet im Infrarotbereich und steht rund 1,5 Millionen Kilometer von der Erde entfernt. Dort bleibt es im Schatten eines Sonnenschildes, damit seine Sensoren kalt genug bleiben."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Die kosmische Hintergrundstrahlung wurde 1964 zufällig entdeckt, als zwei Ingenieure ein Störrauschen nicht loswurden. Sie gilt heute als wichtigster Beleg für die Urknalltheorie."
         }
       ],
       "facts": [
@@ -764,6 +944,96 @@
           "charset": "S5",
           "age": "A2",
           "body": "Die Tour de France geht über rund 3500 Kilometer in 21 Etappen. An harten Bergtagen verbrauchen die Fahrer mehr als 6000 Kilokalorien."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "beim aufwärmen wird der körper warm und die muskeln werden weicher. dann kann man sich weniger leicht verletzen. deshalb macht man es immer zuerst."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "wer viel schwitzt, muss viel trinken. sonst wird man schlapp, noch bevor man überhaupt durst bekommt. wasser reicht dafür völlig aus."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "beim seilspringen springt man nicht hoch, sondern nur ein kleines stück. wer zu hoch springt, wird schnell müde. kurze sprünge halten viel länger durch."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "ausdauertraining senkt den ruhepuls, weil das herz pro schlag mehr befördert. bei gut trainierten menschen liegt er deutlich unter dem durchschnitt, ohne dass das ein zeichen von krankheit wäre."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "übertraining ist ein reales risiko. wer ohne erholung weitermacht, verliert leistung, statt sie zu gewinnen, und die ersten anzeichen sind oft schlechter schlaf und anhaltende müdigkeit."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "der sogenannte muskelkater entsteht durch winzige risse in den muskelfasern, nicht durch milchsäure. diese erklärung hielt sich jahrzehntelang, obwohl sie längst widerlegt ist."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Beim Fußball darf nur die Torhüterin den Ball in die Hand nehmen, und auch nur im eigenen Strafraum. Alle anderen spielen mit Fuß, Kopf oder Brust."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Wie wird man schneller? Nicht dadurch, dass man jeden Tag rennt. Der Körper wird in den Pausen stärker, nicht beim Training selbst. Ruhe gehört also dazu!"
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Ein Handstand geht leichter an der Wand. Schau zwischen deine Hände, nicht auf den Boden. Und spann den Bauch an, sonst kippst du in der Mitte durch."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Leistungssport und Gesundheitssport verfolgen unterschiedliche Ziele. Wer an die eigene Grenze geht, nimmt Verschleiß in Kauf; wer gesund bleiben will, trainiert deutlich darunter und dafür regelmäßiger."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Frauenfußball war in Deutschland bis in die siebziger Jahre vom Verband untersagt. Die Begründungen von damals gelten heute als widerlegt, und die Sportart holt den Rückstand bis heute auf."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Dopingkontrollen weisen nicht Leistung nach, sondern Substanzen. Deshalb hinken sie neuen Mitteln zwangsläufig hinterher, und Proben werden inzwischen jahrelang eingelagert und später erneut untersucht."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Fußballspiel dauert 90 Minuten, aufgeteilt in 2 Halbzeiten. Dazu kommt die Nachspielzeit. Der Ball ist dabei meistens nur etwa 60 Minuten wirklich im Spiel."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Beim Hochsprung liegt der Weltrekord bei 2,45 Metern. Das ist höher als eine Zimmerdecke! Der Sprung geht dabei rückwärts über die Latte."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Basketball muss so aufgepumpt sein, dass er aus 1,80 Metern etwa 1,30 Meter zurückspringt. Ist er zu weich, springt er kaum, und Dribbeln wird anstrengend."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Die Olympischen Spiele der Neuzeit fanden erstmals 1896 in Athen statt. Damals nahmen etwa 240 Sportler aus 14 Ländern teil, ausschließlich Männer."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Der Marathonlauf misst 42,195 Kilometer. Diese krumme Zahl wurde 1908 in London festgelegt und 1921 verbindlich übernommen, obwohl die Strecke zuvor mehrfach abgewichen war."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Ein trainiertes Herz kann in Ruhe unter 40 Mal pro Minute arbeiten, während der Durchschnitt bei rund 70 liegt. Beide Werte sind gesund, sie beschreiben nur unterschiedliche Anpassungen."
         }
       ],
       "facts": [
@@ -1006,6 +1276,96 @@
           "charset": "S5",
           "age": "A2",
           "body": "Eine Schallplatte dreht sich 33 oder 45 Mal pro Minute. Die Rille einer Seite wäre mehrere hundert Meter lang, wenn man sie zu einer Linie ausrollen würde."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "beim klavier gehört jede taste zu einer saite im inneren. drückst du die taste, schlägt ein hämmerchen dagegen. lässt du los, wird der ton wieder gestoppt."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "trommeln kann man überall. tisch, knie und eine leere dose reichen schon. wichtig ist nur, dass du gleichmäßig bleibst und nicht immer schneller wirst."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "ein lied hat fast immer einen takt. du findest ihn, wenn du beim hören mit dem fuß mitwippst. meistens zählst du dabei ganz von selbst bis vier."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "die tonhöhe hängt an der schwingungszahl. verdoppelt sie sich, klingt der ton eine oktave höher, und diese verdopplung empfinden menschen weltweit als denselben ton, nur höher."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "notenschrift ist eine erfindung, keine naturgegebenheit. sie entstand über jahrhunderte aus gedächtnisstützen für den gesang und legte sich erst allmählich auf feste tonhöhen und dauern fest."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "gehörschäden durch laute musik sind nicht heilbar. die haarzellen im innenohr wachsen nicht nach, und ein einmal entstandener tinnitus bleibt bei vielen betroffenen dauerhaft."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Warum ist eine Geige kleiner als ein Cello? Je kürzer die Saite, desto höher der Ton. Große Instrumente klingen deshalb tief und kleine hoch."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Singen lernt man durch Singen, nicht durch Nachdenken. Die Stimme wird sicherer, wenn du sie regelmäßig benutzt. Falsche Töne gehören dabei dazu!"
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Ein Schlagzeug besteht aus vielen Teilen. Füße und Hände machen dabei etwas Verschiedenes. Das wirkt am Anfang unmöglich und wird mit der Zeit einfach."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Musikalische Früherziehung wirkt nachweislich auf Gehör und Feinmotorik. Die häufig behauptete Steigerung allgemeiner Intelligenz ist dagegen schlecht belegt und gilt als überzogen."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Die europäische Notenschrift bildet Rhythmus genau ab, Tonhöhe fast genau und Klangfarbe kaum. Deshalb klingen zwei Aufführungen desselben Stücks sehr unterschiedlich."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Das Urheberrecht an Musik gilt bis siebzig Jahre nach dem Tod der schaffenden Person. Danach wird ein Werk gemeinfrei, einzelne Aufnahmen davon aber nicht automatisch mit."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Klavier hat 88 Tasten: 52 weiße und 36 schwarze. Die schwarzen stehen in Gruppen zu 2 und zu 3. Daran erkennst du, wo du gerade bist."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Herz schlägt etwa 70 Mal pro Minute. Viele Lieder haben genau dieses Tempo (ungefähr 70 bis 90 Schläge). Das fühlt sich für uns angenehm an."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Die tiefste Taste am Klavier schwingt 27 Mal pro Sekunde, die höchste über 4000 Mal. Dazwischen liegt alles, was du auf dem Instrument spielen kannst."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Der Kammerton a wurde 1939 auf 440 Hertz festgelegt. Historische Aufführungen nutzen oft 415 Hertz, was ungefähr einem halben Ton tiefer entspricht."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Eine Aufnahme mit 44 100 Messwerten pro Sekunde kann Frequenzen bis etwa 22 000 Hertz abbilden. Diese Grenze ergibt sich aus einem Satz der Signaltheorie, nicht aus dem Gehör."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Streaming vergütet nach Abrufen, wobei pro Abruf Bruchteile eines Cents anfallen. Für viele Musikerinnen ist deshalb das Konzert die Einnahmequelle und die Aufnahme die Werbung."
         }
       ],
       "facts": [
@@ -1248,6 +1608,96 @@
           "charset": "S5",
           "age": "A2",
           "body": "Eine Suchmaschine durchsucht nicht das Netz, sondern ihren eigenen Index. Der wird vorher angelegt, und deshalb dauert eine Antwort nur Bruchteile einer Sekunde."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "ein computer kennt nur zwei zustände. strom an und strom aus. daraus baut er alles andere zusammen, auch bilder und musik. das klingt einfach und ist es im kern auch."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "wenn ein gerät nicht mehr geht, hilft oft aus und wieder an. das klingt albern, stimmt aber. beim neustart fängt das programm sauber von vorne an."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "ein akku hält nicht ewig. jedes volle aufladen nutzt ihn ein kleines stück ab. deshalb altert ein handy auch dann, wenn man es gut behandelt."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "die rechenleistung pro chipfläche ist über jahrzehnte sehr schnell gewachsen. dieser verlauf verlangsamt sich inzwischen, weil die strukturen kaum noch kleiner werden können."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "verschlüsselung schützt inhalte, nicht die tatsache einer verbindung. wer wann mit wem kommuniziert, bleibt oft erkennbar, und diese angaben sind häufig aussagekräftiger als der inhalt."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "software altert, obwohl sie sich nicht abnutzt. sie veraltet, weil ihre umgebung sich ändert, und unbetreute programme werden dadurch mit der zeit unsicher."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Was ist eine Datei? Ein Stück gespeicherte Information mit einem Namen. Der Computer merkt sich, wo sie liegt, damit er sie später wiederfindet."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Ein Bildschirm zeigt viele kleine Punkte. Jeder Punkt kann rot, grün und blau leuchten. Aus diesen drei Farben entsteht jede andere Farbe, die du siehst!"
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Passwörter sollten lang sein, nicht kompliziert. Drei zufällige Wörter hintereinander sind sicherer als ein kurzes Wort mit ein paar Zeichen darin."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Ein Algorithmus ist eine Handlungsvorschrift, kein Geheimnis. Problematisch wird er dort, wo seine Kriterien unbekannt bleiben und Betroffene die Entscheidung nicht nachvollziehen können."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Offene Software lässt sich prüfen, geschlossene nur glauben. Für sicherheitskritische Anwendungen gilt Nachvollziehbarkeit deshalb als Vorteil, auch wenn sie keine Fehlerfreiheit garantiert."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Künstliche Intelligenz erkennt Muster in Daten. Sie versteht dabei nichts, und Fehler der Trainingsdaten setzen sich in den Ergebnissen fort, ohne dort als Fehler erkennbar zu sein."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Eine Textseite braucht etwa 2000 Zeichen Speicher. Auf einen kleinen Stick mit 8 Gigabyte passen davon Millionen. Auf Papier bräuchte das einen ganzen Raum."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Das erste Handy von 1983 wog fast 800 Gramm und konnte 30 Minuten telefonieren. Danach musste es 10 Stunden laden! Heute passt mehr Technik in eine Hosentasche."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Dein Auge nimmt etwa 25 Bilder pro Sekunde als Bewegung wahr. Filme nutzen genau das: Es sind einzelne Bilder, die schnell nacheinander gezeigt werden."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Rechenzentren verbrauchten 2022 schätzungsweise 1 bis 2 Prozent des weltweiten Stroms. Der Anteil wächst, wobei Effizienzgewinne einen Teil des Mehrbedarfs bislang ausgleichen."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Ein Prozessor mit 64 Bit kann theoretisch rund 18 Trillionen Speicheradressen ansprechen. Praktisch nutzen heutige Systeme davon nur einen winzigen Bruchteil."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Das Internetprotokoll IPv4 kennt gut 4 Milliarden Adressen und ist damit erschöpft. Der Nachfolger IPv6 bietet so viele, dass ein Mangel auf absehbare Zeit ausgeschlossen ist."
         }
       ],
       "facts": [
@@ -1490,6 +1940,96 @@
           "charset": "S5",
           "age": "A2",
           "body": "In Pompeji hielt der Ausbruch des Vesuvs im Jahr 79 einen ganzen Alltag fest. Forscherinnen fanden Brote im Ofen und Wahlwerbung an den Hauswänden."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "früher schrieb man auf tierhaut. das war teuer, denn für ein einziges buch brauchte man eine ganze herde. papier machte bücher später viel billiger."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "eine burg hatte dicke mauern und einen graben. wer hinein wollte, musste über eine brücke, die man hochziehen konnte. so war man gut geschützt."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "die ersten schulen waren nur für wenige kinder da. lesen und schreiben lernten lange nur die, deren eltern das bezahlen konnten. heute lernen es alle."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "geschichtsschreibung hängt davon ab, was überliefert ist. schriftliche quellen stammen überwiegend von wohlhabenden, weshalb der alltag der mehrheit vor allem über funde erschlossen wird."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "die einführung der dampfmaschine veränderte nicht nur die herstellung, sondern auch den tagesablauf. arbeit war fortan an maschinenlaufzeiten gebunden statt an tageslicht und jahreszeit."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "jahreszahlen allein erklären wenig. aufschlussreicher ist, welche bedingungen eine entwicklung möglich machten und warum sie sich an einem ort durchsetzte und an einem anderen nicht."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Die Pyramiden sind mehr als viertausend Jahre alt. Sie standen also schon lange, als die Römer gerade erst anfingen. Ganz schön schwer vorstellbar!"
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Im Mittelalter gab es keine Uhren mit Zeigern. Die Menschen richteten sich nach der Sonne und nach Glocken. Verabredungen waren deshalb viel ungenauer als heute."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Kartoffeln gab es in Europa lange nicht. Sie kamen von weit her und galten zuerst als Zierpflanze. Erst später merkte man, wie gut sie satt machen."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Quellenkritik fragt zuerst, wer etwas aufgeschrieben hat und zu welchem Zweck. Ein Bericht ist nie neutral, und gerade Selbstdarstellungen sind als Quelle über Absichten besonders aufschlussreich."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Die Erfindung des Buchdrucks verbreitete nicht nur Wissen, sondern auch Gerüchte und Hetzschriften. Neue Medien haben diese Doppelwirkung bisher jedes Mal gehabt."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Nationalstaaten sind historisch jung. Über den größten Teil der Geschichte ordneten sich Menschen über Stadt, Herrschaft oder Glauben zu, nicht über eine Staatsangehörigkeit."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Die Chinesische Mauer ist nicht 1 Bauwerk, sondern viele. Zusammen sind die Teile über 20 000 Kilometer lang. Gebaut wurde daran fast 2000 Jahre!"
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Rom hatte vor 2000 Jahren schon 1 Million Einwohner. Es gab dort Wasserleitungen, Badehäuser und Mietshäuser mit mehreren Stockwerken."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Das erste Auto von 1886 fuhr etwa 16 Kilometer pro Stunde. Ein Fahrrad war damals fast genauso schnell (und dazu deutlich billiger)."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Die Industrialisierung setzte in England um 1760 ein und erreichte Deutschland erst rund 70 Jahre später. Der Rückstand erklärt sich unter anderem durch fehlende Verkehrswege und viele Zollgrenzen."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Die Alphabetisierung in Mitteleuropa stieg vor allem im 19. Jahrhundert stark an. Um 1900 konnten in Preußen über 90 Prozent der Bevölkerung lesen und schreiben."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Das Grundgesetz trat 1949 in Kraft und war zunächst als Übergangslösung gedacht. Es gilt bis heute und wurde seither mehr als 60 Mal geändert."
         }
       ],
       "facts": [
@@ -1732,6 +2272,96 @@
           "charset": "S5",
           "age": "A2",
           "body": "Ein Schnellkochtopf erreicht etwa 120 Grad, weil der Druck im Inneren steigt. Dadurch verkürzt sich die Garzeit auf ungefähr ein Drittel."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "zwiebeln schneiden bringt viele zum weinen. das liegt an stoffen, die beim schneiden frei werden. eine scharfe klinge hilft, weil sie weniger zellen zerdrückt."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "wer kocht, wäscht sich vorher die hände. das gehört dazu wie das schneidebrett. rohes fleisch und salat brauchen außerdem getrennte bretter."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "abschmecken heißt probieren. nimm einen kleinen löffel, puste kurz und koste. lieber zweimal wenig salz als einmal zu viel, denn zurück geht es nicht."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "geschmack entsteht zu einem großen teil über den geruch. wer erkältet ist, schmeckt deshalb kaum etwas, obwohl die zunge völlig unverändert arbeitet."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "lebensmittelverschwendung entsteht überwiegend in privathaushalten, nicht im handel. das mindesthaltbarkeitsdatum ist dabei keine verfallsangabe, sondern eine zusicherung des herstellers."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "kochen ist angewandte chemie und physik. wer versteht, warum eine kruste entsteht oder ein teig aufgeht, kann rezepte abwandeln, statt sie auswendig zu befolgen."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Wie schneidet man sicher? Die Finger der anderen Hand zeigen nach innen, wie eine Kralle. Dann liegt die Klinge am Fingerrücken an und kann nicht abrutschen."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Ein Ei ist frisch, wenn es im Wasserglas unten liegen bleibt. Steigt es nach oben, ist es alt. Das liegt an der Luftblase, die mit der Zeit größer wird."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Nudelwasser darf nicht nur leise blubbern. Es muss richtig sprudeln, sonst kleben die Nudeln zusammen. Salz kommt hinein, bevor die Nudeln kommen!"
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Regionale und saisonale Zutaten sind nicht automatisch klimafreundlicher. Gemüse aus dem beheizten Gewächshaus nebenan kann schlechter abschneiden als Gemüse vom Feld aus Südeuropa."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Kochen ist eine Kulturtechnik, keine Begabung. Wer über einige Grundverfahren verfügt, kommt ohne Rezept aus; wer nur Rezepte kennt, steht ohne sie ratlos da."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Der Begriff natürlich ist bei Lebensmitteln rechtlich kaum geschützt. Aussagekräftig sind die Zutatenliste und die Nährwerttabelle, nicht die Aufmachung der Verpackung."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Backofen braucht etwa 10 bis 15 Minuten zum Vorheizen. Wer den Kuchen zu früh hineinschiebt, bekommt ihn ungleichmäßig (außen fest, innen roh)."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Erwachsener isst am Tag ungefähr 2000 bis 2500 Kilokalorien. Ein Apfel hat etwa 60 davon, eine ganze Tafel Schokolade rund 500."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Reis braucht doppelt so viel Wasser wie Reis: Auf 1 Tasse Reis kommen 2 Tassen Wasser. Dann 10 Minuten kochen und 10 Minuten stehen lassen."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Fleisch gilt bei 70 Grad Kerntemperatur als durchgegart. Diese Grenze beruht auf der Abtötung von Krankheitserregern und nicht auf dem Geschmack."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Ein Kühlschrank sollte 7 Grad oder weniger haben, das Gefrierfach minus 18. Jedes Grad darüber verkürzt die Haltbarkeit messbar und begünstigt die Vermehrung von Keimen."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Die Herstellung von 1 Kilogramm Rindfleisch verbraucht ein Vielfaches der Fläche und des Wassers, die für pflanzliche Lebensmittel nötig sind. Das gilt unabhängig von der Haltungsform."
         }
       ],
       "facts": [
@@ -1974,6 +2604,96 @@
           "charset": "S5",
           "age": "A2",
           "body": "Die Datumsgrenze verläuft im Pazifik und macht mehrere Knicke. Wer sie nach Westen überquert, überspringt 1 ganzen Tag und bekommt ihn zurück, sobald er umkehrt."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "wer verreist, arbeitet am besten eine liste ab. dann vergisst man nichts wichtiges. zahnbürste und ladekabel fehlen sonst besonders oft."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "im flugzeug tun manchmal die ohren weh. das liegt am druck. kauen oder gähnen hilft, weil sich dabei ein kleiner gang im ohr öffnet."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "eine landkarte zeigt mehr als ein handy. auf dem handy siehst du nur deinen weg, auf der karte auch alles ringsum. deshalb merkt man sich karten besser."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "fernreisen verursachen den größten teil der persönlichen klimabilanz vieler menschen. ein einziger langstreckenflug übersteigt oft den jahresausstoß durch heizen oder autofahren."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "tourismus bringt einkommen und verdrängt es zugleich. wo wohnraum überwiegend an gäste vermietet wird, steigen die mieten für die einheimische bevölkerung spürbar."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "reisewarnungen sind keine verbote, sondern einschätzungen. sie wirken sich aber auf versicherungsschutz und stornobedingungen aus und sollten deshalb vor der buchung gelesen werden."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Wie packt man einen Koffer? Schweres nach unten, Leichtes nach oben. Kleidung rollen statt falten spart Platz. Und etwas Luft lassen für den Rückweg!"
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Ein Reisepass gehört an einen festen Platz, am besten immer denselben. Wer ihn zwischendurch woanders hinlegt, sucht ihn genau dann, wenn es eilig ist."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "In vielen Ländern ist das Wasser aus dem Hahn trinkbar, in anderen nicht. Fragen kostet nichts, und die Antwort bekommst du überall an der Rezeption."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Sprachkenntnisse verändern eine Reise stärker als jedes Reiseziel. Schon wenige Sätze verschieben die Rolle vom Betrachter zum Gegenüber, und Gespräche kommen überhaupt erst zustande."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Der Jetlag fällt nach Osten schwerer aus als nach Westen. Der innere Rhythmus lässt sich leichter verlängern als verkürzen, weshalb Rückflüge oft anstrengender wirken."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Pauschalreisen unterliegen in Europa besonderen Schutzvorschriften. Bei einzeln gebuchten Bausteinen greifen diese Regeln nicht, was im Störungsfall erheblich ausmachen kann."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Zwischen Deutschland und Japan liegen 8 Stunden Zeitunterschied. Wenn es bei uns 12 Uhr mittags ist, ist es dort schon 20 Uhr am Abend."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Zug fährt bis zu 300 Kilometer pro Stunde, ein Flugzeug schafft 900. Auf kurzen Strecken ist der Zug trotzdem schneller (weil das Warten wegfällt)."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Die Erde hat 24 Zeitzonen. Fliegst du einmal ganz herum, verlierst oder gewinnst du 1 ganzen Tag. Das klingt seltsam und stimmt trotzdem!"
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Ein Langstreckenflug über 8000 Kilometer verursacht pro Person etwa 1 Tonne Kohlendioxid. Das entspricht ungefähr dem, was ein Mittelklassewagen auf 5000 Kilometern ausstößt."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Venedig hatte 1950 rund 175 000 Einwohner, heute sind es weniger als 50 000. Als Hauptgrund gelten steigende Kosten und die Umwandlung von Wohnraum in Ferienunterkünfte."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Die Schengen-Regeln erlauben Aufenthalte von 90 Tagen innerhalb von 180 Tagen. Diese Frist gilt für den gesamten Raum zusammen, nicht für jedes Land einzeln."
         }
       ],
       "facts": [
@@ -2216,6 +2936,96 @@
           "charset": "S5",
           "age": "A2",
           "body": "Papierformate folgen einem einfachen System: A4 ist halb so groß wie A3. Alle Formate dieser Reihe haben dasselbe Seitenverhältnis, deshalb passt jede Verkleinerung."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "beim zeichnen hilft es, zuerst leicht zu skizzieren. dann kann man linien noch ändern. erst am ende zieht man die richtigen linien kräftig nach."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "aus drei farben kann man fast alle anderen mischen. rot, gelb und blau reichen dafür aus. mit weiß wird es heller, mit schwarz dunkler."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "wer malen lernen will, muss zuerst gut hinsehen. die meisten fehler entstehen im kopf, nicht in der hand. schau also öfter auf das, was du malst."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "die wahrnehmung von farbe ist nicht absolut. ein grauton wirkt neben gelb bläulich und neben blau gelblich, obwohl er physikalisch unverändert bleibt."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "moderne kunst wird häufig danach beurteilt, ob jemand sie hätte machen können. das ist der falsche maßstab. entscheidend ist meist, dass jemand es zuerst getan hat."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "restaurierung ist immer ein eingriff. jede reinigung entfernt auch material, weshalb heute so wenig wie möglich verändert und jeder schritt genau dokumentiert wird."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Warum sehen alte Statuen weiß aus? Sie waren früher bunt bemalt. Die Farbe ist mit der Zeit verschwunden. Wir kennen sie also gar nicht im Original!"
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Perspektive klingt schwer und hat einen einfachen Trick: Alle Linien laufen auf einen Punkt am Horizont zu. Schon wirkt ein flaches Bild räumlich."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Ein Bild braucht keinen teuren Rahmen. Aber es braucht Platz drumherum. Zu eng gehängt wirkt selbst ein gutes Bild unruhig und gedrängt."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Die Frage, was Kunst ist, wird seit Jahrhunderten unterschiedlich beantwortet. Jede Antwort schließt etwas aus, und gerade diese Ausschlüsse haben die nächste Generation regelmäßig herausgefordert."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Museen zeigen nur einen Bruchteil ihrer Bestände. Was im Depot bleibt, entscheidet mit darüber, welche Kunst überhaupt als bedeutend wahrgenommen wird."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Die Fotografie nahm der Malerei die Aufgabe des Abbildens ab. Erst dadurch wurden Stilrichtungen möglich, die sich um Ähnlichkeit gar nicht mehr bemühten."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Blatt Papier im Format A4 ist 21 mal 29,7 Zentimeter groß. Faltest du es einmal, bekommst du A5. Jede Faltung halbiert die Fläche."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Die Mona Lisa ist nur 77 mal 53 Zentimeter groß. Viele sind enttäuscht, wenn sie davorstehen (sie hatten etwas Riesiges erwartet)."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Farbe aus der Tube gibt es erst seit etwa 1840. Vorher mussten Malerinnen und Maler ihre Farbe selbst anrühren, und zwar jeden Tag neu."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Die Höhlenmalereien von Chauvet sind rund 36 000 Jahre alt. Sie zeigen eine Sicherheit in der Linienführung, die lange für eine spätere Errungenschaft gehalten wurde."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Der Kunstmarkt ist stark konzentriert: Ein kleiner Teil der Werke erzielt den größten Teil des Umsatzes. Preise sagen deshalb wenig über künstlerische Bedeutung aus."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Ein Gemälde altert chemisch weiter. Der Firnis vergilbt, Pigmente verändern sich, und manche Bilder sahen im Jahr ihrer Entstehung deutlich anders aus als heute."
         }
       ],
       "facts": [
@@ -2458,6 +3268,96 @@
           "charset": "S5",
           "age": "A2",
           "body": "Vier Farben genügen, um jede Landkarte so zu färben, dass keine 2 Nachbarländer gleich aussehen. Der Beweis von 1976 war der erste, der einen Computer brauchte."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "bei einem rätsel hilft es, laut zu denken. sprich einfach aus, was du schon weißt. oft merkst du dabei selbst, wo der fehler steckt."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "wenn du nicht weiterkommst, mach eine pause. das gehirn arbeitet weiter, auch wenn du an etwas anderes denkst. danach siehst du es oft sofort."
+        },
+        {
+          "charset": "S3",
+          "age": "A1",
+          "body": "schreib bei knobelaufgaben auf, was sicher falsch ist. was übrig bleibt, ist dann meistens schon die lösung. im kopf verliert man schnell den überblick."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "die schwierigkeit eines rätsels liegt selten im rechnen. sie liegt darin, eine unausgesprochene annahme zu bemerken, die die lösung von vornherein ausschließt."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "systematisches ausschließen schlägt das raten. wer die möglichkeiten geordnet durchgeht und notiert, kommt auch bei vielen kombinationen zuverlässig ans ziel."
+        },
+        {
+          "charset": "S3",
+          "age": "A3",
+          "body": "der reiz eines guten rätsels liegt im moment des umschaltens. vorher wirkt die aufgabe unlösbar, danach selbstverständlich, und dazwischen liegt kein neues wissen."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Ein Labyrinth hat nur einen Weg. Ein Irrgarten hat viele, und man kann sich verlaufen. Die beiden Wörter meinen also gar nicht dasselbe!"
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Bei Sudoku musst du nicht rechnen. Es geht nur darum, dass jede Zahl in jeder Zeile genau einmal vorkommt. Buchstaben würden genauso gut gehen."
+        },
+        {
+          "charset": "S4",
+          "age": "A1",
+          "body": "Wie löst man ein Kreuzworträtsel? Fang mit dem an, was du sicher weißt. Jeder Buchstabe hilft dir dann beim nächsten Wort weiter."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Denkaufgaben messen weniger Intelligenz als Übung. Wer die üblichen Aufgabentypen kennt, erkennt sie wieder und spart die Zeit, die andere mit dem Verstehen verbringen."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Ein Rätsel muss eindeutig lösbar sein, sonst ist es keines. Mehrdeutige Aufgaben wirken tiefsinnig, sind aber meist nur ungenau formuliert."
+        },
+        {
+          "charset": "S4",
+          "age": "A3",
+          "body": "Beim Schach übersteigt die Zahl möglicher Partien jede Vorstellung. Deshalb arbeiten auch starke Spielerinnen mit Mustern und Stellungstypen statt mit vollständiger Berechnung."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Sudoku hat 81 Felder in 9 Reihen und 9 Spalten. Am Anfang sind meist 25 bis 30 Zahlen vorgegeben. Der ganze Rest ist deine Aufgabe!"
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "Ein Zauberwürfel hat 6 Seiten mit je 9 Feldern. Aus jeder Stellung kommst du in höchstens 20 Zügen zur Lösung. Das muss man allerdings erst lernen."
+        },
+        {
+          "charset": "S5",
+          "age": "A1",
+          "body": "In einem Raum mit 23 Menschen haben 2 davon wahrscheinlich am selben Tag Geburtstag. Das klingt falsch und stimmt trotzdem (es gibt sehr viele mögliche Paare)."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Das Vierfarbenproblem wurde 1976 gelöst, und zwar mit Computerhilfe. Es war der erste bedeutende Beweis, den kein Mensch vollständig von Hand nachvollziehen konnte."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Ein Sudoku benötigt mindestens 17 Vorgaben für eine eindeutige Lösung. Der Nachweis gelang 2012 durch systematisches Durchsuchen aller Möglichkeiten."
+        },
+        {
+          "charset": "S5",
+          "age": "A3",
+          "body": "Das Schiebepuzzle mit 15 Steinen wurde um 1880 mit einem Preisgeld beworben, das niemand gewinnen konnte. Die ausgeschriebene Stellung war mathematisch unerreichbar."
         }
       ],
       "facts": [

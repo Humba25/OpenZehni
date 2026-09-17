@@ -9,6 +9,9 @@
 //! SQLite-Datenbank ein und führt die Migrationen aus. Die gesamte Lernlogik
 //! liegt in `src/lib/` auf der TypeScript-Seite und ist dort unit-getestet.
 
+mod pruefsummen;
+
+use tauri::Manager;
 use tauri_plugin_sql::{Migration, MigrationKind};
 
 /// Name der Datenbankdatei. Landet in `%APPDATA%\Zehni\` (SPEC.md 5).
@@ -63,6 +66,23 @@ fn migrations() -> Vec<Migration> {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .setup(|app| {
+            // Muss **vor** dem Migrator laufen. Der Migrator prueft beim Laden
+            // der Datenbank alle Pruefsummen auf einmal und verweigert bei der
+            // ersten Abweichung den ganzen Satz -- danach waere es zu spaet.
+            //
+            // Scheitert die Reparatur, wird das protokolliert und weitergemacht:
+            // Eine frische Installation hat noch keine Datei, und eine gesunde
+            // Datenbank braucht nichts. Ein Abbruch hier wuerde aus einem
+            // Sonderfall einen Startfehler machen.
+            let pfad = app.path().app_config_dir()?.join("zehni.db");
+            match tauri::async_runtime::block_on(pruefsummen::geradeziehen(&pfad)) {
+                Ok(0) => {}
+                Ok(n) => eprintln!("Zehni: {n} Migrations-Pruefsummen aus 0.1.2 geradegezogen."),
+                Err(e) => eprintln!("Zehni: Pruefsummen nicht pruefbar ({e}). Start geht weiter."),
+            }
+            Ok(())
+        })
         .plugin(
             tauri_plugin_sql::Builder::default()
                 .add_migrations(DB_URL, migrations())

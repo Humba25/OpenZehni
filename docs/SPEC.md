@@ -1023,9 +1023,10 @@ Anforderung an den Seed-Bestand (Definition of Done für Meilenstein M2):
   Davon sind 400 der Pflichtteil (`alle` + `A2`), die übrigen 240 dürfen
   lückenhaft bleiben — der Rückfall aus 9.8 fängt jede Lücke stumm ab.
 
-  **Stand 2026-09-16: Der Pflichtteil ist vollständig** — 400 Texte, dazu 90
-  aus `A1` und `A3`, zusammen 490. `text-provider.test.ts` prüft je Thema und
-  Stufe auf acht **verschiedene** Texte.
+  **Stand 2026-09-16: Der Zielbestand ist erreicht** — 640 Texte, also 64 je
+  Thema. `text-provider.test.ts` prüft je Thema und Stufe auf acht
+  **verschiedene** Texte im Pflichtteil, vier in `A1` und `A3`, dazu die
+  Gesamtzahl.
 
   Acht ist keine gegriffene Zahl: `provideText()` wählt nach Versuchsnummer
   aus. Vorher standen in `S3` bis `S5` je Thema **ein** A2-Text; wer eine
@@ -1518,11 +1519,35 @@ Punkt der Gamification und der einzige, der nichts zum Lernpfad beiträgt.
    eigenen Anschluss — für eine App auf fremden Rechnern eher ungünstig.)
 2. **Name und Marke**: „Zehni" ist frei gewählt; vor Weitergabe kurz prüfen,
    ob es Namenskollisionen gibt.
-3. **Schriftlizenz**: Atkinson Hyperlegible (SIL OFL) und JetBrains Mono
-   (SIL OFL) sind unbedenklich — Lizenztexte mitliefern.
+3. ~~**Schriftlizenz**~~ — **erledigt am 2026-09-16.** Atkinson Hyperlegible
+   und JetBrains Mono liegen als `.woff2` in `src/assets/fonts/`, die
+   Lizenztexte daneben als `OFL-AtkinsonHyperlegible.txt` und
+   `OFL-JetBrainsMono.txt`. Beide stehen unter der SIL Open Font License 1.1;
+   die verlangt genau das: Lizenztext mitliefern, Schriften nicht einzeln
+   verkaufen. Beides ist erfüllt.
 4. **Abschlusstest-Urkunde**: als PDF exportierbar? (Nett, aber M6+.)
-5. **Zweitprofil** für weitere Kinder — Datenmodell ist vorbereitet
-   (`profile.id`), UI nicht.
+5. **Zweitprofil** für weitere Kinder.
+
+   **Korrektur vom 2026-09-16:** Hier stand, das Datenmodell sei vorbereitet,
+   weil `profile` eine Spalte `id` hat. Das war falsch und hat den Aufwand um
+   eine Größenordnung zu klein erscheinen lassen. Nachgesehen im Schema:
+
+   - **Keine einzige andere Tabelle kennt ein Profil.** `lesson_progress` hat
+     `lesson_id` als Primärschlüssel, `char_stats` das Zeichen, `interests` die
+     Themen-ID, `daily_activity` und `weekly_goal` das Datum.
+   - `xp` und `streak` haben `CHECK (id = 1)` fest eingebaut — sie können
+     bauartbedingt nur **eine** Zeile enthalten.
+   - Dreizehn Tabellen bräuchten eine Spalte `profile_id` und einen neuen
+     Primärschlüssel. In SQLite heißt das: Tabelle neu anlegen, Daten
+     umkopieren, alte löschen — für jede einzelne.
+   - Rund 110 SQL-Anweisungen in `src/db/` müssten das Profil mitführen.
+
+   Dazu die Oberfläche: Profilwahl beim Start, Wechsel, Anlegen, Löschen.
+
+   Das ist kein „UI fehlt noch", sondern ein Umbau des Datenmodells auf einer
+   Datenbank, in der der Lernfortschritt eines Kindes liegt. Vor der Umsetzung
+   ist deshalb zu klären, ob es ein zweites Kind überhaupt gibt — der Nutzen ist
+   bis dahin null, das Risiko nicht.
 6. **Normenpflege**: vor jedem Major-Release prüfen, ob eine neue Ausgabe von
    DIN 2137, DIN 5008 oder der Wettschreibordnung erschienen ist; Ergebnis mit
    Datum in `NORMEN.md` 9 vermerken.
@@ -1533,9 +1558,15 @@ Punkt der Gamification und der einzige, der nichts zum Lernpfad beiträgt.
    nicht aufgeschlüsselt. Falls damit Tabellenkalkulation oder Präsentation
    gemeint ist, wäre das eine bewusste Lücke in Zehni — zu entscheiden, nicht
    zu übersehen.
-9. **Ergonomie und Sitzhaltung**: bisher nur als Pausenerinnerung vorgesehen
-   (12.2). Eine kurze eigene Einheit wäre wenig Aufwand und würde einen echten
-   Nachteil gegenüber einem betreuten Präsenzkurs verkleinern.
+9. ~~**Ergonomie und Sitzhaltung** als eigene Einheit~~ — **verworfen am
+   2026-09-16, Entscheidung des Nutzers.** Eine Lerneinheit über richtiges
+   Sitzen wurde als nicht sinnvoll eingeschätzt. Der Punkt wird nicht weiter
+   verfolgt und gilt nicht als Lücke.
+
+   **Die Haltungs- und Pausenerinnerung nach zwanzig Minuten (12.2) bleibt
+   bestehen.** Sie ist etwas anderes als eine Einheit: kein Lernstoff, sondern
+   ein Hinweis zur rechten Zeit, und sie ist abschaltbar. Wer sie später auch
+   entfernen will, entscheidet das dort und nicht hier.
 10. ~~**Zahlengliederung nach DIN 5008**~~ — **erledigt am 2026-09-14.** Der
     Punkt war nie offen: `NORMEN.md` 5.1 legt ihn eindeutig fest (ab fünf
     Stellen in Dreiergruppen mit Leerzeichen, vierstellige bleiben

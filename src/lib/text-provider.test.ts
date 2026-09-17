@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { provideText, pickSeedText, pickFact, allTopics, topicsWithContent } from './text-provider';
 import { allLessons, getLesson } from './curriculum';
+import seed from '../../content/topics.seed.json';
 
 describe('provideText — SPEC.md 4.1 und 9.7', () => {
   /**
@@ -214,8 +215,9 @@ describe('Themenbestand', () => {
    * Zustand war der Seed bis zum 2026-09-16: 13 Texte je Thema, in `S3` bis
    * `S5` je **einer** für `A2`.
    *
-   * Die ergänzenden Stufen `A1` und `A3` sind hier bewusst nicht geprüft —
-   * sie dürfen lückenhaft bleiben, der Rückfall aus 9.8 fängt das ab.
+   * Für `A1` und `A3` gilt seit dem 2026-09-16 dasselbe mit **vier** Texten je
+   * Stufe (SPEC.md 9.6). Sie dürften lückenhaft bleiben — der Rückfall aus 9.8
+   * fängt jede Lücke ab —, sind es aber nicht mehr, und dabei soll es bleiben.
    */
   it('hat je Thema den Pflichtteil von acht Texten pro Stufe', () => {
     const PFLICHT: readonly (readonly ['S1' | 'S2' | 'S3' | 'S4' | 'S5', 'A2'])[] = [
@@ -240,5 +242,34 @@ describe('Themenbestand', () => {
         ).toBeGreaterThanOrEqual(8);
       }
     }
+  });
+
+  it('hat je Thema vier Texte pro Stufe für A1 und A3', () => {
+    for (const topic of allTopics()) {
+      for (const stage of ['S3', 'S4', 'S5'] as const) {
+        for (const age of ['A1', 'A3'] as const) {
+          const verschieden = new Set<string>();
+          for (let attempt = 0; attempt < 4; attempt++) {
+            const t = pickSeedText(topic.id, stage, age, attempt);
+            if (t) verschieden.add(t);
+          }
+          expect(
+            verschieden.size,
+            `${topic.id}/${stage}/${age} hat nur ${verschieden.size} verschiedene Texte, ` +
+              `gefordert sind vier (SPEC.md 9.6).`,
+          ).toBeGreaterThanOrEqual(4);
+        }
+      }
+    }
+  });
+
+  /**
+   * Der Zielbestand aus SPEC.md 9.6, als eine Zahl. Sie steht hier, damit ein
+   * Schwund auffällt, den die Prüfungen oben nicht sehen — sie fragen nur nach
+   * den ersten acht beziehungsweise vier Texten je Zelle.
+   */
+  it('erreicht den Zielbestand von 640 Texten', () => {
+    const gesamt = seed.topics.reduce((summe, topic) => summe + topic.texts.length, 0);
+    expect(gesamt, 'Zielbestand nach SPEC.md 9.6 sind 640 Texte.').toBeGreaterThanOrEqual(640);
   });
 });

@@ -47,18 +47,23 @@ npm test                 # Vitest (Unit)
 npm run lint             # ESLint + Prettier + tsc --noEmit
 npm run validate:seed    # prüft content/topics.seed.json gegen validateText()
 npm run check:din5008    # prüft alle ausgegebenen Texte gegen DIN 5008
-cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings
+cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings
+cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+cargo test --manifest-path src-tauri/Cargo.toml
 ```
 
-**Noch nicht vorhanden**, hier bewusst nicht aufgeführt: `npm run test:e2e`
-(Playwright ist noch nicht eingerichtet) und `cargo test` (die Rust-Seite hat
-noch keine Tests — sie besteht in M1 nur aus dem Start und den Migrationen).
-Eine Arbeitsanweisung, die Befehle verspricht, die ins Leere laufen, ist eine
-Falle für die nächste Sitzung.
+**Noch nicht vorhanden**, hier bewusst nicht aufgeführt: `npm run test:e2e` —
+Playwright ist nicht eingerichtet. Eine Arbeitsanweisung, die Befehle
+verspricht, die ins Leere laufen, ist eine Falle für die nächste Sitzung.
 
-Vor jedem Commit müssen `npm run lint`, `npm test` und `cargo clippy`
-fehlerfrei durchlaufen. Wer Inhalte geändert hat, zusätzlich
-`npm run validate:seed` und `npm run check:din5008`.
+`cargo test` stand bis zum 2026-09-17 ebenfalls hier, weil die Rust-Seite
+keine Tests hatte. Sie hat jetzt welche: `src/pruefsummen.rs` greift in die
+Datenbank der Nutzerin ein und wird gegen eine nachgebaute 0.1.2-Datenbank
+geprüft.
+
+Vor jedem Commit müssen `npm run lint`, `npm test`, `cargo clippy`,
+`cargo fmt --check` und `cargo test` fehlerfrei durchlaufen. Wer Inhalte
+geändert hat, zusätzlich `npm run validate:seed` und `npm run check:din5008`.
 
 **Wer `tauri.conf.json`, die Plugins in `src-tauri/src/lib.rs` oder die
 Berechtigungen in `src-tauri/capabilities/` anfasst, startet die App

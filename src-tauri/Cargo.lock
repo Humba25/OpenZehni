@@ -5847,10 +5847,11 @@ dependencies = [
 
 [[package]]
 name = "zehni"
-version = "0.1.5"
+version = "0.1.6"
 dependencies = [
  "serde",
  "serde_json",
+ "sqlx",
  "tauri",
  "tauri-build",
  "tauri-plugin-process",

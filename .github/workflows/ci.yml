@@ -47,7 +47,7 @@ jobs:
       - name: Rust-Werkzeuge einrichten
         uses: dtolnay/rust-toolchain@stable
         with:
-          components: clippy
+          components: clippy, rustfmt
 
       - name: Rust-Abhaengigkeiten zwischenspeichern
         uses: swatinem/rust-cache@v2
@@ -55,4 +55,13 @@ jobs:
           workspaces: src-tauri
 
       - name: Clippy
-        run: cargo clippy --manifest-path src-tauri/Cargo.toml -- -D warnings
+        run: cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings
+
+      - name: Rust-Format
+        run: cargo fmt --manifest-path src-tauri/Cargo.toml -- --check
+
+      # Seit 0.1.6 hat die Rust-Seite Tests: Die Pruefsummen-Reparatur aus
+      # src/pruefsummen.rs greift in eine fremde Datenbank ein und wird
+      # deshalb gegen eine nachgebaute 0.1.2-Datenbank geprueft.
+      - name: Rust-Tests
+        run: cargo test --manifest-path src-tauri/Cargo.toml
