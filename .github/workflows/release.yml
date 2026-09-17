@@ -143,3 +143,72 @@ jobs:
           prerelease: false
           includeUpdaterJson: true
           args: --config src-tauri/tauri.release.conf.json
+
+  # ---------------------------------------------------------------------------
+  # Zusaetzlich auf SourceForge anbieten.
+  #
+  # **Dieser Job darf den Release nie gefaehrden.** Er laeuft nach `bauen`, laedt
+  # die bereits veroeffentlichten und signierten Dateien herunter und legt sie
+  # dort ab. Schlaegt er fehl, ist der GitHub-Release trotzdem draussen und die
+  # Update-Kette funktioniert -- der Updater fragt ausschliesslich GitHub.
+  #
+  # Ohne die beiden Secrets wird der Job uebersprungen statt zu scheitern. So
+  # bleibt der Workflow benutzbar, solange die Einrichtung dort nicht steht.
+  sourceforge:
+    needs: bauen
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Ein Fehlschlag hier faerbt den Lauf nicht rot. Was zaehlt, ist `bauen`.
+    continue-on-error: true
+
+    steps:
+      - name: Einrichtung pruefen
+        id: pruefung
+        shell: bash
+        env:
+          NUTZER: ${{ secrets.SOURCEFORGE_USER }}
+          PROJEKT: ${{ secrets.SOURCEFORGE_PROJECT }}
+        run: |
+          if [ -z "$NUTZER" ] || [ -z "$PROJEKT" ]; then
+            echo "SourceForge ist nicht eingerichtet. Uebersprungen."
+            echo "weiter=nein" >> "$GITHUB_OUTPUT"
+          else
+            echo "weiter=ja" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Veroeffentlichte Dateien holen
+        if: steps.pruefung.outputs.weiter == 'ja'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p hochladen
+          gh release download "${{ github.ref_name }}" \
+            --repo "${{ github.repository }}" \
+            --pattern '*.exe' --pattern '*.sig' \
+            --dir hochladen
+          ls -l hochladen
+
+      - name: SSH-Schluessel einrichten
+        if: steps.pruefung.outputs.weiter == 'ja'
+        env:
+          SCHLUESSEL: ${{ secrets.SOURCEFORGE_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SCHLUESSEL" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H frs.sourceforge.net >> ~/.ssh/known_hosts
+
+      # Der Ordner heisst wie die Version. SourceForge zeigt den neuesten
+      # Ordner zuerst an und bietet die dortige .exe als Standard-Download an.
+      - name: Hochladen
+        if: steps.pruefung.outputs.weiter == 'ja'
+        env:
+          NUTZER: ${{ secrets.SOURCEFORGE_USER }}
+          PROJEKT: ${{ secrets.SOURCEFORGE_PROJECT }}
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          ZIEL="/home/frs/project/$PROJEKT/$VERSION/"
+          rsync -av --chmod=ug=rwX,o=rX \
+            -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=yes" \
+            hochladen/ "$NUTZER@frs.sourceforge.net:$ZIEL"

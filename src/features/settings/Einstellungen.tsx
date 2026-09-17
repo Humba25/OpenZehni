@@ -203,12 +203,16 @@ export function Einstellungen({
             onAendern={(an) => aendern({ blindMode: an })}
           />
 
-          <Schalter
-            titel={de.einstellungen.ki}
-            erklaerung={de.einstellungen.kiErklaerung}
-            an={daten.aiEnabled}
-            onAendern={(an) => aendern({ aiEnabled: an })}
-          />
+          {/*
+            Hier stand bis zum 2026-09-17 ein Schalter „Frische Texte aus dem
+            Internet". Die KI-Texte sind gestrichen (SPEC.md 15.1); ein Schalter
+            für etwas, das es nie geben wird, ist eine Lüge im Einstellungsbild.
+
+            Die Spalte `ai_enabled` bleibt in der Datenbank stehen — eine
+            ausgelieferte Migration wird nie verändert (ARCHITEKTUR.md,
+            Architekturregel 3). Sie behält ihren Vorgabewert und wird von
+            nichts mehr gelesen.
+          */}
 
           <Feld
             titel={de.einstellungen.tastaturPruefen}

@@ -634,10 +634,6 @@ export const de = {
     geistErklaerung:
       'Ein blasser zweiter Cursor läuft im Tempo deiner besten Runde mit. Im Abschlusstest ist er immer aus.',
 
-    ki: 'Frische Texte aus dem Internet',
-    kiErklaerung:
-      'Ist das aus, kommen alle Übungstexte aus Zehni selbst. Offline funktioniert sowieso alles.',
-
     tastaturPruefen: 'Tastatur neu prüfen',
     tastaturPruefenErklaerung: 'Nur nötig, wenn du die Tastatur gewechselt hast.',
   },

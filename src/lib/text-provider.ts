@@ -102,10 +102,26 @@ export function provideText(request: TextRequest): ProvidedText {
 /**
  * Sucht einen Seed-Text zu (Thema, Zeichensatzstufe, Altersstufe).
  *
- * Die Auswahl innerhalb der Treffer ist **deterministisch** über die
- * Versuchsnummer: Beim zweiten Versuch kommt ein anderer Text, aber derselbe
- * zweite Versuch liefert immer denselben. Das braucht der Geisterschreiber
- * (SPEC.md 8.7), und es macht die Auswahl testbar.
+ * Die Auswahl ist **deterministisch** über die Versuchsnummer: Beim zweiten
+ * Versuch kommt ein anderer Text, aber derselbe zweite Versuch liefert immer
+ * denselben. Das braucht der Geisterschreiber (SPEC.md 8.7), und es macht die
+ * Auswahl testbar.
+ *
+ * **Alle Altersstufen bilden einen Vorrat, die eigene zuerst.** Bis zum
+ * 2026-09-17 hörte die Suche bei der ersten nicht leeren Stufe auf. Ein
+ * achtjähriges Kind hatte damit vier Texte je Lektion und sah beim fünften
+ * Versuch denselben wieder — während acht weitere derselben
+ * Zeichensatzstufe ungenutzt danebenlagen.
+ *
+ * Seit die KI-Texte gestrichen sind (SPEC.md 9), ist der Seed die einzige
+ * Quelle. Eine Wiederholung ist dann schlimmer als ein Text, der eine Stufe
+ * zu lang oder zu kurz ist: Wer denselben Text erneut bekommt, schreibt ihn
+ * beim zweiten Mal auswendig ab, statt zu tippen.
+ *
+ * Die Reihenfolge aus `ageFallbackOrder()` bleibt maßgeblich, deshalb ändert
+ * sich an den ersten Versuchen **nichts** — fremde Stufen kommen erst, wenn
+ * die eigene aufgebraucht ist. Der Zeichensatz ist dabei nie ein Problem: Alle
+ * Texte einer Stufe halten denselben Vorrat ein.
  */
 export function pickSeedText(
   topicId: string,
@@ -116,14 +132,16 @@ export function pickSeedText(
   const topic = TOPICS.find((t) => t.id === topicId);
   if (!topic) return undefined;
 
+  const vorrat: string[] = [];
   for (const age of ageFallbackOrder(ageBand)) {
-    const treffer = topic.texts.filter((t) => t.charset === stage && t.age === age);
-    if (treffer.length > 0) {
-      const index = ((attempt % treffer.length) + treffer.length) % treffer.length;
-      return treffer[index]!.body;
+    for (const t of topic.texts) {
+      if (t.charset === stage && t.age === age) vorrat.push(t.body);
     }
   }
-  return undefined;
+  if (vorrat.length === 0) return undefined;
+
+  const index = ((attempt % vorrat.length) + vorrat.length) % vorrat.length;
+  return vorrat[index]!;
 }
 
 /**

@@ -272,4 +272,57 @@ describe('Themenbestand', () => {
     const gesamt = seed.topics.reduce((summe, topic) => summe + topic.texts.length, 0);
     expect(gesamt, 'Zielbestand nach SPEC.md 9.6 sind 640 Texte.').toBeGreaterThanOrEqual(640);
   });
+
+  /**
+   * Wie oft kann ein Kind dieselbe Lektion wiederholen, bevor ein Text
+   * wiederkommt? Das ist die Zahl, die seit dem Streichen der KI-Texte zählt —
+   * der Seed ist die einzige Quelle (SPEC.md 9).
+   *
+   * Geprüft wird **jede** Altersstufe. Vorher war `A1` und `A3` auf vier Texte
+   * beschränkt, weil die Suche bei der ersten nicht leeren Stufe aufhörte,
+   * während acht weitere derselben Zeichensatzstufe danebenlagen.
+   */
+  it('hält für jede Altersstufe mindestens zwölf Texte je Lektion bereit', () => {
+    for (const topic of allTopics()) {
+      for (const stage of ['S3', 'S4', 'S5'] as const) {
+        for (const age of ['A1', 'A2', 'A3'] as const) {
+          const verschieden = new Set<string>();
+          for (let attempt = 0; attempt < 12; attempt++) {
+            const t = pickSeedText(topic.id, stage, age, attempt);
+            if (t) verschieden.add(t);
+          }
+          expect(
+            verschieden.size,
+            `${topic.id}/${stage}/${age} wiederholt sich schon nach ${verschieden.size} Versuchen.`,
+          ).toBeGreaterThanOrEqual(12);
+        }
+      }
+    }
+  });
+
+  /**
+   * Die eigene Altersstufe kommt zuerst. Sonst bekäme ein Neunjähriger gleich
+   * im ersten Versuch einen Text, der für Fünfzehnjährige geschrieben ist
+   * (SPEC.md 9.8).
+   */
+  it('nimmt die eigene Altersstufe zuerst', () => {
+    for (const [age, stage] of [
+      ['A1', 'S4'],
+      ['A3', 'S4'],
+    ] as const) {
+      const eigene = new Set(
+        seed.topics
+          .find((t) => t.id === 'tiere')!
+          .texts.filter((t) => t.charset === stage && t.age === age)
+          .map((t) => t.body),
+      );
+      for (let attempt = 0; attempt < eigene.size; attempt++) {
+        const t = pickSeedText('tiere', stage, age, attempt);
+        expect(
+          eigene.has(t!),
+          `${age}, Versuch ${attempt} greift zu früh auf eine fremde Stufe`,
+        ).toBe(true);
+      }
+    }
+  });
 });

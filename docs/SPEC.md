@@ -876,7 +876,23 @@ wissen will, ob er aktuell ist, hatte sonst keine Stelle zum Nachsehen.
 
 ---
 
-## 9. Inhalte: KI-Generierung mit lokalem Fallback
+## 9. Inhalte: die lokale Textdatenbank
+
+> **KI-Texte sind am 2026-09-17 gestrichen** — Entscheidung des Nutzers.
+> Zehni bezieht seine Übungstexte ausschließlich aus dem mitgelieferten Seed
+> (9.6). Die Abschnitte 9.2 bis 9.5 beschreiben eine Anbindung, die es nicht
+> mehr geben wird; sie bleiben als Begründung stehen und sind entsprechend
+> gekennzeichnet.
+>
+> **Was das bedeutet:** Der Seed ist keine Rückfallebene mehr, sondern die
+> einzige Quelle. Sein Umfang ist damit kein Komfortthema, sondern entscheidet,
+> wie oft ein Kind denselben Text wiedersieht.
+>
+> **Was dadurch wegfällt:** die Anbieterfrage, der Umgang mit Schlüsseln, die
+> Remote-Konfiguration samt Hosting (15.1), die zweite Textprüfung in Rust
+> (15.15), jede Wartezeit auf eine Netzwerkantwort und jede Abhängigkeit von
+> einem Anbieterlimit. Architekturregel 2 („Netzwerk und Schlüssel nur in
+> Rust") bleibt bestehen, hat aber vorerst keinen Anwendungsfall mehr.
 
 ### 9.1 Die zehn Themen
 
@@ -1147,11 +1163,29 @@ unterscheiden. Diese Texte tragen `"age": "alle"`. Erst ab `S3`, wo echte Sätze
 stehen, wird nach Stufe unterschieden.
 
 **Auswahl und Rückfall (verbindlich).** Gesucht wird ein Text zu
-(Thema, Zeichensatzstufe, Altersstufe). Ist die Zelle leer, wird die
-**benachbarte** Altersstufe genommen (`A1` → `A2`, `A3` → `A2`, `A2` → `A1`),
-danach `"alle"`. Ein Text wird **nie** wegen der Altersstufe verweigert — das
-verstieße gegen „Offline ist der Normalfall". Der Rückfall ist stumm; die
-Nutzerin merkt nichts davon.
+(Thema, Zeichensatzstufe, Altersstufe). Die Reihenfolge ist `A1` → `A2` →
+`"alle"` → `A3` beziehungsweise `A3` → `A2` → `"alle"` → `A1`, für `A2`
+entsprechend `A2` → `A1` → `"alle"` → `A3`. Ein Text wird **nie** wegen der
+Altersstufe verweigert — das verstieße gegen „Offline ist der Normalfall". Der
+Rückfall ist stumm; die Nutzerin merkt nichts davon.
+
+**Alle Stufen bilden einen Vorrat, die eigene zuerst** (seit 2026-09-17). Die
+Reihenfolge oben wird **vollständig** durchlaufen, nicht bis zur ersten
+gefüllten Zelle: Erst kommen alle Texte der eigenen Stufe, dann die der
+nächsten. Vorher hörte die Suche bei der ersten nicht leeren Stufe auf — ein
+achtjähriges Kind hatte damit vier Texte je Lektion, während zwölf weitere
+derselben Zeichensatzstufe ungenutzt danebenlagen.
+
+Der Grund für die Änderung ist das Streichen der KI-Texte (Kapitel 9): Der Seed
+ist die einzige Quelle. Eine **Wiederholung** ist dann schlimmer als ein Text,
+der eine Stufe zu lang oder zu kurz ist — wer denselben Text erneut bekommt,
+schreibt ihn beim zweiten Mal auswendig ab, statt zu tippen. An den ersten
+Versuchen ändert sich nichts; fremde Stufen erscheinen erst, wenn die eigene
+aufgebraucht ist. Der Zeichenvorrat ist dabei nie gefährdet: Alle Texte einer
+Zeichensatzstufe halten denselben ein.
+
+`text-provider.test.ts` prüft, dass jede Altersstufe mindestens zwölf
+verschiedene Texte je Lektion bekommt und dass die eigene Stufe zuerst kommt.
 
 **Vollbestand ist `A2`.** `A2` deckt die Kernzielgruppe (`SPEC.md` 1: „ab ca.
 10 Jahren") und wird vollständig befüllt. `A1` und `A3` sind Ergänzungen, die
@@ -1482,12 +1516,23 @@ NSIS-Installer, Auto-Updater, Signierung, GitHub-Actions-Release,
 **Fertig, wenn:** Die App auf einem fremden Windows-Rechner installiert,
 gestartet und auf eine neue Version aktualisiert wurde.
 
-### M5 — KI-Inhalte
+### M5 — KI-Inhalte ~~offen~~ **gestrichen am 2026-09-17**
 
-`AiProvider`-Trait, OpenRouter + Groq, Remote-Konfiguration, Validierung,
-Cache und Vorab-Generierung, Schalter in den Einstellungen.
-**Fertig, wenn:** Bei aktivem Internet frische Texte erscheinen und bei
-gezogenem Netzwerkkabel nichts davon auffällt.
+Vorgesehen waren `AiProvider`-Trait, OpenRouter und Groq, Remote-Konfiguration,
+Validierung, Cache und Vorab-Generierung.
+
+**Gestrichen auf Entscheidung des Nutzers.** Der Meilenstein ist damit nicht
+offen, sondern erledigt — es gibt nichts mehr zu bauen.
+
+Was an seine Stelle tritt: ein Seed, der für sich allein trägt (9.6). Und was
+damit von selbst verschwindet: eine externe Abhängigkeit, die ein
+Anbieterlimit oder eine Preisänderung jederzeit hätte lahmlegen können. Genau
+davor warnte der Reihenfolge-Hinweis bei M6.
+
+Der Schalter „Frische Texte aus dem Internet" ist aus dem Einstellungsbild
+entfernt. Die Datenbankspalte `ai_enabled` bleibt stehen — eine ausgelieferte
+Migration wird nie verändert (`ARCHITEKTUR.md`, Architekturregel 3) — und wird
+von nichts mehr gelesen.
 
 ### M6 — Lernmodule und Minispiele
 
@@ -1514,9 +1559,9 @@ Punkt der Gamification und der einzige, der nichts zum Lernpfad beiträgt.
 
 ## 15. Offene Punkte
 
-1. **Hosting der Remote-Konfiguration**: GitHub Raw, eigener Webspace oder
-   Homelab-Server mit Reverse Proxy? (Homelab bedeutet: Verfügbarkeit hängt am
-   eigenen Anschluss — für eine App auf fremden Rechnern eher ungünstig.)
+1. ~~**Hosting der Remote-Konfiguration**~~ — **entfallen am 2026-09-17.**
+   Die Remote-Konfiguration gab es nur, um KI-Schlüssel und Anbieter zu
+   verteilen. Mit dem Streichen der KI-Texte (M5) hat sie keinen Zweck mehr.
 2. **Name und Marke**: „Zehni" ist frei gewählt; vor Weitergabe kurz prüfen,
    ob es Namenskollisionen gibt.
 3. ~~**Schriftlizenz**~~ — **erledigt am 2026-09-16.** Atkinson Hyperlegible
@@ -1602,13 +1647,11 @@ Punkt der Gamification und der einzige, der nichts zum Lernpfad beiträgt.
     senkt oder die Kurve wieder anzieht, bekommt es dort gesagt. Eine
     unerreichbare Schwelle bricht sonst keinen Test; sie sieht für ein Kind nur
     so aus, als käme sie irgendwann.
-15. **Die Textprüfung gibt es zweimal**: `validateText()` liegt seit dem
-    2026-09-14 in TypeScript (`src/lib/validate-text.ts`) und prüft Seed- und
-    Oberflächentexte. Für KI-Antworten braucht M5 dieselbe Prüfung in Rust,
-    weil dort das Netzwerk liegt. Zwei Umsetzungen laufen auseinander. Wer die
-    Rust-Fassung baut, überträgt die Testfälle aus `validate-text.test.ts` und
-    `din5008.test.ts` mit — oder legt vorher eine gemeinsame Prüffalldatei an,
-    die beide Seiten einlesen.
+15. ~~**Die Textprüfung gibt es zweimal**~~ — **entfallen am 2026-09-17.**
+    Der Punkt betraf ausschließlich M5: Für KI-Antworten hätte `validateText()`
+    ein zweites Mal in Rust entstehen müssen, weil dort das Netzwerk liegt. Mit
+    dem Streichen der KI-Texte bleibt es bei der einen Fassung in TypeScript
+    (`src/lib/validate-text.ts`), die Seed- und Oberflächentexte prüft.
 
 ---
 
