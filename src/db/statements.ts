@@ -275,3 +275,33 @@ export const LESSON_PASSES_ALL =
 
 export const LESSON_PASSES =
   'SELECT COUNT(*) AS n FROM sessions WHERE lesson_id = $1 AND passed = 1';
+
+/**
+ * Alle Tabellen eines Platzes leeren (SPEC.md 5.1).
+ *
+ * **Die Liste muss vollständig sein.** Eine vergessene Tabelle hieße: Das neue
+ * Kind bekommt die Abzeichen, die Serie oder das Fehlerprofil des alten. Genau
+ * dagegen prüft `statements.test.ts` die Liste gegen die Tabellen aus den
+ * Migrationsdateien — wer eine Tabelle hinzufügt und hier nichts einträgt,
+ * bekommt einen roten Test und keine stille Vermischung.
+ *
+ * `profile` steht bewusst mit drin: Ohne sie bliebe der Name des gelöschten
+ * Kindes stehen, und `plaetzeLesen()` hielte den Platz weiter für belegt.
+ */
+export const PLATZ_LEEREN: readonly string[] = [
+  'DELETE FROM profile',
+  'DELETE FROM interests',
+  'DELETE FROM lesson_progress',
+  'DELETE FROM sessions',
+  'DELETE FROM char_stats',
+  'DELETE FROM confusions',
+  'DELETE FROM rewards',
+  'DELETE FROM streak',
+  'DELETE FROM xp',
+  'DELETE FROM daily_challenge',
+  'DELETE FROM weekly_goal',
+  'DELETE FROM text_cache',
+  'DELETE FROM module_progress',
+  'DELETE FROM daily_activity',
+  'DELETE FROM minigame_plays',
+];

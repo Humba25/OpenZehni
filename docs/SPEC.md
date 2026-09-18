@@ -59,8 +59,9 @@ Zehni gilt als erfolgreich, wenn:
 
 - Kein Benutzerkonto, kein Login, keine Cloud-Synchronisation.
 - Keine Telemetrie, kein Tracking, keine Werbung.
-- Keine Mehrbenutzerverwaltung in v1 (ein Profil pro Installation; Profile-Wechsel
-  ist Phase 3).
+- Kein Benutzerkonto und keine Rechteverwaltung. **Mehrere Kinder an einem
+  Rechner gibt es seit dem 2026-09-18** (5.1) — getrennte Datenbankdateien,
+  keine Anmeldung, kein Passwort. Hier stand vorher, das sei Phase 3.
 - Keine mobile App, keine Web-Version.
 - Kein lokales LLM (zu schwer für die Zielhardware).
 
@@ -314,6 +315,56 @@ CREATE INDEX idx_cache_lookup ON text_cache (topic_id, charset_key, level);
 Speicherort: `%APPDATA%\Zehni\zehni.db`.
 Bei jedem Start wird vor der Migration eine Kopie als `zehni.db.bak` angelegt.
 
+### 5.1 Mehrere Kinder an einem Rechner
+
+**Jedes Kind hat seine eigene Datenbankdatei.** Platz 1 ist `zehni.db`, die
+weiteren sind `zehni-2.db` bis `zehni-4.db`. Vier ist die Obergrenze; alle
+Plätze bekommen denselben Migrationssatz.
+
+Der erste Platz behält den alten Dateinamen. Dort liegt der Lernfortschritt
+jeder Installation, die es vorher schon gab — ein neuer Name hieße für das
+Kind, dass nach dem Update alles weg ist.
+
+**Warum keine Spalte `profile_id`.** Das war der ursprüngliche Plan (15.5) und
+wäre ein Umbau von dreizehn Tabellen gewesen: In SQLite verlangt ein neuer
+Primärschlüssel, die Tabelle neu anzulegen, die Daten umzukopieren und die alte
+zu löschen — auf einer Datenbank, in der der Lernfortschritt eines Kindes
+liegt. Dazu hätte jede der rund hundert Abfragen das Profil mitführen müssen.
+**Eine einzige vergessene Bedingung vermischt still die Daten zweier Kinder**,
+und das sähe nicht nach einem Fehler aus, sondern nach einem Kind, das
+erstaunlich weit ist. Getrennte Dateien können das nicht: Die Trennung liegt in
+der Bauweise, nicht in einer Bedingung, die man vergessen kann.
+
+**Was dadurch nicht geht: eine Auswertung über beide Kinder hinweg.** Das ist
+kein Verlust, sondern passt zur Leitlinie — Zehni vergleicht nur mit dem
+eigenen früheren Ergebnis (2, 8.7). Zwei Geschwister nach Anschlägen je Minute
+nebeneinanderzustellen wäre das Gegenteil davon.
+
+**Die Wahl beim Start erscheint nur, wenn es mehr als ein Kind gibt.** Solange
+eines allein übt, wäre sie ein zusätzlicher Klick ohne Nutzen — und der erste
+Klick nach dem Öffnen entscheidet mit darüber, ob ein Kind die App überhaupt
+aufmacht (14, M3).
+
+**Es wird nicht gemerkt, wer zuletzt geübt hat.** Ein gemerkter Name wäre auf
+einem geteilten Laptop die häufigste Art, in der Übungszeit beim falschen Kind
+landet — und das fiele niemandem auf.
+
+**Angelegt wird der Reihe nach**, und beim Start wird nur bis zum ersten freien
+Platz nachgesehen. Das Öffnen einer Datei legt sie an und lässt die Migrationen
+laufen; alle vier bei jedem Start zu prüfen hieße, auf einer alten Festplatte
+viermal dafür zu bezahlen (Startbudget, 12.1).
+
+**Gelöscht werden kann nur das zuletzt angelegte Kind**, und Platz 1 nie. Eine
+Lücke in der Mitte wäre für alles Dahinterliegende dasselbe wie gelöscht. Die
+Einschränkung steht als offener Punkt in 15.17. Gelöscht wird zeilenweise, nicht
+die Datei — aus der WebView heraus gibt es keinen Dateizugriff, und dabei bleibt
+es. Vor dem Löschen wird gefragt, und die Frage nennt die Folge beim Namen.
+
+Anlegen, Wechseln und Löschen stehen in den Einstellungen, nicht in der
+Kopfzeile: Das tut ein Erwachsener, und zwar selten. Ein Knopf dafür neben
+„Spiele" wäre eine Einladung zum Ausprobieren — mit dem Lernfortschritt eines
+Geschwisterkindes als Einsatz.
+
 ---
 
 ## 6. Didaktik: der Lernpfad
@@ -431,7 +482,7 @@ kurze Drill-Sequenz (20 Sekunden) geübt.
 2. **Hauptteil** (2–4 Minuten): Übungstext zum gewählten Interessenthema.
 3. **Auswertung**: A/min, Kennzahl der Stufe, Vergleich zum letzten Mal,
    Sterne, XP.
-4. **Belohnung**: Fortschrittsbalken, ggf. Abzeichen, ggf. neues Deko-Teil.
+4. **Belohnung**: Fortschrittsbalken, ggf. Abzeichen.
 
 Nie mehr als 5 Minuten am Stück ohne Auswertungsbildschirm.
 
@@ -686,7 +737,6 @@ als Kernmechanik.
 | Tagesaufgabe erfüllt (8.6) | 35 |
 | Tastenjagd abgeschlossen (8.9) | 15 |
 | Minispiel gespielt (8.10), höchstens dreimal je Tag | 10 |
-| Wochenziel erreicht (8.8) | 120 + Deko-Teil |
 
 Die Deckelung beim Minispiel ist Absicht: XP sollen dem Lernpfad folgen, nicht
 der Spielzeit (8.10).
@@ -709,9 +759,9 @@ rund 1,5 Millionen XP und machte die obere Hälfte der Leiste zur Dekoration
 (15.14). `gamification.test.ts` rechnet das XP-Angebot aus den echten Inhalten
 nach und schlägt an, wenn das Höchstlevel wieder unerreichbar wird.
 
-Jedes Level vergibt ein Deko-Teil für die Lernstube (8.4). Der Katalog hat 15
-erspielbare Teile; ist der Raum voll, kommt nichts mehr dazu — das ist kein
-Mangel, sondern ein Abschluss (`raumVoll()`).
+Bis zum 2026-09-18 vergab jedes Level zusätzlich ein Deko-Teil für die
+Lernstube. Die ist gestrichen (8.4); ein Levelaufstieg zeigt sich jetzt allein
+in der Kopfzeile.
 
 ### 8.2 Abzeichen (Auswahl, mindestens diese 15 in v1)
 
@@ -743,12 +793,34 @@ Abzeichen — es gibt es fürs **Unterscheiden**.
 - Nach Verlust der Serie: freundliche Einordnung („Deine längste Serie: 12 Tage.
   Auf zur nächsten!"), keine Dramatisierung.
 
-### 8.4 Die Lernstube
+### 8.4 Die Lernstube — gestrichen am 2026-09-18
 
-Ein einfacher, isometrischer Raum, der mit erspielten Gegenständen eingerichtet
-wird (Pflanze, Poster, Lampe, Haustier, Schreibtisch-Kram). Rein kosmetisch,
-kein Spielmechanismus dahinter — das Ziel ist Wiedererkennung und Besitzgefühl.
-Umsetzung als CSS-positionierte SVG-Layer, keine Game-Engine.
+Geplant war ein einfacher Raum, der sich mit erspielten Gegenständen füllt:
+Pflanze, Poster, Lampe, Schreibtisch-Kram. Rein kosmetisch, als Wiedererkennung
+und Besitzgefühl.
+
+**Gebaut und wieder entfernt.** Der Nutzer nach 0.1.9: „Die Lernstube
+Funktioniert Leider Nicht bzw sieht nicht gut aus ich denke die sollten wir
+einfach rausnehmen."
+
+**Warum sie nicht zu retten war.** Am 2026-09-18 war bereits ein Maßstabsfehler
+behoben worden (Breite in Prozent der Raumbreite, Lage in Prozent der Raumhöhe
+— zwei verschiedene Einheiten). Danach lag nichts mehr daneben, und es sah
+trotzdem nicht gut aus: vier kleine geometrische Formen, verteilt auf einer
+großen leeren Fläche, ohne Bezug zueinander. Der Fehler war nicht die Umsetzung,
+sondern die Annahme dahinter. **Ein Raum, der Besitzgefühl auslösen soll,
+braucht gezeichnete Bilder.** Was ohne Zeichnerin entsteht, sind Rechtecke mit
+abgerundeten Ecken — und ein halbschöner Raum ist schlechter als keiner, weil er
+in jeder Sitzung sichtbar ist.
+
+**Was an die Stelle tritt: nichts.** Der Levelaufstieg bleibt sichtbar in der
+Kopfzeile (Leiste, Zahl, Stufe), und die Abzeichen (8.2) sind die
+Sammelbelohnung. Ein zweites Sammelsystem daneben war ohnehin viel.
+
+**Folgen im Bestand:** `content/deko.json`, `src/lib/lernstube.ts` und der
+Bildschirm sind entfernt; nichts in der Datenbank hing daran, weil die Teile
+allein aus dem Level errechnet wurden. Sollte je jemand mit Zeichentalent
+mitarbeiten, steht der Gedanke in der Versionsgeschichte.
 
 ### 8.5 Maskottchen
 
@@ -814,8 +886,6 @@ an Minuten hängt und nicht an Lektionen, und die Serie. Beides misst, ob
 
 **Folgen im Bestand:**
 
-- Deko-Teile kommen allein aus den Leveln (8.4). 29 Levelaufstiege stehen 15
-  erspielbaren Teilen gegenüber — das reicht.
 - Die 120 XP je erreichtem Wochenziel entfallen. Die Level-Kurve trägt auch
   ohne sie: Nach einem Jahr fast täglichen Übens stehen rund 48 400 XP zur
   Verfügung, Level 30 verlangt 43 500 (8.1). `gamification.test.ts` prüft das.
@@ -1408,11 +1478,29 @@ Klassen 5–10; Zehni deckt bewusst die Doppelklassenstufe 5/6 ab und ist
 2. Persönliche Daten: was gehört nicht ins Internet. Aufgabe: Profilbeispiele
    bewerten.
 3. Quellen prüfen: echt oder erfunden? Aufgabe: drei Schlagzeilen einschätzen.
-4. Werbung erkennen: Anzeige vs. Inhalt, Influencer-Werbung.
-5. Kettenbriefe, Cybermobbing, „Wo hole ich mir Hilfe?".
-6. Dateien und Ordner: sinnvolle Namen, Struktur, Backup. Aufgabe: ein
+4. **Von einem Computer gemacht?** Woran sich erzeugte Bilder und Texte
+   derzeit erkennen lassen — und warum man sich darauf nicht verlassen darf.
+
+   **Die Einheit sagt ihr eigenes Verfallsdatum an.** Sechs Finger an einer
+   Hand, unsinnige Schrift im Bild, auffällig glatte Sätze: Solche Merkmale
+   verschwinden schneller, als Zehni Updates bekommt. Eine Einheit, die eine
+   Merkmalsliste zum Auswendiglernen gäbe, würde ein Kind genau dann in
+   Sicherheit wiegen, wenn es am wenigsten sicher ist.
+
+   Was bleibt, ist die Frage aus Einheit 3: Wo kommt das her, und wer steht
+   mit seinem Namen dafür ein? Dazu zwei Punkte, die sich nicht überholen:
+   Ein Programm erfindet auch Antworten und klingt dabei genauso sicher wie
+   sonst — und **sich nicht sicher zu sein ist kein Fehler.** Oft lässt es
+   sich nicht erkennen, auch von Erwachsenen nicht; dann lautet die richtige
+   Antwort „Ich weiß es nicht" und man gibt es nicht weiter.
+
+   Aufgabe: einsortieren, was dauerhaft hilft und was vielleicht nur heute
+   noch hilft.
+5. Werbung erkennen: Anzeige vs. Inhalt, Influencer-Werbung.
+6. Kettenbriefe, Cybermobbing, „Wo hole ich mir Hilfe?".
+7. Dateien und Ordner: sinnvolle Namen, Struktur, Backup. Aufgabe: ein
    Chaos-Verzeichnis aufräumen (Drag & Drop).
-7. Tastenkürzel: Kopieren, Einfügen, Rückgängig, Suchen, Speichern.
+8. Tastenkürzel: Kopieren, Einfügen, Rückgängig, Suchen, Speichern.
    Aufgabe: Kürzel-Trainer.
 
 #### Die drei Fallen
@@ -1549,9 +1637,21 @@ wissenschaftlich nicht belegt (`MODUL-LERNEN.md` 3).
 
 `.github/workflows/release.yml`, ausgelöst durch Tag `v*`:
 Tests → Build (`windows-latest`) → Signieren → Release anlegen →
-`Zehni-Setup.exe` + `latest.json` anhängen. Das Release entsteht als
-**Entwurf** — ein Release, das sich sofort selbst verteilt, kann man nicht mehr
-zurückholen.
+`Zehni-Setup.exe` + `latest.json` anhängen.
+
+**Das Release wird sofort veröffentlicht, nicht als Entwurf angelegt.** Hier
+stand das Gegenteil, begründet damit, dass ein sich selbst verteilendes Release
+nicht zurückzuholen sei. Das war ein Irrtum mit Folgen: Ein Entwurf liefert
+keine Dateien aus — `releases/latest/download/…` findet ihn nicht, und der
+Updater sieht nichts. Am 2026-09-16 lagen deshalb zwei fertige Versionen
+unbemerkt herum, während die installierte Zehni weiter meldete, sie sei
+aktuell.
+
+Der Schutz liegt nicht im Entwurf, sondern im Job `pruefen`: Lint, alle Tests,
+Seed- und DIN-5008-Prüfung laufen, **bevor** gebaut wird. Zurückholen lässt
+sich eine Version trotzdem — Release löschen, Tag löschen. Wer sie schon
+installiert hat, behält sie; deshalb ist der Tag die Entscheidung, nicht der
+Klick danach.
 
 Dazu `.github/workflows/ci.yml` auf jedem Push und Pull Request mit genau den
 Befehlen, die `ARCHITEKTUR.md` vor jedem Commit verlangt.
@@ -1572,6 +1672,35 @@ Befehlen, die `ARCHITEKTUR.md` vor jedem Commit verlangt.
 
 Der Workflow bricht ab, wenn der Updater-Block fehlt oder unvollständig ist —
 lieber laut scheitern als eine App ausliefern, die sich nicht öffnen lässt.
+
+### 11.4 Was ist neu? — das Änderungsprotokoll
+
+In den Einstellungen, unter der Versionsangabe, steht, was die laufende Version
+gebracht hat; frühere Versionen klappen darunter auf. Wunsch des Nutzers vom
+2026-09-18.
+
+**Geschrieben für die, die Zehni benutzen.** Hier steht, was jemand merkt, wenn
+er die App öffnet — nicht, welche Datei umgebaut wurde. Wer einen Punkt nicht
+in einem Satz erklären kann, der für ein Kind Sinn ergibt, lässt ihn weg. Ein
+Test hält Entwicklerwörter heraus.
+
+Die Liste liegt als Daten in `content/aenderungen.json`
+(`ARCHITEKTUR.md`, Architekturregel 4) und **wird mitgeliefert, nicht geladen**
+— Zehni spricht mit keinem Server außer dem Updater. Sie ist damit auch offline
+lesbar.
+
+**Gezeigt wird nur, was die laufende Version schon enthält.** Die Einträge
+entstehen, während gebaut wird, und stehen deshalb oft schon in der Datei,
+bevor die Version heraus ist. Jemandem zu erzählen, was in einer Version
+steckt, die er nicht hat, wäre die verwirrendste Art, diese Liste zu füllen —
+er würde die neuen Sachen suchen und nicht finden.
+
+Versionen werden dafür **zahlenweise** verglichen, nicht alphabetisch: `0.1.10`
+ist größer als `0.1.9`.
+
+**Der Eintrag zur neuen Version gehört zum Release**, und zwar vor die
+Prüfungen: Ein fehlender Eintrag wird nicht laut. Die App zeigt dann einfach
+den vorigen, und niemand erfährt, was neu ist.
 
 ---
 
@@ -1685,7 +1814,7 @@ Alle 25 Lektionen, Freischaltlogik, adaptive Wiederholung, Seed-Datenbank mit
 
 ### M3 — Motivation
 
-XP, Level, Sterne, 15 Abzeichen, Serie mit Jokern, Lernstube, Maskottchen,
+XP, Level, Sterne, 15 Abzeichen, Serie mit Jokern, Maskottchen,
 Tagesziel, Auswertungsbildschirm in seiner Endfassung.
 Dazu Tagesaufgabe (8.6), Geisterschreiber (8.7), Wochenziel (8.8) und
 Tastenjagd (8.9).
@@ -1713,12 +1842,23 @@ aufeinanderfolgenden Tagen freiwillig öffnet.
 > werden — Tagesaufgabe und Wochenziel brauchen dagegen neue Tabellen und
 > bleiben in M3.
 
-### M4 — Auslieferung
+### M4 — Auslieferung ✅ **abgenommen am 2026-09-18**
 
 NSIS-Installer, Auto-Updater, Signierung, GitHub-Actions-Release,
 `INSTALL.md` und `DATENSCHUTZ.md`.
 **Fertig, wenn:** Die App auf einem fremden Windows-Rechner installiert,
 gestartet und auf eine neue Version aktualisiert wurde.
+
+**Abgenommen an 0.1.9.** Der Nutzer hat die installierte Zehni gestartet, das
+Update wurde von selbst gefunden und angeboten, er hat es eingespielt — und
+**der Lernfortschritt war danach noch da**. Das letzte Stück ist das
+entscheidende: Migrationen laufen nach einem Update automatisch, und wenn
+dabei etwas schiefgeht, merkt man es genau hier. Am 2026-09-17 war das schon
+einmal schiefgegangen (Prüfsummen, 15.15), deshalb war diese Abnahme keine
+Formsache.
+
+Kein Test kann das ersetzen — er läuft gegen eine frisch angelegte Datenbank,
+nicht gegen eine gewachsene.
 
 ### M5 — KI-Inhalte ~~offen~~ **gestrichen am 2026-09-17**
 
@@ -1775,28 +1915,26 @@ Punkt der Gamification und der einzige, der nichts zum Lernpfad beiträgt.
    die verlangt genau das: Lizenztext mitliefern, Schriften nicht einzeln
    verkaufen. Beides ist erfüllt.
 4. **Abschlusstest-Urkunde**: als PDF exportierbar? (Nett, aber M6+.)
-5. **Zweitprofil** für weitere Kinder.
+5. ~~**Zweitprofil** für weitere Kinder.~~ — **gebaut am 2026-09-18**, siehe
+   5.1. Der Nutzer hat bestätigt, dass es ein zweites Kind gibt.
 
-   **Korrektur vom 2026-09-16:** Hier stand, das Datenmodell sei vorbereitet,
-   weil `profile` eine Spalte `id` hat. Das war falsch und hat den Aufwand um
-   eine Größenordnung zu klein erscheinen lassen. Nachgesehen im Schema:
+   **Wie die Schätzung hier zustande kam und warum sie danebenlag.** Am
+   2026-09-16 stand hier zunächst, das Datenmodell sei vorbereitet, weil
+   `profile` eine Spalte `id` hat. Das war falsch: Keine einzige andere Tabelle
+   kannte ein Profil, und `xp` und `streak` haben `CHECK (id = 1)` fest
+   eingebaut. Die Korrektur veranschlagte dann dreizehn Tabellenumbauten und
+   rund 110 anzupassende SQL-Anweisungen.
 
-   - **Keine einzige andere Tabelle kennt ein Profil.** `lesson_progress` hat
-     `lesson_id` als Primärschlüssel, `char_stats` das Zeichen, `interests` die
-     Themen-ID, `daily_activity` und `weekly_goal` das Datum.
-   - `xp` und `streak` haben `CHECK (id = 1)` fest eingebaut — sie können
-     bauartbedingt nur **eine** Zeile enthalten.
-   - Dreizehn Tabellen bräuchten eine Spalte `profile_id` und einen neuen
-     Primärschlüssel. In SQLite heißt das: Tabelle neu anlegen, Daten
-     umkopieren, alte löschen — für jede einzelne.
-   - Rund 110 SQL-Anweisungen in `src/db/` müssten das Profil mitführen.
+   **Auch das war falsch — diesmal zu hoch.** Beide Schätzungen gingen von
+   einer Spalte `profile_id` aus. Mit einer Datenbankdatei je Kind entfällt der
+   Umbau vollständig: kein neuer Primärschlüssel, keine geänderte Abfrage. Es
+   blieben die Oberfläche, eine Zeile in `db()` und vier Einträge auf der
+   Rust-Seite.
 
-   Dazu die Oberfläche: Profilwahl beim Start, Wechsel, Anlegen, Löschen.
-
-   Das ist kein „UI fehlt noch", sondern ein Umbau des Datenmodells auf einer
-   Datenbank, in der der Lernfortschritt eines Kindes liegt. Vor der Umsetzung
-   ist deshalb zu klären, ob es ein zweites Kind überhaupt gibt — der Nutzen ist
-   bis dahin null, das Risiko nicht.
+   **Die Lehre daraus:** Eine Aufwandsschätzung, die sich auf einen Lösungsweg
+   festlegt, schätzt den Weg und nicht die Aufgabe. Die pessimistische Fassung
+   war dabei die gefährlichere — sie klang gründlich, weil sie Zahlen nannte,
+   und hätte den Punkt fast dauerhaft verhindert.
 6. **Normenpflege**: vor jedem Major-Release prüfen, ob eine neue Ausgabe von
    DIN 2137, DIN 5008 oder der Wettschreibordnung erschienen ist; Ergebnis mit
    Datum in `NORMEN.md` 9 vermerken.
@@ -1856,6 +1994,45 @@ Punkt der Gamification und der einzige, der nichts zum Lernpfad beiträgt.
     ein zweites Mal in Rust entstehen müssen, weil dort das Netzwerk liegt. Mit
     dem Streichen der KI-Texte bleibt es bei der einen Fassung in TypeScript
     (`src/lib/validate-text.ts`), die Seed- und Oberflächentexte prüft.
+16. **Bilder in den Modultexten** (10). Der Nutzer hat am 2026-09-18 kleine
+    Bilder oder Karikaturen angeregt, besonders für Kinder unter vierzehn.
+
+    **Zu unterscheiden sind zwei Dinge.** Einfache SVG-Symbole in der
+    Formensprache des Maskottchens — ein Schloss, ein Briefumschlag, ein
+    Fragezeichen — sind Programmierarbeit und machbar. Gezeichnete Karikaturen
+    mit Witz sind Illustrationsarbeit; die entsteht hier nicht, und ein
+    halbherziger Versuch wäre schlechter als gar keins. Genau daran ist die
+    Lernstube gescheitert (8.4).
+
+    Zu entscheiden ist also nicht „mit oder ohne Bilder", sondern ob die
+    einfache Variante den Texten hilft.
+17. **Ein Profil in der Mitte löschen** (5.1). Löschbar ist nur das zuletzt
+    angelegte Kind. Plätze werden der Reihe nach belegt, und beim Start wird
+    nur bis zum ersten freien nachgesehen — eine Lücke in der Mitte wäre für
+    alles Dahinterliegende dasselbe wie gelöscht.
+
+    **Lösbar wäre es auf zwei Wegen**, beide mit einem Preis: Entweder werden
+    beim Start alle vier Plätze geprüft, was auf einer alten Festplatte viermal
+    Migrationen kostet (12.1), oder die späteren Plätze rücken beim Löschen auf
+    — dann wird die Datenbank eines Kindes verschoben, und genau das ist der
+    Vorgang, den diese Bauweise vermeiden sollte.
+
+    Kein Fall für „irgendwann beheben": Erst wenn jemand tatsächlich das
+    mittlere von drei Kindern löschen will, ist klar, welcher Preis der
+    richtige ist.
+18. **Die Merkmale in `medien-ki` veralten planmäßig** (10.1, Einheit 4). Sechs
+    Finger, unsinnige Schrift im Bild, auffällig glatte Sätze: Das sind
+    Beispiele vom 2026-09-18.
+
+    **Das ist kein Mangel, sondern der Inhalt der Einheit** — sie sagt
+    ausdrücklich, dass diese Merkmale schneller verschwinden, als Zehni
+    Updates bekommt. Trotzdem gehört sie vor jedem größeren Release
+    durchgesehen, zusammen mit der Normenpflege aus Punkt 6: Ein Beispiel, das
+    erkennbar von gestern ist, macht die ganze Einheit unglaubwürdig.
+
+    Was dabei **nicht** angetastet wird, ist der dauerhafte Teil: Wo kommt das
+    her, wer steht mit seinem Namen dafür ein, und „Ich weiß es nicht" ist
+    eine richtige Antwort.
 
 ---
 

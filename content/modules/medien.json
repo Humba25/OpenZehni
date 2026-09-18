@@ -138,6 +138,84 @@
       ]
     },
     {
+      "id": "medien-ki",
+      "title": "Hat das ein Mensch gemacht?",
+      "kmk": 6,
+      "digcomp": "1.2",
+      "bloecke": [
+        "Bilder, Texte und sogar Stimmen lassen sich heute von Computern erzeugen. Das Ergebnis sieht oft echt aus, und niemand schreibt dazu, dass es erfunden ist.",
+        "Ein paar Sachen fallen im Moment noch auf: Hände mit sechs Fingern, Schrift im Bild, die keine Wörter ergibt, Ohrringe, die nur links da sind. Bei Texten ist es das Glatte — viele schöne Sätze, aber keine einzige Einzelheit, die jemand wirklich erlebt hat.",
+        "Und jetzt der wichtigste Satz dieser Einheit: Verlass dich nicht darauf. Diese Merkmale verschwinden schneller, als diese App Updates bekommt. Was gestern noch komisch aussah, sieht morgen richtig aus. Wer eine Liste auswendig lernt, ist genau dann sicher, wenn er es am wenigsten sein sollte.",
+        "Was bleibt, ist dieselbe Frage wie bei jeder Quelle: Wo kommt das her? Wer steht mit seinem Namen dafür ein? Steht es auch woanders, bei jemandem, der nichts davon hat? Ein Bild ohne Herkunft ist kein Beweis — auch dann nicht, wenn die Finger stimmen.",
+        "Noch etwas: Computerprogramme erfinden auch Antworten, wenn sie etwas nicht wissen. Sie klingen dabei genauso sicher wie sonst. Sicher zu klingen ist kein Zeichen dafür, dass etwas stimmt.",
+        "Sich nicht sicher zu sein ist übrigens kein Fehler. Bei vielen Sachen kann man es nicht erkennen, auch als Erwachsener nicht. Dann heißt die richtige Antwort: Ich weiß es nicht, und ich gebe es nicht weiter."
+      ],
+      "bloeckeEinfach": [
+        "Computer können heute Bilder und Texte selbst erzeugen. Auch Stimmen.",
+        "Das Ergebnis sieht oft echt aus. Und es steht nicht dabei, dass es erfunden ist.",
+        "Ein paar Dinge fallen im Moment noch auf.",
+        "Zum Beispiel eine Hand mit sechs Fingern.",
+        "Oder Schrift im Bild, die keine Wörter ergibt.",
+        "Bei Texten ist es das Glatte. Viele schöne Sätze. Aber nichts, was jemand wirklich erlebt hat.",
+        "Jetzt kommt das Wichtigste.",
+        "Verlass dich nicht auf diese Merkmale.",
+        "Sie verschwinden schnell. Schneller, als diese App neu wird.",
+        "Was gestern komisch aussah, sieht morgen richtig aus.",
+        "Wer eine Liste auswendig lernt, fühlt sich sicher. Aber er ist es nicht.",
+        "Eine Frage hilft immer. Wo kommt das her?",
+        "Wer sagt das mit seinem Namen? Steht es auch woanders?",
+        "Ein Bild ohne Herkunft ist kein Beweis.",
+        "Und noch etwas: Ein Computer erfindet auch Antworten.",
+        "Er klingt dabei sehr sicher. Sicher klingen heißt aber nicht, dass es stimmt.",
+        "Du musst es nicht erkennen können.",
+        "Oft geht das gar nicht. Auch Erwachsene können es nicht.",
+        "Dann sagst du einfach: Ich weiß es nicht.",
+        "Und du gibst es nicht weiter."
+      ],
+      "aufgabe": {
+        "art": "zuordnen",
+        "text": "Worauf kann man sich lange verlassen — und was hilft vielleicht nur heute noch?",
+        "faecher": [
+          {
+            "id": "dauerhaft",
+            "label": "Hilft dauerhaft"
+          },
+          {
+            "id": "heute",
+            "label": "Hilft vielleicht heute noch"
+          }
+        ],
+        "karten": [
+          {
+            "text": "Nachsehen, wer das veröffentlicht hat und ob ein Name dabeisteht.",
+            "fach": "dauerhaft"
+          },
+          {
+            "text": "Schauen, ob es noch woanders steht, bei jemandem, der nichts davon hat.",
+            "fach": "dauerhaft"
+          },
+          {
+            "text": "Fragen, ob mich das informieren oder aufregen soll.",
+            "fach": "dauerhaft"
+          },
+          {
+            "text": "Die Finger auf dem Bild zählen.",
+            "fach": "heute"
+          },
+          {
+            "text": "Auf krumme Schrift im Hintergrund achten.",
+            "fach": "heute"
+          },
+          {
+            "text": "Darauf achten, ob der Text zu glatt klingt.",
+            "fach": "heute"
+          }
+        ],
+        "erklaerung": "Die drei oberen Fragen gelten auch noch in zehn Jahren. Die drei unteren sind Merkmale von heute — und die werden Jahr für Jahr seltener. Deshalb sind sie nicht falsch, aber sie sind kein Verlass."
+      },
+      "abschluss": "Du musst nicht erkennen können, ob ein Computer etwas gemacht hat. Du musst nur wissen, dass es sein kann — und deshalb fragen, wo es herkommt."
+    },
+    {
       "id": "medien-werbung",
       "title": "Werbung erkennen",
       "kmk": 2,

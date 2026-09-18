@@ -1,0 +1,53 @@
+{
+  "schema": 1,
+  "comment": "Was sich je Version geaendert hat, in der Sprache der Leute, die Zehni benutzen (SPEC.md 11.4). Neueste Version zuerst. Kein Entwicklerprotokoll: Hier steht, was jemand merkt, wenn er die App oeffnet -- nicht, welche Datei umgebaut wurde. Wer einen Punkt nicht in einem Satz erklaeren kann, der fuer ein Kind Sinn ergibt, laesst ihn weg.",
+  "versionen": [
+    {
+      "version": "0.2.0",
+      "datum": "2026-09-18",
+      "punkte": [
+        "Mehrere Kinder können an einem Rechner üben. Jedes hat seinen eigenen Fortschritt, und niemand sieht die Zahlen der anderen. Anlegen und wechseln kannst du das hier in den Einstellungen.",
+        "Neue Einheit „Hat das ein Mensch gemacht?“ im Modul Medienkompetenz. Es geht darum, woran man Bilder und Texte vom Computer erkennt — und warum man sich darauf nicht verlassen darf.",
+        "Zehni lässt sich jetzt über den ganzen Bildschirm zeigen. Mit der Taste F11 oder dem Knopf oben rechts.",
+        "Diese Liste hier ist neu. Nach jedem Update steht hier, was dazugekommen ist.",
+        "Die Lernstube ist weggefallen. Sie sah nicht gut aus, und halbschön ist schlechter als gar nicht."
+      ]
+    },
+    {
+      "version": "0.1.9",
+      "datum": "2026-09-18",
+      "punkte": [
+        "Im Lernweg steht jetzt, wie viele Runden dir bis zur nächsten Lektion fehlen. Vorher sah es so aus, als wäre etwas kaputt.",
+        "Die Erklärtexte in den Modulen sind in einfacher Sprache, wenn du jünger als vierzehn bist.",
+        "Buchstabenregen: Du wählst vorher aus, mit welchen Tasten du üben willst. Bei einem Fehlgriff ist die Tastatur eine Sekunde gesperrt — das steht vorher dran.",
+        "Elfmeterschießen: mit Countdown, springendem Torwart und einem Knopf zum Nochmalspielen. Wer schneller tippt, schießt härter.",
+        "Neues Spiel: Pferderennen."
+      ]
+    },
+    {
+      "version": "0.1.8",
+      "datum": "2026-09-18",
+      "punkte": [
+        "Zwei neue Spiele: Elfmeterschießen und Pferderennen.",
+        "In den Übungen kommen jetzt auch echte Wörter vor, sobald du genug Buchstaben kannst.",
+        "Vor der nächsten Lektion sind zwei Runden zu schaffen statt einer. Die Lernkurve war zu steil.",
+        "Das Wochenziel ist weggefallen. Es hat gesagt: Jetzt reicht es für diese Woche — und das ist das Gegenteil von dem, was es sollte."
+      ]
+    },
+    {
+      "version": "0.1.7",
+      "datum": "2026-09-17",
+      "punkte": [
+        "Die Auswertung nach einer Runde lag über der Kopfzeile und die Knöpfe waren nicht erreichbar. Behoben.",
+        "Es gibt eine Download-Adresse, die sich nie ändert."
+      ]
+    },
+    {
+      "version": "0.1.3",
+      "datum": "2026-09-17",
+      "punkte": [
+        "Wichtige Reparatur: Bei manchen Installationen ließ sich der Fortschritt nicht mehr speichern. Der Fehler kam von uns, und der Fortschritt war nicht verloren — er war nur nicht erreichbar."
+      ]
+    }
+  ]
+}

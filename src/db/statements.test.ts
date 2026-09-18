@@ -32,6 +32,7 @@ import {
   SETTINGS_SET,
   PROFILE_EINSTELLUNGEN_SET,
   PROFILE_UPDATE,
+  PLATZ_LEEREN,
 } from './statements';
 
 const HIER = dirname(fileURLToPath(import.meta.url));
@@ -434,5 +435,58 @@ describe('Schriftgroesse — SPEC.md 12.2', () => {
     expect(alle<{ onboarded_at: string }>(PROFILE_SELECT)[0]!.onboarded_at).toBe(
       '2026-09-16T11:00:00Z',
     );
+  });
+});
+
+/**
+ * Das Leeren eines Platzes (SPEC.md 5.1).
+ *
+ * **Warum das geprüft wird.** Jedes Kind hat eine eigene Datenbankdatei, und
+ * beim Löschen wird zeilenweise geleert, nicht die Datei entfernt. Eine
+ * vergessene Tabelle hieße: Das nächste Kind auf diesem Platz erbt die
+ * Abzeichen, die Serie oder das Fehlerprofil des vorigen. Das fiele niemandem
+ * auf — es sähe nur nach einem Kind aus, das erstaunlich weit ist.
+ */
+describe('PLATZ_LEEREN — SPEC.md 5.1', () => {
+  /** Die Tabellen, die die Migrationen wirklich anlegen. */
+  function tabellenAusMigrationen(): string[] {
+    const namen = db
+      .prepare(
+        "SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name",
+      )
+      .all() as { name: string }[];
+    return namen.map((r) => r.name);
+  }
+
+  it('nennt jede Tabelle, die es gibt', () => {
+    const geleert = PLATZ_LEEREN.map((s) => s.replace('DELETE FROM ', '').trim()).sort();
+    expect(geleert).toEqual(tabellenAusMigrationen());
+  });
+
+  it('nennt keine Tabelle doppelt', () => {
+    const geleert = PLATZ_LEEREN.map((s) => s.replace('DELETE FROM ', '').trim());
+    expect(new Set(geleert).size).toBe(geleert.length);
+  });
+
+  /**
+   * Der eigentliche Beweis: erst füllen, dann leeren, dann nachzählen.
+   * Eine Anweisung, die sich gegen das echte Schema nicht ausführen lässt,
+   * fällt hier ebenfalls auf.
+   */
+  it('lässt nach dem Leeren nichts stehen', () => {
+    const jetzt = new Date().toISOString();
+    run(PROFILE_INSERT, ['Kind', 'maus', jetzt, 10, 1, 'hell', 'A2']);
+    run(LESSON_UNLOCK, ['L01']);
+    run(SESSION_INSERT, ['L01', jetzt, 60000, 300, 2, 0.6, 180, 96, null, 'seed', 0, 1]);
+    run(CHAR_STATS_UPSERT, ['f', 10, 1, 200, jetzt]);
+    run('INSERT INTO rewards (id, earned_at) VALUES ($1, $2)', ['grundstellung', jetzt]);
+    run('INSERT INTO xp (id, total) VALUES (1, $1)', [500]);
+
+    for (const anweisung of PLATZ_LEEREN) db.exec(anweisung);
+
+    for (const tabelle of tabellenAusMigrationen()) {
+      const n = db.prepare(`SELECT COUNT(*) AS n FROM ${tabelle}`).get() as { n: number };
+      expect(n.n, `${tabelle} ist nicht leer`).toBe(0);
+    }
   });
 });

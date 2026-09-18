@@ -19,6 +19,39 @@ export interface VollbildKnopfProps {
   readonly onUmschalten: () => void;
 }
 
+/**
+ * Vier Eckwinkel — nach außen zeigend heißt „größer", nach innen „kleiner".
+ *
+ * **Warum gezeichnet und nicht als Zeichen.** Vorher standen hier `⤢` und `⤡`.
+ * Die beiden gehören zu den Zeichen, für die viele Schriften keine eigene Form
+ * haben; Windows setzt dann irgendeinen Pfeil aus einer Ersatzschrift ein, der
+ * weder zur Textgröße noch zur Strichstärke daneben passt. Genau so sah es am
+ * 2026-09-18 aus. Ein `<svg>` sieht überall gleich aus und erbt mit
+ * `currentColor` die Farbe des Knopfes.
+ */
+function EckSymbol({ an }: { an: boolean }) {
+  // Beim Verkleinern zeigen dieselben Winkel nach innen: gespiegelt, nicht neu
+  // gezeichnet, damit beide Zustaende garantiert gleich aussehen.
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 16 16"
+      className="h-3.5 w-3.5 shrink-0"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={an ? { transform: 'rotate(180deg)' } : undefined}
+    >
+      <path d="M6 1.5H1.5V6" />
+      <path d="M10 1.5H14.5V6" />
+      <path d="M6 14.5H1.5V10" />
+      <path d="M10 14.5H14.5V10" />
+    </svg>
+  );
+}
+
 export function VollbildKnopf({ an, onUmschalten }: VollbildKnopfProps) {
   return (
     <button
@@ -26,11 +59,9 @@ export function VollbildKnopf({ an, onUmschalten }: VollbildKnopfProps) {
       onClick={onUmschalten}
       title={an ? de.vollbild.ausTitel : de.vollbild.anTitel}
       aria-pressed={an}
-      className="rounded-lg border border-rand px-3 py-1.5 text-gedaempft hover:text-text"
+      className="flex items-center gap-2 rounded-lg border border-rand px-3 py-1.5 text-gedaempft hover:text-text"
     >
-      <span aria-hidden="true" className="mr-1.5">
-        {an ? '⤡' : '⤢'}
-      </span>
+      <EckSymbol an={an} />
       {an ? de.vollbild.aus : de.vollbild.an}
     </button>
   );
@@ -42,11 +73,9 @@ export function VollbildAusstieg({ onUmschalten }: { readonly onUmschalten: () =
       type="button"
       onClick={onUmschalten}
       title={de.vollbild.ausTitel}
-      className="fixed right-3 top-3 z-40 rounded-lg border border-rand bg-flaeche/90 px-3 py-1.5 text-xs text-gedaempft opacity-60 shadow-sm transition hover:opacity-100 focus-visible:opacity-100"
+      className="fixed right-3 top-3 z-40 flex items-center gap-2 rounded-lg border border-rand bg-flaeche/90 px-3 py-1.5 text-xs text-gedaempft opacity-60 shadow-sm transition hover:opacity-100 focus-visible:opacity-100"
     >
-      <span aria-hidden="true" className="mr-1.5">
-        ⤡
-      </span>
+      <EckSymbol an />
       {de.vollbild.verlassen}
     </button>
   );

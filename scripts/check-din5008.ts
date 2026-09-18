@@ -150,8 +150,8 @@ const interludes: Interludes = JSON.parse(
 );
 for (const u of interludes.units) lauf(u, `interludes.${String(u['id'])}`);
 
-// Tagesaufgaben (SPEC.md 8.6) und Einrichtung der Lernstube (SPEC.md 8.4).
-// Beides steht dem Kind vor Augen und faellt damit unter NORMEN.md 5.1.
+// Tagesaufgaben (SPEC.md 8.6). Sie stehen dem Kind vor Augen und fallen damit
+// unter NORMEN.md 5.1.
 interface Challenges {
   aufgaben: Record<string, unknown>[];
 }
@@ -160,11 +160,18 @@ const challenges: Challenges = JSON.parse(
 );
 for (const a of challenges.aufgaben) pruefe(`challenges.${String(a['id'])}`, String(a['text']));
 
-interface Deko {
-  teile: Record<string, unknown>[];
+// Das Aenderungsprotokoll (SPEC.md 11.4). Steht in den Einstellungen und wird
+// gelesen -- also gilt NORMEN.md 5.1 auch hier. Versionsnummern sind keine
+// Zahlen im Sinne der Gliederungsregel und werden nicht mitgeprueft.
+interface Aenderungen {
+  versionen: { version: string; punkte: string[] }[];
 }
-const deko: Deko = JSON.parse(readFileSync(join(WURZEL, 'content', 'deko.json'), 'utf8'));
-for (const t of deko.teile) pruefe(`deko.${String(t['id'])}`, String(t['label']));
+const aenderungen: Aenderungen = JSON.parse(
+  readFileSync(join(WURZEL, 'content', 'aenderungen.json'), 'utf8'),
+);
+for (const v of aenderungen.versionen) {
+  v.punkte.forEach((p, i) => pruefe(`aenderungen.${v.version}.${i + 1}`, p));
+}
 
 // Der freie Modulbereich (SPEC.md 10). Hier stehen die laengsten Texte der
 // ganzen App -- und im Modul "Textverarbeitung" die einzigen, die absichtlich

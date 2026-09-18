@@ -307,7 +307,7 @@ der digitalen Welt" (2016, fortgeschrieben 2021):
 | 3 | Produzieren und Präsentieren | Modul Textverarbeitung (gesamt) |
 | 4 | Schützen und sicher Agieren | Passwörter; persönliche Daten; **Falle F1 „Du hast gewonnen!"**; **Falle F2 „Das Internet vergisst nie"**; **Falle F3 „Das Kleingedruckte"** |
 | 5 | Problemlösen und Handeln | Tastenkürzel; Backup |
-| 6 | Analysieren und Reflektieren | Werbung erkennen; Influencer-Werbung; **Falle F3** |
+| 6 | Analysieren und Reflektieren | Werbung erkennen; Influencer-Werbung; Von einem Computer gemacht? (`medien-ki`, DigComp 1.2); **Falle F3** |
 
 Die drei Fallen (SPEC 6.6.1 und 10.1) stellen Situationen nach, statt Regeln
 aufzuzählen. Sie sind der Teil des Moduls, der am ehesten missverstanden werden

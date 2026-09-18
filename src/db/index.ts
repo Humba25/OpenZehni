@@ -9,8 +9,10 @@
 import Database from '@tauri-apps/plugin-sql';
 import type { AgeBand } from '../lib/curriculum';
 import type { CharStat, Confusion } from '../lib/typing-engine';
+import { PLAETZE, dbUrl, weiterSuchen } from '../lib/plaetze';
 import {
   PROFILE_SELECT,
+  PLATZ_LEEREN,
   PROFILE_INSERT,
   PROGRESS_SELECT,
   SESSION_INSERT,
@@ -26,13 +28,41 @@ import {
   LAST_SESSION_SPEED,
 } from './statements';
 
-const DB_URL = 'sqlite:zehni.db';
+// Damit die Oberflaeche nicht zwei Stellen kennen muss (SPEC.md 5.1).
+export { PLAETZE, dbUrl } from '../lib/plaetze';
+
+/**
+ * Der Platz, dessen Daten gerade gemeint sind.
+ *
+ * Ein Modulzustand statt eines Parameters an jeder Funktion: So bleiben alle
+ * bestehenden Aufrufe unverändert gültig, und es gibt keine Abfrage, die den
+ * Platz „vergessen" könnte. Gesetzt wird er genau einmal je Sitzung, bevor
+ * irgendetwas gelesen wird.
+ */
+let aktiverPlatz = 1;
 
 let verbindung: Database | null = null;
 
+/** Welcher Platz gerade offen ist. */
+export function offenerPlatz(): number {
+  return aktiverPlatz;
+}
+
+/**
+ * Wechselt den Platz und wirft die offene Verbindung weg.
+ *
+ * Das Wegwerfen ist der wichtige Teil: Bliebe die alte Verbindung stehen,
+ * schriebe das zweite Kind in die Datenbank des ersten.
+ */
+export function platzWaehlen(platz: number): void {
+  if (platz === aktiverPlatz) return;
+  aktiverPlatz = platz;
+  verbindung = null;
+}
+
 /** Öffnet die Datenbank beim ersten Aufruf und gibt sie danach wieder. */
 export async function db(): Promise<Database> {
-  verbindung ??= await Database.load(DB_URL);
+  verbindung ??= await Database.load(dbUrl(aktiverPlatz));
   return verbindung;
 }
 
@@ -74,6 +104,75 @@ interface ProfileRow {
   ghost_enabled: number;
   blind_mode: number;
   font_scale: string;
+}
+
+/** Ein Platz in der Übersicht: belegt mit einem Namen, oder noch frei. */
+export interface PlatzStand {
+  readonly platz: number;
+  /** Leer, solange das Onboarding nicht durch ist. */
+  readonly name: string;
+  readonly avatar: string;
+  /** Ist hier ein Kind eingerichtet? */
+  readonly belegt: boolean;
+}
+
+/**
+ * Welche Plätze belegt sind — die Grundlage der Profilwahl.
+ *
+ * **Geprüft wird nur bis zum ersten freien Platz.** Das Öffnen einer
+ * Datenbankdatei legt sie an und lässt die Migrationen laufen; alle vier
+ * Plätze bei jedem Start zu prüfen hieße, auf einer alten Festplatte viermal
+ * dafür zu bezahlen (Startbudget, SPEC.md 12.1). Da Plätze immer der Reihe
+ * nach belegt werden, sagt der erste freie alles Weitere.
+ *
+ * Der erste freie Platz ist im Ergebnis enthalten: Die Oberfläche braucht ihn,
+ * um „noch ein Kind" anzubieten.
+ */
+export async function plaetzeLesen(): Promise<readonly PlatzStand[]> {
+  const stand: PlatzStand[] = [];
+
+  for (let platz = 1; platz <= PLAETZE; platz++) {
+    let eintrag: PlatzStand = { platz, name: '', avatar: 'maus', belegt: false };
+    try {
+      const d = await Database.load(dbUrl(platz));
+      const rows = await d.select<ProfileRow[]>(PROFILE_SELECT);
+      const r = rows[0];
+      // Belegt heisst: Das Onboarding ist durch. Eine Datei, die nur angelegt
+      // wurde, ist kein Kind.
+      if (r && r.onboarded_at) {
+        eintrag = { platz, name: r.name, avatar: r.avatar, belegt: true };
+      }
+    } catch (error) {
+      // Ein unlesbarer Platz darf die anderen nicht mitreissen.
+      console.warn(`Zehni: Platz ${platz} nicht lesbar`, error);
+    }
+
+    stand.push(eintrag);
+    if (!weiterSuchen(eintrag.belegt, platz)) break;
+  }
+
+  return stand;
+}
+
+/**
+ * Löscht alles, was zu einem Platz gehört.
+ *
+ * **Nur der letzte belegte Platz.** Plätze werden der Reihe nach belegt, und
+ * `plaetzeLesen()` hört beim ersten freien auf — eine Lücke in der Mitte wäre
+ * für alles Dahinterliegende dasselbe wie gelöscht. Diese Einschränkung steht
+ * in `SPEC.md` 15.17 als offener Punkt.
+ *
+ * Gelöscht wird zeilenweise, nicht die Datei: Aus der WebView heraus gibt es
+ * keinen Dateizugriff, und dabei soll es bleiben (ARCHITEKTUR.md,
+ * Architekturregel 2). Die leere Datei bleibt liegen und zählt wieder als
+ * freier Platz.
+ */
+export async function platzLoeschen(platz: number): Promise<void> {
+  if (platz <= 1) throw new Error('Der erste Platz laesst sich nicht loeschen.');
+  if (platz === aktiverPlatz) throw new Error('Der offene Platz laesst sich nicht loeschen.');
+
+  const d = await Database.load(dbUrl(platz));
+  for (const anweisung of PLATZ_LEEREN) await d.execute(anweisung);
 }
 
 /**

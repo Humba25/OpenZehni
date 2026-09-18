@@ -15,6 +15,7 @@ import { Tastenjagd, Jagdfrage } from '../features/typing/Tastenjagd';
 import { ResultScreen, type Belohnung } from '../features/stats/ResultScreen';
 import { LayoutCheck } from '../features/onboarding/LayoutCheck';
 import { Onboarding } from '../features/onboarding/Onboarding';
+import { Profilwahl } from '../features/profil/Profilwahl';
 import { InterludeScreen, type Lernzahlen } from '../features/modules/InterludeScreen';
 import { Modulbereich } from '../features/modules/Modulbereich';
 import { Spielauswahl } from '../features/minispiele/Spielauswahl';
@@ -26,7 +27,6 @@ import { EinheitScreen } from '../features/modules/EinheitScreen';
 import { AbzeichenGalerie } from '../features/stats/Abzeichen';
 import { Einstellungen } from '../features/settings/Einstellungen';
 import { TagesaufgabeKarte } from '../features/motivation/Tagesaufgabe';
-import { Lernstube } from '../features/motivation/Lernstube';
 import { Maskottchen, MaskottchenMitSpruch } from '../features/mascot/Maskottchen';
 import { UpdateHinweis } from '../features/update/UpdateHinweis';
 import { useUpdater } from '../features/update/useUpdater';
@@ -43,6 +43,12 @@ import {
   loadCharStats,
   loadLastSpeed,
   markLayoutVerified,
+  plaetzeLesen,
+  platzWaehlen,
+  platzLoeschen,
+  offenerPlatz,
+  PLAETZE,
+  type PlatzStand,
   clearLayoutVerified,
   type LessonProgress,
   type Profile,
@@ -149,7 +155,8 @@ type Ansicht =
   // als T1, zeigt Zehni falsche Tasten (SPEC.md 7.4, NORMEN.md 3.1).
   | { name: 'tastaturtest' }
   | { name: 'lernweg' }
-  | { name: 'lernstube' }
+  // Wer uebt gerade? Nur bei mehr als einem Kind (SPEC.md 5.1).
+  | { name: 'profilwahl'; plaetze: readonly PlatzStand[] }
   | { name: 'abzeichen' }
   | { name: 'einstellungen' }
   | { name: 'modulbereich' }
@@ -216,6 +223,8 @@ export function App() {
   const [abzeichen, setAbzeichen] = useState<ReadonlyMap<string, string>>(new Map());
   const [erledigteEinheiten, setErledigteEinheiten] = useState<ReadonlySet<string>>(new Set());
   const [fehler, setFehler] = useState<string | null>(null);
+  /** Welche Kinder an diesem Rechner eingerichtet sind (SPEC.md 5.1). */
+  const [plaetze, setPlaetze] = useState<readonly PlatzStand[]>([]);
 
   // Einmal fuer die ganze App: Hinweis unten rechts und Einstellungen zeigen
   // denselben Stand (SPEC.md 11.1).
@@ -269,9 +278,31 @@ export function App() {
     [],
   );
 
-  useEffect(() => {
-    void (async () => {
+  /**
+   * Einen Platz öffnen und alles laden, was dazugehört (SPEC.md 5.1).
+   *
+   * Steht getrennt vom Starteffekt, weil derselbe Ablauf beim Wechsel des
+   * Kindes noch einmal gebraucht wird. **`platzWaehlen` muss vor jedem
+   * Lesezugriff stehen** — danach zeigt `db()` auf die richtige Datei.
+   */
+  /**
+   * Die Übersicht neu lesen.
+   *
+   * Nötig nach jedem Onboarding: Ein Platz gilt erst als belegt, wenn es durch
+   * ist. Ohne das Nachlesen stünde das neue Kind nirgends.
+   */
+  const plaetzeNeuLaden = useCallback(async (): Promise<void> => {
+    try {
+      setPlaetze(await plaetzeLesen());
+    } catch (error) {
+      console.warn('Zehni: Profiluebersicht nicht lesbar', error);
+    }
+  }, []);
+
+  const platzOeffnen = useCallback(
+    async (platz: number): Promise<void> => {
       try {
+        platzWaehlen(platz);
         const p = await getOrCreateProfile();
         await unlockLesson('L01');
         setProfile(p);
@@ -295,8 +326,33 @@ export function App() {
         // Schutz.
         setAnsicht({ name: 'tastaturtest' });
       }
+    },
+    [standNeuLaden, motivationNeuLaden],
+  );
+
+  useEffect(() => {
+    void (async () => {
+      let gelesen: readonly PlatzStand[] = [];
+      try {
+        gelesen = await plaetzeLesen();
+        setPlaetze(gelesen);
+      } catch (error) {
+        // Laesst sich die Uebersicht nicht lesen, ist der erste Platz die
+        // richtige Annahme: Dort liegen die Daten jeder Installation vor 0.2.0.
+        console.warn('Zehni: Profiluebersicht nicht lesbar', error);
+      }
+
+      // Genau ein Kind -- oder noch keines: kein Auswahlbildschirm. Ein
+      // zusaetzlicher Klick vor dem ersten Buchstaben kostet mehr, als die
+      // Auswahl dann wert waere (SPEC.md 5.1).
+      if (gelesen.filter((p) => p.belegt).length > 1) {
+        setAnsicht({ name: 'profilwahl', plaetze: gelesen });
+        return;
+      }
+
+      await platzOeffnen(1);
     })();
-  }, [standNeuLaden, motivationNeuLaden]);
+  }, [platzOeffnen]);
 
   useEffect(() => {
     document.documentElement.dataset['theme'] = profile?.theme ?? 'hell';
@@ -663,7 +719,6 @@ export function App() {
 
   const zeigtKopfzeile =
     ansicht.name === 'lernweg' ||
-    ansicht.name === 'lernstube' ||
     ansicht.name === 'abzeichen' ||
     ansicht.name === 'einstellungen' ||
     ansicht.name === 'modulbereich' ||
@@ -691,7 +746,6 @@ export function App() {
           aktiv={ansicht.name}
           updateBereit={updater.stand.name === 'bereit'}
           onLernweg={() => setAnsicht({ name: 'lernweg' })}
-          onLernstube={() => setAnsicht({ name: 'lernstube' })}
           onAbzeichen={() => void abzeichenOeffnen()}
           onModule={() => setAnsicht({ name: 'modulbereich' })}
           onSpiele={() => setAnsicht({ name: 'spiele' })}
@@ -712,6 +766,14 @@ export function App() {
           immer. Genau so sah die Auswertung am 2026-09-16 aus. Was hier nicht
           hineinpasst, wird ab jetzt scrollbar, nicht abgeschnitten. */}
       <div className="min-h-0 flex-1 overflow-y-auto">
+        {ansicht.name === 'profilwahl' && (
+          <Profilwahl
+            plaetze={ansicht.plaetze}
+            onWaehlen={(platz) => void platzOeffnen(platz)}
+            onNeu={(platz) => void platzOeffnen(platz)}
+          />
+        )}
+
         {ansicht.name === 'einrichtung' && (
           <Onboarding
             onDone={(e) => {
@@ -721,6 +783,8 @@ export function App() {
                   const p = await getOrCreateProfile();
                   setProfile(p);
                   await standNeuLaden(p.dailyGoalMin);
+                  // Erst jetzt gilt der Platz als belegt (SPEC.md 5.1).
+                  await plaetzeNeuLaden();
                 } catch (error) {
                   console.error('Zehni: Einrichtung konnte nicht gespeichert werden', error);
                   setFehler(de.fehler.datenbank);
@@ -779,10 +843,6 @@ export function App() {
               </div>
             }
           />
-        )}
-
-        {ansicht.name === 'lernstube' && (
-          <Lernstube level={stand.level} onZurueck={() => setAnsicht({ name: 'lernweg' })} />
         )}
 
         {ansicht.name === 'abzeichen' && (
@@ -886,6 +946,24 @@ export function App() {
             onSpeichern={einstellungenSpeichern}
             onZurueck={() => setAnsicht({ name: 'lernweg' })}
             updater={updater}
+            profile={{
+              plaetze,
+              offen: offenerPlatz(),
+              maximum: PLAETZE,
+              onWechseln: () => setAnsicht({ name: 'profilwahl', plaetze }),
+              onNeu: (platz) => void platzOeffnen(platz),
+              onLoeschen: (platz) => {
+                void (async () => {
+                  try {
+                    await platzLoeschen(platz);
+                    await plaetzeNeuLaden();
+                  } catch (error) {
+                    console.error('Zehni: Platz nicht geloescht', error);
+                    setFehler(de.fehler.datenbank);
+                  }
+                })();
+              },
+            }}
             onTastaturPruefen={() => {
               // Die Bestaetigung zuruecksetzen, damit die Pruefung auch beim
               // naechsten Start wieder erscheint, falls sie hier abgebrochen wird.
@@ -1021,7 +1099,7 @@ async function belohnungenVerbuchen(e: {
 
   // Das Wochenziel ist am 2026-09-18 gestrichen worden (SPEC.md 8.8). Ein
   // sichtbares Wochenziel wirkt als Stoppsignal: Ist der Balken voll, ist die
-  // Woche gefuehlt erledigt. Deko-Teile kommen jetzt allein aus den Leveln.
+  // Woche gefuehlt erledigt.
 
   // Abzeichen erst danach: Sie muessen die neue Serie und die neue Uebungszeit
   // kennen (SPEC.md 8.2).
@@ -1096,7 +1174,6 @@ function Kopfzeile({
   aktiv,
   updateBereit,
   onLernweg,
-  onLernstube,
   onAbzeichen,
   onModule,
   onSpiele,
@@ -1110,7 +1187,6 @@ function Kopfzeile({
   aktiv: Ansicht['name'];
   updateBereit: boolean;
   onLernweg: () => void;
-  onLernstube: () => void;
   onAbzeichen: () => void;
   onModule: () => void;
   onSpiele: () => void;
@@ -1191,10 +1267,6 @@ function Kopfzeile({
 
       <Reiter offen={aktiv === 'abzeichen'} onClick={onAbzeichen}>
         {de.abzeichenGalerie.oeffnen}
-      </Reiter>
-
-      <Reiter offen={aktiv === 'lernstube'} onClick={onLernstube}>
-        {de.lernstube.oeffnen}
       </Reiter>
 
       {/* Kein `Reiter`: Das Vollbild ist kein Bereich, in dem man sich

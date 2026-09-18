@@ -491,15 +491,34 @@ export const de = {
     verbleibend: (s: number): string => `noch ${s} s`,
   },
 
-  lernstube: {
-    titel: 'Deine Lernstube',
-    oeffnen: 'Lernstube',
-    zurueck: 'Zurück',
-    // Das Wochenziel ist am 2026-09-18 gestrichen worden (SPEC.md 8.8). Der
-    // Satz stand danach noch da und versprach etwas, das es nicht mehr gibt.
-    erklaerung: 'Für jedes Level kommt etwas dazu.',
-    stand: (a: number, b: number): string => `${a} von ${b} Sachen`,
-    voll: 'Deine Lernstube ist vollständig eingerichtet.',
+  profilwahl: {
+    titel: 'Wer übt gerade?',
+    ohneNamen: 'Ohne Namen',
+    neu: 'Noch ein Kind',
+    // Erklaert, warum es keine gemeinsame Auswertung gibt -- und dass das
+    // Absicht ist, nicht eine Luecke (SPEC.md 5.1).
+    getrennt:
+      'Jedes Kind hat seinen eigenen Fortschritt. Niemand sieht die Zahlen der anderen, und es wird nichts verglichen.',
+    wechseln: 'Kind wechseln',
+    wechselnTitel: 'Zurück zur Auswahl, wer gerade übt',
+    // Ueberschrift des Bereichs in den Einstellungen.
+    verwalten: 'Kinder an diesem Rechner',
+    loeschen: 'Löschen',
+    loeschenFrage: (name: string): string =>
+      `Alles von ${name} löschen? Der Lernfortschritt ist danach weg und lässt sich nicht zurückholen.`,
+    loeschenJa: 'Ja, alles löschen',
+    loeschenNein: 'Abbrechen',
+    // Warum nur der letzte: Plaetze werden der Reihe nach belegt, eine Luecke
+    // in der Mitte wuerde alles Dahinterliegende verstecken (SPEC.md 15.17).
+    nurLetztes: 'Es lässt sich immer nur das zuletzt angelegte Kind löschen.',
+    voll: (n: number): string => `Mehr als ${n} Kinder gehen an einem Rechner nicht.`,
+  },
+
+  aenderungen: {
+    // Steht unter dem Update-Feld in den Einstellungen (SPEC.md 11.3).
+    titel: 'Was ist neu in Version',
+    version: 'Version',
+    aeltere: 'Frühere Versionen anzeigen',
   },
 
   update: {

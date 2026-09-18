@@ -14,8 +14,21 @@ mod pruefsummen;
 use tauri::Manager;
 use tauri_plugin_sql::{Migration, MigrationKind};
 
-/// Name der Datenbankdatei. Landet in `%APPDATA%\Zehni\` (SPEC.md 5).
-const DB_URL: &str = "sqlite:zehni.db";
+/// Wie viele Kinder eine Installation trennen kann (SPEC.md 5.1).
+pub const PLAETZE: u8 = 4;
+
+/// Name der Datenbankdatei eines Platzes. Landet in `%APPDATA%\Zehni\` (SPEC.md 5).
+///
+/// **Platz 1 behält den alten Namen.** Dort liegt der Lernfortschritt aller
+/// Installationen vor 0.2.0; ein neuer Name hieße, dass beim Update alles weg
+/// zu sein scheint.
+fn db_url(platz: u8) -> String {
+    if platz <= 1 {
+        "sqlite:zehni.db".to_string()
+    } else {
+        format!("sqlite:zehni-{platz}.db")
+    }
+}
 
 /// Alle Migrationen in ihrer Reihenfolge.
 ///
@@ -83,11 +96,17 @@ pub fn run() {
             }
             Ok(())
         })
-        .plugin(
-            tauri_plugin_sql::Builder::default()
-                .add_migrations(DB_URL, migrations())
-                .build(),
-        )
+        .plugin({
+            // Jeder Platz bekommt denselben Migrationssatz. Angelegt wird eine
+            // Datei erst, wenn die Oberflaeche sie zum ersten Mal oeffnet --
+            // hier wird nur hinterlegt, was dann zu tun ist. Deshalb kostet ein
+            // leerer Platz nichts (Startbudget, SPEC.md 12.1).
+            let mut b = tauri_plugin_sql::Builder::default();
+            for platz in 1..=PLAETZE {
+                b = b.add_migrations(&db_url(platz), migrations());
+            }
+            b.build()
+        })
         // Auto-Update nach SPEC.md 11.1. Der Updater ist immer registriert;
         // ob er etwas findet, haengt an der Konfiguration in
         // `tauri.release.conf.json`. Ohne Konfiguration meldet er einen Fehler,

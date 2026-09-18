@@ -15,6 +15,8 @@ import { allTopics } from '../../lib/text-provider';
 import type { AgeBand } from '../../lib/curriculum';
 import type { Einstellungen as Daten } from '../../db/gamification';
 import type { Updater } from '../update/useUpdater';
+import { ProfilFeld, type ProfilFeldProps } from '../profil/ProfilFeld';
+import { Aenderungen } from '../update/Aenderungen';
 import { de } from '../../i18n/de';
 
 /** Wie viele Themen höchstens gewählt werden dürfen (SPEC.md 9.1). */
@@ -28,6 +30,8 @@ export interface EinstellungenProps {
   readonly onZurueck: () => void;
   readonly onTastaturPruefen: () => void;
   readonly updater: Updater;
+  /** Die Kinderverwaltung (SPEC.md 5.1) -- durchgereicht, nicht hier gebaut. */
+  readonly profile: ProfilFeldProps;
 }
 
 export function Einstellungen({
@@ -36,6 +40,7 @@ export function Einstellungen({
   onZurueck,
   onTastaturPruefen,
   updater,
+  profile,
 }: EinstellungenProps) {
   const [daten, setDaten] = useState<Daten>(start);
   const [gemerkt, setGemerkt] = useState(false);
@@ -227,6 +232,8 @@ export function Einstellungen({
             </button>
           </Feld>
 
+          <ProfilFeld {...profile} />
+
           <UpdateFeld updater={updater} />
         </div>
       </div>
@@ -292,6 +299,11 @@ function UpdateFeld({ updater }: { updater: Updater }) {
           </button>
         )}
       </div>
+
+      {/* Was das letzte Update gebracht hat (SPEC.md 11.3). Steht hier und
+          nicht in einem eigenen Bereich: Wer wissen will, was neu ist, sucht
+          dort, wo die Version steht. */}
+      <Aenderungen version={version} />
     </Feld>
   );
 }
