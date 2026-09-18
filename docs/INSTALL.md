@@ -36,8 +36,21 @@ startet, startet er auch Zehni.
 
 ### 1. Installer herunterladen
 
-Auf der Releases-Seite des Projekts die Datei `Zehni_…_x64-setup.exe`
-herunterladen. Es ist immer die oberste, neueste Version.
+**Dieser Link führt immer zur neuesten Version:**
+
+<https://github.com/Humba25/OpenZehni/releases/latest/download/Zehni-Setup.exe>
+
+Die Adresse ändert sich nie. Man kann sie sich merken, weitergeben oder als
+Lesezeichen ablegen — sie liefert stets die aktuelle Ausgabe.
+
+Wer lieber nachsieht, was er bekommt: Auf der Releases-Seite des Projekts liegt
+dieselbe Datei zusätzlich unter ihrem vollen Namen, also
+`Zehni_1.2.3_x64-setup.exe`. Beide sind byteweise identisch; die eine ist nur
+die Kopie der anderen unter einem festen Namen.
+
+> **Einmal herunterladen genügt.** Zehni hält sich danach selbst aktuell (siehe
+> „Updates" weiter unten). Auch ein älterer Installer führt also innerhalb
+> weniger Augenblicke zur neuesten Fassung.
 
 ### 2. Doppelklick — und die Warnung von Windows
 

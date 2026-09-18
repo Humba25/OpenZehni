@@ -56,8 +56,13 @@ darf dabei ruhig weniger können, solange es das Wesentliche kann.
 
 ## Installieren
 
-Fertige Installer liegen unter [Releases](../../releases). Anleitung für
-Eltern: [`docs/INSTALL.md`](docs/INSTALL.md).
+**Immer die neueste Version:**
+[Zehni-Setup.exe](https://github.com/Humba25/OpenZehni/releases/latest/download/Zehni-Setup.exe)
+
+Diese Adresse ändert sich nie. Alle Ausgaben samt Signaturen liegen unter
+[Releases](../../releases).
+
+Anleitung für Eltern: [`docs/INSTALL.md`](docs/INSTALL.md).
 
 Was gespeichert wird und was nicht:
 [`docs/DATENSCHUTZ.md`](docs/DATENSCHUTZ.md).

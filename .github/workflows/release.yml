@@ -144,6 +144,47 @@ jobs:
           includeUpdaterJson: true
           args: --config src-tauri/tauri.release.conf.json
 
+      # Eine Adresse, die sich nie aendert.
+      #
+      # `releases/latest/download/<Dateiname>` fuehrt immer zur neuesten
+      # Version -- aber nur, wenn der Dateiname gleich bleibt. Die gebaute
+      # Datei heisst `Zehni_0.1.6_x64-setup.exe`, also aendert sich die Adresse
+      # mit jeder Version, und jeder weitergegebene Link wird mit dem naechsten
+      # Release ungueltig.
+      #
+      # Deshalb liegt dieselbe Datei zusaetzlich unter einem Namen ohne
+      # Versionsnummer. Damit gibt es einen Link, den man einmal weitergibt:
+      #
+      #   https://github.com/Humba25/OpenZehni/releases/latest/download/Zehni-Setup.exe
+      #
+      # Das ist **dieselbe signierte Datei**, nur unter einem zweiten Namen --
+      # nicht neu gebaut und nicht veraendert. Die Signatur kommt mit, damit
+      # sie pruefbar bleibt.
+      #
+      # `latest.json` bleibt unberuehrt: Der Updater sucht weiter den
+      # versionierten Namen, weil dessen Signatur dort hinterlegt ist.
+      - name: Feste Download-Adresse bereitstellen
+        if: startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          mkdir -p fest && cd fest
+          gh release download "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --pattern 'Zehni_*_x64-setup.exe' --pattern 'Zehni_*_x64-setup.exe.sig'
+
+          EXE=$(ls Zehni_*_x64-setup.exe)
+          cp "$EXE" Zehni-Setup.exe
+          cp "$EXE.sig" Zehni-Setup.exe.sig
+
+          # Gleicher Inhalt, anderer Name -- nachgewiesen, nicht behauptet.
+          if ! cmp -s "$EXE" Zehni-Setup.exe; then
+            echo "Die Kopie weicht vom Original ab. Abbruch."
+            exit 1
+          fi
+
+          gh release upload "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" Zehni-Setup.exe Zehni-Setup.exe.sig --clobber
+
   # ---------------------------------------------------------------------------
   # Zusaetzlich auf SourceForge anbieten.
   #
@@ -185,7 +226,7 @@ jobs:
           mkdir -p hochladen
           gh release download "${{ github.ref_name }}" \
             --repo "${{ github.repository }}" \
-            --pattern '*.exe' --pattern '*.sig' \
+            --pattern 'Zehni_*_x64-setup.exe' --pattern 'Zehni_*_x64-setup.exe.sig' \
             --dir hochladen
           ls -l hochladen
 
