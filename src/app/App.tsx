@@ -88,6 +88,7 @@ import { neuesTeil } from '../lib/lernstube';
 import {
   XP,
   xpFuerRunde,
+  istFehlerfrei,
   neueAbzeichen,
   serieFortschreiben,
   levelFortschritt,
@@ -1013,8 +1014,9 @@ async function belohnungenVerbuchen(e: {
       [...progressJetzt.values()].filter((p) => p.status === 'passed').map((p) => p.lessonId),
     ),
     besteStrokesMin: leistung.besteStrokesMin,
-    // "fehlerfrei" verlangt eine Lektion mit 0,00 % Fehlerquote (SPEC.md 8.2).
-    jeFehlerfrei: leistung.besteErrorRate !== null && leistung.besteErrorRate === 0,
+    // Was "fehlerfrei" heisst, haengt an der Lektion (NORMEN.md 4.4.1) und
+    // steht in istFehlerfrei() -- nicht hier.
+    jeFehlerfrei: istFehlerfrei(leistung.bestwerte),
     minutenHeute: aktivitaet.activeMs / 60000,
     blindMinuten,
     serieTage: serieJetzt.currentDays,

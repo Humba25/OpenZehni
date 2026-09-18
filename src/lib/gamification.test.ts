@@ -7,6 +7,7 @@ import {
   xpSchwelle,
   levelFuerXp,
   levelFortschritt,
+  istFehlerfrei,
   MINISPIEL_XP_PRO_TAG,
   verdienteAbzeichen,
   neueAbzeichen,
@@ -16,7 +17,7 @@ import {
   type FortschrittsBild,
   type SerienStand,
 } from './gamification';
-import { allLessons } from './curriculum';
+import { allLessons, thresholdsFor } from './curriculum';
 
 const leer: FortschrittsBild = {
   bestandeneLektionen: new Set(),
@@ -194,6 +195,78 @@ describe('XP für eine Runde', () => {
       blindmodus: true,
     });
     expect(blind).toBe(Math.round(normal * 1.2));
+  });
+});
+
+describe('Fehlerfrei — NORMEN.md 4.4.1', () => {
+  /**
+   * Der Fehler, den der Nutzer am 2026-09-18 gemeldet hat: Er machte drei
+   * Vertipper, die Auswertung zeigte „Sicherheit 97,5 %" — und daneben das
+   * Abzeichen „Fehlerfrei, kein einziger Fehler".
+   *
+   * Ursache: In `L01`–`L13` lässt der blockierende Modus keine falsche Taste
+   * durch. Die amtliche Fehlerquote ist dort **immer** 0,00 %; das Abzeichen
+   * hing genau an dieser Zahl und kam damit in der ersten Runde.
+   */
+  it('vergibt es nicht für eine blockierende Lektion mit Vertippern', () => {
+    expect(
+      istFehlerfrei([{ lessonId: 'L01', besteErrorRate: 0, besteSicherheit: 97.5 }]),
+      'Fehlerquote 0 ist in L01 bauartbedingt und sagt nichts aus',
+    ).toBe(false);
+  });
+
+  it('vergibt es für eine blockierende Lektion ohne einen einzigen Fehlgriff', () => {
+    expect(istFehlerfrei([{ lessonId: 'L01', besteErrorRate: 0, besteSicherheit: 100 }])).toBe(
+      true,
+    );
+  });
+
+  /** Knapp daneben ist auch daneben. */
+  it('vergibt es nicht bei 99,9 Prozent Sicherheit', () => {
+    expect(istFehlerfrei([{ lessonId: 'L05', besteErrorRate: 0, besteSicherheit: 99.9 }])).toBe(
+      false,
+    );
+  });
+
+  it('zählt ab L14 die amtliche Fehlerquote', () => {
+    expect(istFehlerfrei([{ lessonId: 'L19', besteErrorRate: 0, besteSicherheit: 80 }])).toBe(true);
+    expect(istFehlerfrei([{ lessonId: 'L19', besteErrorRate: 0.4, besteSicherheit: 100 }])).toBe(
+      false,
+    );
+  });
+
+  it('reicht eine einzige passende Lektion', () => {
+    expect(
+      istFehlerfrei([
+        { lessonId: 'L01', besteErrorRate: 0, besteSicherheit: 90 },
+        { lessonId: 'L19', besteErrorRate: 0, besteSicherheit: 70 },
+      ]),
+    ).toBe(true);
+  });
+
+  it('kommt mit leeren Werten und unbekannten Lektionen zurecht', () => {
+    expect(istFehlerfrei([])).toBe(false);
+    expect(istFehlerfrei([{ lessonId: 'L01', besteErrorRate: null, besteSicherheit: null }])).toBe(
+      false,
+    );
+    expect(istFehlerfrei([{ lessonId: 'L99', besteErrorRate: 0, besteSicherheit: 100 }])).toBe(
+      false,
+    );
+  });
+
+  /**
+   * Der Schutz vor dem Rückfall: Für **jede** blockierende Lektion darf eine
+   * Runde mit Vertippern das Abzeichen nicht auslösen. Wer die Grenze zwischen
+   * blockierend und fließend verschiebt, ohne hier nachzuziehen, merkt es.
+   */
+  it('gilt für alle blockierenden Lektionen', () => {
+    for (const lesson of allLessons()) {
+      if (thresholdsFor(lesson.id)?.kind !== 'safety') continue;
+      expect(
+        istFehlerfrei([{ lessonId: lesson.id, besteErrorRate: 0, besteSicherheit: 97.5 }]),
+        lesson.id,
+      ).toBe(false);
+    }
   });
 });
 

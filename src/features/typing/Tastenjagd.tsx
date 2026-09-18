@@ -10,7 +10,15 @@
  */
 
 import { useMemo } from 'react';
-import { jagdSequenzen, JAGD_RUNDEN, JAGD_SEKUNDEN, type Jagdangebot } from '../../lib/tastenjagd';
+import {
+  jagdSequenzen,
+  jagdbilanz,
+  JAGD_RUNDEN,
+  JAGD_SEKUNDEN,
+  type Jagdangebot,
+  type Jagdbilanz,
+} from '../../lib/tastenjagd';
+import { XP } from '../../lib/gamification';
 import { DrillScreen } from './DrillScreen';
 import { MaskottchenMitSpruch } from '../mascot/Maskottchen';
 import { maskottchenFuer } from '../../lib/maskottchen';
@@ -76,8 +84,53 @@ export function Tastenjagd({ angebot, saat, blind, onFertig }: TastenjagdProps) 
       fertigText={de.tastenjagd.fertig}
       onFertig={onFertig}
       onAbbrechen={onFertig}
+      fertigInhalt={(statistiken) => <Jagdende bilanz={jagdbilanz(angebot.zeichen, statistiken)} />}
       zeigeRunden
       blind={blind}
     />
+  );
+}
+
+/**
+ * Was nach der Jagd dasteht.
+ *
+ * **Beschreibend, nicht bewertend.** Die Jagd ist unbewertet (SPEC.md 8.9):
+ * keine Sterne, keine Fehlerquote, keine Note. Hier steht deshalb nur, was
+ * passiert ist — und ausdrücklich **kein** „du bist besser geworden". Fünf
+ * Runden tragen eine solche Aussage nicht; sie wäre eine erfundene
+ * Fortschrittszahl (MODUL-LERNEN.md 1.1).
+ *
+ * Bis zum 2026-09-18 stand hier gar nichts: Die Jagd endete mit einem kleinen
+ * „Jagd beendet." neben dem Knopf, und wer zurückging, landete wortlos im
+ * Lernweg. Aus Sicht des Nutzers war das „es passiert nichts".
+ */
+function Jagdende({ bilanz }: { bilanz: Jagdbilanz }) {
+  const nichtsVorgekommen = bilanz.treffer === 0 && bilanz.daneben === 0;
+
+  return (
+    <div className="text-center">
+      <h2 className="text-xl font-semibold">{de.tastenjagd.bilanzTitel}</h2>
+
+      {nichtsVorgekommen ? (
+        <p className="mt-3">{de.tastenjagd.bilanzNichts(bilanz.zeichen)}</p>
+      ) : (
+        <>
+          <p className="mt-3 text-lg">
+            {de.tastenjagd.bilanzTreffer(bilanz.zeichen, bilanz.treffer)}
+          </p>
+          <p className="mt-1 text-gedaempft">{de.tastenjagd.bilanzDaneben(bilanz.daneben)}</p>
+        </>
+      )}
+
+      <p className="mt-1 text-sm text-gedaempft">
+        {de.tastenjagd.bilanzAnschlaege(bilanz.anschlaege)}
+      </p>
+
+      <p className="mt-4 inline-block rounded-full bg-akzent px-4 py-1.5 font-semibold text-white">
+        {de.tastenjagd.bilanzXp(XP.tastenjagd)}
+      </p>
+
+      <p className="mt-4 text-sm text-gedaempft">{de.tastenjagd.bilanzUnbewertet}</p>
+    </div>
   );
 }

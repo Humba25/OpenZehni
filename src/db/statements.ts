@@ -138,9 +138,21 @@ export const MODULE_SELECT = 'SELECT * FROM module_progress';
 export const TOPICS_TRIED =
   'SELECT COUNT(DISTINCT topic_id) AS n FROM sessions WHERE topic_id IS NOT NULL';
 
-/** Bestes Tempo und ob je fehlerfrei gearbeitet wurde. */
-export const SESSION_HIGHLIGHTS =
-  'SELECT MAX(strokes_min) AS best_strokes_min, MIN(error_rate) AS best_error_rate FROM sessions';
+/** Bestes Tempo aller Zeiten. */
+export const SESSION_HIGHLIGHTS = 'SELECT MAX(strokes_min) AS best_strokes_min FROM sessions';
+
+/**
+ * Bestwerte **je Lektion** — Grundlage für das Abzeichen „Fehlerfrei".
+ *
+ * Beide Kennzahlen werden gebraucht, weil je nach Lektion eine andere etwas
+ * aussagt: In `L01`–`L13` ist die Fehlerquote bauartbedingt immer 0,00 %
+ * (`NORMEN.md` 4.4.1), dort zählt die Sicherheit. Welche gilt, entscheidet
+ * `istFehlerfrei()` in `src/lib/gamification.ts` — hier wird nur geliefert.
+ */
+export const SESSION_BESTWERTE =
+  'SELECT lesson_id, MIN(error_rate) AS best_error_rate, ' +
+  '  MAX(first_try_pct) AS best_safety ' +
+  'FROM sessions GROUP BY lesson_id';
 
 /** Erste und letzte Rundengeschwindigkeit, für „Deine eigene Kurve". */
 export const LERNKURVE =

@@ -99,3 +99,52 @@ export function jagdSequenzen(
   }
   return sequenzen;
 }
+
+/**
+ * Was am Ende einer Jagd dasteht.
+ *
+ * **Bewusst ohne Urteil.** Die Jagd ist unbewertet (`SPEC.md` 8.9): keine
+ * Sterne, keine Fehlerquote, keine Note. Diese Zahlen sind die reine
+ * Beschreibung dessen, was passiert ist — mehr darf eine Jagd nicht behaupten.
+ *
+ * Insbesondere steht hier **kein Vergleich „du bist besser geworden"**. Fünf
+ * Runden sind dafür zu wenig; eine solche Aussage wäre eine erfundene
+ * Fortschrittszahl und verstieße gegen dieselbe Regel, die auch für das Modul
+ * „Lernen lernen" gilt (`MODUL-LERNEN.md` 1.1).
+ */
+export interface Jagdbilanz {
+  /** Das gejagte Zeichen. */
+  readonly zeichen: string;
+  /** Wie oft es beim ersten Anschlag saß. */
+  readonly treffer: number;
+  /** Wie oft daneben gegriffen wurde. */
+  readonly daneben: number;
+  /** Wie viele Zeichen insgesamt getippt wurden — alle, nicht nur das gejagte. */
+  readonly anschlaege: number;
+}
+
+/**
+ * Rechnet die Bilanz aus den gesammelten Zeichenstatistiken einer Jagd.
+ *
+ * Die Statistiken kommen zeilenweise herein, weil je Zeile eine eigene Sitzung
+ * läuft. Hier werden sie zusammengezählt.
+ */
+export function jagdbilanz(
+  zeichen: string,
+  statistiken: readonly ReadonlyMap<string, CharStat>[],
+): Jagdbilanz {
+  let treffer = 0;
+  let daneben = 0;
+  let anschlaege = 0;
+
+  for (const karte of statistiken) {
+    for (const [z, stat] of karte) {
+      anschlaege += stat.hits + stat.misses;
+      if (z !== zeichen) continue;
+      treffer += stat.hits;
+      daneben += stat.misses;
+    }
+  }
+
+  return { zeichen, treffer, daneben, anschlaege };
+}

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { jagdAngebot, jagdSequenzen, JAGD_RUNDEN, JAGD_SEKUNDEN } from './tastenjagd';
+import { jagdAngebot, jagdSequenzen, jagdbilanz, JAGD_RUNDEN, JAGD_SEKUNDEN } from './tastenjagd';
 import { MIN_SAMPLES_FOR_WEAKNESS, type CharStat } from './typing-engine';
 import { allLessons, getLesson } from './curriculum';
 
@@ -100,5 +100,50 @@ describe('Rahmen', () => {
   it('bleibt in der Zeitvorgabe aus SPEC.md 8.9', () => {
     expect(JAGD_SEKUNDEN).toBeLessThanOrEqual(45);
     expect(JAGD_RUNDEN).toBe(5);
+  });
+});
+
+describe('Jagdbilanz — SPEC.md 8.9', () => {
+  const karte = (eintraege: readonly [string, number, number][]): Map<string, CharStat> =>
+    new Map(
+      eintraege.map(([z, hits, misses]) => [
+        z,
+        { hits, misses, totalLatencyMs: 0, samples: hits + misses },
+      ]),
+    );
+
+  it('zählt Treffer und Fehlgriffe des gejagten Zeichens über alle Zeilen', () => {
+    const b = jagdbilanz('j', [
+      karte([
+        ['j', 4, 2],
+        ['f', 6, 0],
+      ]),
+      karte([['j', 5, 1]]),
+    ]);
+    expect(b.zeichen).toBe('j');
+    expect(b.treffer).toBe(9);
+    expect(b.daneben).toBe(3);
+  });
+
+  it('zählt alle Anschläge, nicht nur die des gejagten Zeichens', () => {
+    const b = jagdbilanz('j', [
+      karte([
+        ['j', 4, 2],
+        ['f', 6, 1],
+      ]),
+    ]);
+    expect(b.anschlaege).toBe(13);
+  });
+
+  it('kommt mit einem Zeichen zurecht, das gar nicht vorkam', () => {
+    const b = jagdbilanz('z', [karte([['j', 4, 0]])]);
+    expect(b.treffer).toBe(0);
+    expect(b.daneben).toBe(0);
+    expect(b.anschlaege).toBe(4);
+  });
+
+  it('kommt mit einer leeren Jagd zurecht', () => {
+    const b = jagdbilanz('j', []);
+    expect(b).toEqual({ zeichen: 'j', treffer: 0, daneben: 0, anschlaege: 0 });
   });
 });

@@ -13,8 +13,13 @@
  * hier nichts zu verlieren gibt.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { createSession, type CharState, type SessionSnapshot } from '../../lib/typing-engine';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import {
+  createSession,
+  type CharState,
+  type CharStat,
+  type SessionSnapshot,
+} from '../../lib/typing-engine';
 import { Keyboard } from './Keyboard';
 import { Hands } from './Hands';
 import { de } from '../../i18n/de';
@@ -32,6 +37,16 @@ export interface DrillScreenProps {
   readonly fertigText: string;
   readonly onFertig: () => void;
   readonly onAbbrechen?: (() => void) | undefined;
+  /**
+   * Wird gezeigt, sobald die Einheit vorbei ist — an der Stelle, wo sonst die
+   * Tastatur steht.
+   *
+   * Der Bildschirm sammelt dafür die Zeichenstatistik **jeder** Zeile ein, denn
+   * je Zeile läuft eine eigene Sitzung. Was daraus gemacht wird, entscheidet
+   * der Aufrufer; dieser Bildschirm bewertet weiterhin nichts.
+   */
+  readonly fertigInhalt?:
+    ((statistiken: readonly ReadonlyMap<string, CharStat>[]) => ReactNode) | undefined;
   /** Fortschrittszeile „Runde 2 von 5". Ohne Angabe wird nichts gezeigt. */
   readonly zeigeRunden?: boolean;
   readonly blind?: boolean;
@@ -46,6 +61,7 @@ export function DrillScreen({
   fertigText,
   onFertig,
   onAbbrechen,
+  fertigInhalt,
   zeigeRunden = false,
   blind = false,
 }: DrillScreenProps) {
@@ -62,6 +78,17 @@ export function DrillScreen({
 
   const [snap, setSnap] = useState<SessionSnapshot>(() => session.snapshot());
   useEffect(() => setSnap(session.snapshot()), [session]);
+
+  /**
+   * Die Zeichenstatistik jeder abgeschlossenen Zeile.
+   *
+   * Je Zeile entsteht eine eigene Sitzung, deren Statistik mit ihr verschwindet.
+   * Wer am Ende etwas ueber die ganze Einheit sagen will, muss sie unterwegs
+   * einsammeln -- deshalb dieser Speicher. Ein Ref statt State: Die Anzeige
+   * haengt nicht daran, und jede Aenderung wuerde sonst neu zeichnen.
+   */
+  const statistiken = useRef<ReadonlyMap<string, CharStat>[]>([]);
+  const letzteZeile = useRef(-1);
 
   const zeitUm = verbleibend <= 0;
   const allesGetippt = index >= texte.length - 1 && snap.finished;
@@ -103,7 +130,11 @@ export function DrillScreen({
       const neu = session.snapshot();
       setSnap(neu);
 
-      // Zeile fertig: die naechste holen, solange es eine gibt.
+      // Zeile fertig: Statistik sichern, dann die naechste holen.
+      if (neu.finished && letzteZeile.current !== index) {
+        letzteZeile.current = index;
+        statistiken.current = [...statistiken.current, neu.charStats];
+      }
       if (neu.finished && index < texte.length - 1) naechsteZeile();
     };
 
@@ -146,18 +177,37 @@ export function DrillScreen({
         </p>
       </section>
 
-      {!blind && (
-        <section className="flex items-start gap-4 rounded-2xl border border-rand bg-flaeche p-4">
-          <div className="min-w-0 flex-1">
-            <Keyboard nextChar={naechstesZeichen} showHint />
-          </div>
-          <div className="w-56 shrink-0 border-l border-rand pl-4">
-            <p className="text-center text-xs uppercase tracking-wide text-gedaempft">
-              {de.uebung.naechsterFinger}
-            </p>
-            <Hands nextChar={naechstesZeichen} />
-          </div>
+      {/*
+        Ist die Einheit vorbei, tritt die Rueckmeldung an die Stelle der
+        Tastatur. Vorher stand dort weiter die Tastatur und daneben ein
+        kleines "Jagd beendet." -- fuer den Nutzer sah das aus, als sei
+        nichts passiert.
+
+        Die Statistik der laufenden Zeile kommt dazu: Laeuft die Uhr mitten in
+        einer Zeile ab, waere sie sonst nicht mitgezaehlt.
+      */}
+      {vorbei && fertigInhalt ? (
+        <section className="rounded-2xl border border-rand bg-flaeche p-6">
+          {fertigInhalt(
+            letzteZeile.current === index
+              ? statistiken.current
+              : [...statistiken.current, snap.charStats],
+          )}
         </section>
+      ) : (
+        !blind && (
+          <section className="flex items-start gap-4 rounded-2xl border border-rand bg-flaeche p-4">
+            <div className="min-w-0 flex-1">
+              <Keyboard nextChar={naechstesZeichen} showHint />
+            </div>
+            <div className="w-56 shrink-0 border-l border-rand pl-4">
+              <p className="text-center text-xs uppercase tracking-wide text-gedaempft">
+                {de.uebung.naechsterFinger}
+              </p>
+              <Hands nextChar={naechstesZeichen} />
+            </div>
+          </section>
+        )
       )}
 
       <div className="mt-auto flex items-center justify-between">

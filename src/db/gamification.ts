@@ -7,6 +7,7 @@
  */
 
 import { db } from './index';
+import type { LektionsBestwert } from '../lib/gamification';
 import {
   PROFILE_UPDATE,
   INTERESTS_CLEAR,
@@ -24,6 +25,7 @@ import {
   MODULE_SELECT,
   TOPICS_TRIED,
   SESSION_HIGHLIGHTS,
+  SESSION_BESTWERTE,
   LERNKURVE,
   REWARDS_SELECT_DATES,
   PROFILE_EINSTELLUNGEN_SET,
@@ -218,20 +220,30 @@ export async function completeModule(
 
 export interface Leistungsdaten {
   readonly besteStrokesMin: number;
-  readonly besteErrorRate: number | null;
+  /**
+   * Bestwerte je Lektion. Welche Kennzahl „fehlerfrei" bedeutet, hängt an der
+   * Lektion — das entscheidet `istFehlerfrei()` in `src/lib/gamification.ts`
+   * (`NORMEN.md` 4.4.1), nicht diese Schicht.
+   */
+  readonly bestwerte: readonly LektionsBestwert[];
   readonly themenProbiert: number;
 }
 
 export async function loadLeistungsdaten(): Promise<Leistungsdaten> {
   const d = await db();
-  const h =
-    await d.select<{ best_strokes_min: number | null; best_error_rate: number | null }[]>(
-      SESSION_HIGHLIGHTS,
-    );
+  const h = await d.select<{ best_strokes_min: number | null }[]>(SESSION_HIGHLIGHTS);
+  const b =
+    await d.select<
+      { lesson_id: string; best_error_rate: number | null; best_safety: number | null }[]
+    >(SESSION_BESTWERTE);
   const t = await d.select<{ n: number }[]>(TOPICS_TRIED);
   return {
     besteStrokesMin: h[0]?.best_strokes_min ?? 0,
-    besteErrorRate: h[0]?.best_error_rate ?? null,
+    bestwerte: b.map((r) => ({
+      lessonId: r.lesson_id,
+      besteErrorRate: r.best_error_rate,
+      besteSicherheit: r.best_safety,
+    })),
     themenProbiert: t[0]?.n ?? 0,
   };
 }

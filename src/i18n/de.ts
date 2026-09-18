@@ -463,7 +463,21 @@ export const de = {
     unbewertet: 'Das hier wird nicht bewertet. Es geht nur ums Üben.',
     runde: (a: number, b: number): string => `Runde ${a} von ${b}`,
     fertig: 'Jagd beendet.',
-    zurueck: 'Zurück',
+    zurueck: 'Zurück zum Lernweg',
+
+    // Rueckmeldung am Ende. Beschreibend, nie bewertend: Die Jagd ist
+    // unbewertet (SPEC.md 8.9), und fuenf Runden tragen keine Aussage
+    // ueber Fortschritt (MODUL-LERNEN.md 1.1).
+    bilanzTitel: 'Das war deine Jagd',
+    bilanzTreffer: (zeichen: string, n: number): string =>
+      `Das „${zeichen}“ hast du ${n} Mal gleich beim ersten Mal getroffen.`,
+    bilanzDaneben: (n: number): string =>
+      n === 0 ? 'Kein einziges Mal danebengegriffen.' : `${n} Mal ging es daneben.`,
+    bilanzAnschlaege: (n: number): string => `${n} Anschläge insgesamt.`,
+    bilanzNichts: (zeichen: string): string =>
+      `Diesmal kam das „${zeichen}“ nicht mehr vor. Auch gut — geübt hast du trotzdem.`,
+    bilanzXp: (n: number): string => `+${n} XP fürs Üben.`,
+    bilanzUnbewertet: 'Hier gibt es keine Sterne und keine Note. Das war nur Übung.',
   },
 
   aufwaermen: {

@@ -9,6 +9,8 @@
  * (ARCHITEKTUR.md, Architekturregel 1).
  */
 
+import { thresholdsFor } from './curriculum';
+
 /** Anlässe, für die es XP gibt (SPEC.md 8.1). */
 export type XpReason =
   | 'lektion'
@@ -135,7 +137,7 @@ export interface FortschrittsBild {
   readonly bestandeneLektionen: ReadonlySet<string>;
   /** Bestes Tempo aller Zeiten in Anschlägen pro Minute. */
   readonly besteStrokesMin: number;
-  /** Wurde je eine Lektion mit 0,00 % Fehlerquote abgeschlossen? */
+  /** Wurde je eine Runde ohne einen einzigen Fehler abgeschlossen? Siehe `istFehlerfrei()`. */
   readonly jeFehlerfrei: boolean;
   /** Geübte Minuten am heutigen Tag. */
   readonly minutenHeute: number;
@@ -149,6 +151,56 @@ export interface FortschrittsBild {
   readonly fallenErkannt: number;
   /** Abgeschlossene Zwischenstücke (SPEC.md 6.6). */
   readonly zwischenstueckeFertig: number;
+}
+
+/** Bestwerte einer Lektion, wie sie aus `sessions` kommen. */
+export interface LektionsBestwert {
+  readonly lessonId: string;
+  /** Kleinste amtliche Fehlerquote in Prozent (`NORMEN.md` 4.3). */
+  readonly besteErrorRate: number | null;
+  /** Höchste Sicherheit in Prozent (`NORMEN.md` 4.4). */
+  readonly besteSicherheit: number | null;
+}
+
+/**
+ * Hat die Nutzerin je eine Runde **ohne einen einzigen Fehler** geschafft?
+ *
+ * **Warum das nicht einfach „Fehlerquote 0" ist.** In `L01`–`L13` lässt der
+ * blockierende Modus eine falsche Taste gar nicht erst durch. Der Ergebnistext
+ * ist dort bauartbedingt sauber, die amtliche Fehlerquote also **immer**
+ * 0,00 % — `NORMEN.md` 4.4.1 sagt ausdrücklich, dass sie dort nichts
+ * unterscheiden kann.
+ *
+ * Bis zum 2026-09-18 hing das Abzeichen trotzdem an genau dieser Zahl. Es kam
+ * damit in der allerersten Runde der allerersten Lektion, auch nach drei
+ * Vertippern. Gemeldet hat es der Nutzer, nicht ein Test: Die Auswertung zeigte
+ * „Sicherheit 97,5 %" und daneben „Fehlerfrei — kein einziger Fehler".
+ *
+ * Ein Abzeichen, das jeder in der ersten Minute bekommt, ist keine Auszeichnung,
+ * und eines, das dem widerspricht, was daneben steht, beschädigt das Vertrauen
+ * in alle anderen Zahlen.
+ *
+ * **Jetzt gilt in jedem Bereich die Kennzahl, die dort etwas unterscheidet:**
+ *
+ * | Bereich | Modus | fehlerfrei heißt |
+ * |---|---|---|
+ * | `L01`–`L13` | blockierend | Sicherheit 100 % — keine Taste je danebengegriffen |
+ * | ab `L14` | fließend | Fehlerquote 0,00 % am Ergebnistext |
+ *
+ * Das steht nicht im Widerspruch dazu, dass die Sicherheit **nie eine Note**
+ * ist (`NORMEN.md` 4.4.1): Sie vergibt dort bereits die Sterne, und ein
+ * Abzeichen ist wie ein Stern Trainingsrückmeldung, keine Bewertung.
+ */
+export function istFehlerfrei(bestwerte: readonly LektionsBestwert[]): boolean {
+  return bestwerte.some((b) => {
+    const schwellen = thresholdsFor(b.lessonId);
+    if (!schwellen) return false;
+
+    if (schwellen.kind === 'safety') {
+      return b.besteSicherheit !== null && b.besteSicherheit >= 100;
+    }
+    return b.besteErrorRate !== null && b.besteErrorRate === 0;
+  });
 }
 
 /** Schwellen, an denen Abzeichen hängen. An einer Stelle änderbar. */
