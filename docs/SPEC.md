@@ -1356,6 +1356,43 @@ geht — sie trifft nur nicht mehr.
 Im Lernweg bleiben die Einheiten als Stationen stehen. Wer eine schon gemacht
 hat, sieht sie dort als erledigt.
 
+### 10.0 Einfache Sprache unter vierzehn
+
+**Alle Erklärtexte der Module liegen in zwei Fassungen vor.** `A1` und `A2`
+bekommen die einfache, `A3` die ausführliche. Fehlt eine einfache Fassung,
+greift die ausführliche — **nie nichts**.
+
+Hinweis des Nutzers vom 2026-09-18, und nachgemessen hatte er recht: Die
+ursprünglichen Texte lagen bei zehn bis zwölf Wörtern je Satz, einzelne bei
+einundzwanzig, einer im Textmodul bei **achtunddreißig**. Für `A1` erlaubt 9.8
+sechs bis zwölf. Die Kernzielgruppe ist die fünfte Klasse — der Normalfall lag
+also über dem, was der Normalfall lesen kann.
+
+**Verbindlich, und durch `module-lesbarkeit.test.ts` geprüft:**
+
+| Stufe | Höchstens Wörter je Satz |
+|---|---|
+| `A1` | 12 |
+| `A2` | 18 |
+| `A3` | 25 |
+
+Die Werte sind dieselben wie für Übungstexte in 9.8. Ein Satz, der zum Tippen
+zu lang ist, ist zum Lesen nicht plötzlich kurz.
+
+**Warum ein Test und nicht Sorgfalt:** „Einfache Sprache" ist sonst eine
+Geschmacksfrage, über die man beim Schreiben jedes Mal neu entscheidet — und
+beim dritten Text nachlässig wird. Satzlänge ist nicht alles, aber sie ist das,
+was sich messen lässt.
+
+Beim Vereinfachen gilt außerdem, ohne Testbarkeit, aber verbindlich: ein
+Gedanke je Satz, keine Einschübe, keine Doppelpunkte, die zwei Aussagen
+verbinden, und Beispiele in eigenen Sätzen statt in Klammern.
+
+> **Bilder sind offen.** Der Nutzer hat kleine Bilder oder Karikaturen
+> angeregt. Machbar sind einfache SVG-Symbole in der Formensprache des
+> Maskottchens; gezeichnete Karikaturen sind Illustrationsarbeit und keine
+> Programmierarbeit. Noch nicht entschieden (15.16).
+
 ### 10.1 Medienkompetenz (`modul-medien`)
 
 Jede Einheit trägt im Inhalts-JSON die Felder `kmk` und `digcomp` mit dem
@@ -1567,6 +1604,25 @@ direkte DOM-Klassen oder feingranulare Memoisierung).
 - Haltungs-/Pausenerinnerung nach 20 Minuten am Stück (abschaltbar).
 - Vollständige Tastaturbedienbarkeit der Oberfläche (naheliegend, aber oft
   vergessen).
+
+**Vollbild.** Zehni lässt sich über den ganzen Bildschirm zeigen. Zwei Wege
+hinein und hinaus, und beide sind sichtbar:
+
+- ein Schalter in der Kopfzeile, der im Vollbild weiterhin dort steht;
+- die Taste `F11`.
+
+Während einer Übung oder eines Spiels gibt es keine Kopfzeile. Dort erscheint
+im Vollbild oben rechts ein gedämpfter Knopf „Vollbild verlassen". **Ohne ihn
+wäre das Vollbild eine Sackgasse** — und ein Kind, das nicht weiterkommt,
+macht den Rechner aus, nicht die App.
+
+`Escape` schaltet das Vollbild **nicht** um: In den Übungen pausiert und
+beendet diese Taste bereits etwas. Zwei Bedeutungen für dieselbe Taste sind
+eine zu viel.
+
+`F11` wird in der Capture-Phase abgefangen und dort gestoppt. Mehrere
+Bildschirme reagieren auf *jede* Taste — sonst setzte `F11` nebenbei die
+pausierte Lektion fort.
 
 ### 12.3 Datenschutz
 

@@ -29,6 +29,10 @@ export const de = {
     starten: 'Losgehen',
     nochmal: 'Nochmal üben',
     versuche: (n: number): string => (n === 1 ? '1 Versuch' : `${n} Versuche`),
+    // Muss sichtbar sein: Ohne diese Zeile besteht man eine Lektion, die
+    // naechste geht nicht auf, und nichts sagt warum.
+    runden: (geschafft: number, noetig: number): string =>
+      `${geschafft} von ${noetig} Runden geschafft`,
     bestwert: 'Bestwert',
 
     // Die Stationen zwischen den Lektionen (SPEC.md 6.7). Sie halten nie auf,
@@ -491,7 +495,9 @@ export const de = {
     titel: 'Deine Lernstube',
     oeffnen: 'Lernstube',
     zurueck: 'Zurück',
-    erklaerung: 'Für jedes Level und jedes geschaffte Wochenziel kommt etwas dazu.',
+    // Das Wochenziel ist am 2026-09-18 gestrichen worden (SPEC.md 8.8). Der
+    // Satz stand danach noch da und versprach etwas, das es nicht mehr gibt.
+    erklaerung: 'Für jedes Level kommt etwas dazu.',
     stand: (a: number, b: number): string => `${a} von ${b} Sachen`,
     voll: 'Deine Lernstube ist vollständig eingerichtet.',
   },
@@ -530,6 +536,17 @@ export const de = {
     neuesUpdate: 'Update bereit',
   },
 
+  vollbild: {
+    an: 'Vollbild',
+    anTitel: 'Zehni über den ganzen Bildschirm zeigen — oder Taste F11',
+    aus: 'Vollbild beenden',
+    ausTitel: 'Zurück ins Fenster — oder Taste F11',
+    // Steht im Vollbild dort, wo sonst die Kopfzeile waere: waehrend einer
+    // Uebung gibt es keine Kopfzeile, und ohne diesen Knopf gaebe es dann
+    // keinen sichtbaren Weg hinaus.
+    verlassen: 'Vollbild verlassen',
+  },
+
   minispiele: {
     titel: 'Spiele',
     oeffnen: 'Spiele',
@@ -558,6 +575,15 @@ export const de = {
       // braucht keine Erklärung, „L02" schon. Mehrfachauswahl ist möglich.
       gruppeFrage: 'Welche Tasten sollen fallen?',
       gruppeAlles: 'Alles, was du kannst',
+      losgehen: 'Los geht es',
+      andereTasten: 'Andere Tasten',
+      danebem: 'Daneben!',
+
+      // Die Regeln stehen auf dem Startbild, bevor sie wirken. Eine Regel, die
+      // man erst durch ihre Folgen kennenlernt, ist eine Falle.
+      regelLeben: 'Drei Buchstaben dürfen unten ankommen. Beim vierten ist die Runde vorbei.',
+      regelSperre: 'Triffst du daneben, ist die Tastatur eine Sekunde lang gesperrt.',
+      regelTempo: 'Je mehr du fängst, desto schneller fallen sie.',
     },
 
     elfmeter: {
@@ -573,6 +599,7 @@ export const de = {
         schwer: 'Schwer',
       } as Record<string, string>,
 
+      tastenFrage: 'Welche Tasten beim Aufladen?',
       zielen: 'Such dir eine Ecke aus und tipp das Wort.',
       laden: 'Jetzt schnell! Jedes Zeichen macht den Schuss härter.',
       kraft: (n: number): string => `Schusskraft ${n} Prozent`,
@@ -580,7 +607,8 @@ export const de = {
 
       tor: 'Tor!',
       gehalten: 'Gehalten. Der Torwart hat die Ecke erraten.',
-      weiter: 'Weiter mit der Eingabetaste.',
+      naechster: 'Nächster Schuss',
+      weiter: 'Oder die Eingabetaste drücken.',
 
       ergebnis: (tore: number, schuesse: number): string =>
         `${tore} von ${schuesse} Schüssen waren drin.`,
@@ -599,6 +627,7 @@ export const de = {
         rasant: 'Rasant',
       } as Record<string, string>,
 
+      tastenFrage: 'Welche Tasten auf der Strecke?',
       losgehen: 'Tipp das erste Zeichen, dann geht es los.',
       laufen: 'Immer weiter!',
       springen: 'Hürde! Leertaste!',

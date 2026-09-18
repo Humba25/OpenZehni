@@ -11,7 +11,7 @@
  */
 
 import type { ReactNode } from 'react';
-import { allLessons, getLesson, type Lesson } from '../../lib/curriculum';
+import { allLessons, getLesson, PFLICHTRUNDEN, type Lesson } from '../../lib/curriculum';
 import { lernpfad, stationOffen, type Station } from '../../lib/lernpfad';
 import { getInterlude } from '../../lib/interludes';
 import { getEinheit } from '../../lib/module';
@@ -21,6 +21,12 @@ import { de } from '../../i18n/de';
 
 export interface LessonListProps {
   readonly progress: ReadonlyMap<string, LessonProgress>;
+  /**
+   * Bestandene Runden je Lektion. Der Lernweg zeigt damit, wie viele noch
+   * fehlen — ohne diese Anzeige war die Regel aus `PFLICHTRUNDEN` unsichtbar,
+   * und der Nutzer hat sie folgerichtig für nicht vorhanden gehalten.
+   */
+  readonly passes: ReadonlyMap<string, number>;
   /** IDs der abgeschlossenen Zwischenstücke und Modul-Einheiten. */
   readonly erledigt: ReadonlySet<string>;
   readonly onStart: (lesson: Lesson) => void;
@@ -37,6 +43,7 @@ export interface LessonListProps {
 
 export function LessonList({
   progress,
+  passes,
   erledigt,
   onStart,
   onZwischenstueck,
@@ -75,6 +82,7 @@ export function LessonList({
               <Lektionszeile
                 lesson={getLesson(station.lessonId)!}
                 fortschritt={progress.get(station.lessonId)}
+                runden={passes.get(station.lessonId) ?? 0}
                 offen={offeneLektionen.has(station.lessonId)}
                 onStart={onStart}
               />
@@ -98,11 +106,14 @@ export function LessonList({
 function Lektionszeile({
   lesson,
   fortschritt,
+  runden,
   offen,
   onStart,
 }: {
   lesson: Lesson;
   fortschritt: LessonProgress | undefined;
+  /** Bestandene Runden dieser Lektion. */
+  runden: number;
   offen: boolean;
   onStart: (lesson: Lesson) => void;
 }) {
@@ -139,7 +150,20 @@ function Lektionszeile({
       </span>
 
       {offen ? (
-        <SterneKlein anzahl={fortschritt?.stars ?? 0} />
+        <span className="flex shrink-0 flex-col items-end gap-1">
+          <SterneKlein anzahl={fortschritt?.stars ?? 0} />
+          {/*
+            Ohne diese Zeile war die Regel aus PFLICHTRUNDEN unsichtbar: Man
+            bestand eine Lektion, die naechste ging nicht auf, und nichts sagte
+            warum. Sie steht deshalb auch dann da, wenn noch keine Runde
+            geschafft ist.
+          */}
+          {runden < PFLICHTRUNDEN && (
+            <span className="text-xs text-gedaempft">
+              {de.lernpfad.runden(runden, PFLICHTRUNDEN)}
+            </span>
+          )}
+        </span>
       ) : (
         <span className="shrink-0 text-sm text-gedaempft">{de.lernpfad.gesperrt}</span>
       )}

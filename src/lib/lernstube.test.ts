@@ -18,10 +18,17 @@ describe('Katalog — SPEC.md 8.4', () => {
     for (const t of alleDekoTeile()) {
       expect(t.label.length, t.id).toBeGreaterThan(2);
       expect(t.form.length, t.id).toBeGreaterThan(2);
-      expect(t.links, t.id).toBeGreaterThanOrEqual(0);
-      expect(t.links + t.groesse, t.id).toBeLessThanOrEqual(100);
-      expect(t.oben, t.id).toBeGreaterThanOrEqual(0);
-      expect(t.oben, t.id).toBeLessThan(100);
+      // Nichts darf aus dem Raumfenster 200 x 112 herausragen -- sonst steht
+      // es im Nichts. Genau das ist am 2026-09-18 passiert: Der Schreibtisch
+      // lief unten aus dem Bild, weil Breite und Hoehe in verschiedenen
+      // Einheiten gerechnet wurden.
+      expect(t.x, t.id).toBeGreaterThanOrEqual(0);
+      expect(t.y, t.id).toBeGreaterThanOrEqual(0);
+      expect(t.x + t.breite, t.id).toBeLessThanOrEqual(200);
+      expect(t.y + t.hoehe, t.id).toBeLessThanOrEqual(112);
+      expect(t.breite, t.id).toBeGreaterThan(0);
+      expect(t.hoehe, t.id).toBeGreaterThan(0);
+      expect(t.ebene, t.id).toBeGreaterThanOrEqual(0);
     }
   });
 });

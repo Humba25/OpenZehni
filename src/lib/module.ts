@@ -123,6 +123,12 @@ export interface ModulEinheit {
   readonly kmk?: number;
   readonly digcomp?: string;
   readonly bloecke: readonly string[];
+  /**
+   * Dieselben Erklärungen in einfacher Sprache, für `A1` und `A2`.
+   *
+   * Fehlt sie, greift `bloecke` — siehe `bloeckeFuer()`.
+   */
+  readonly bloeckeEinfach?: readonly string[];
   readonly aufgabe: Aufgabe;
   /** Schlusssatz nach der Aufgabe. */
   readonly abschluss: string;
@@ -247,4 +253,55 @@ export function kuerzelPasst(
     gedrueckt.ctrl === gesucht.ctrl &&
     gedrueckt.shift === gesucht.shift
   );
+}
+
+// ------------------------------------------- Einfache Sprache nach Alter
+
+/**
+ * Wie lang ein Satz höchstens sein darf, damit er für diese Altersstufe
+ * lesbar ist (`SPEC.md` 9.8).
+ *
+ * Die Werte sind dieselben, die dort für Übungstexte stehen. Sie gelten hier
+ * genauso: Ein Satz, der zum Tippen zu lang ist, ist zum Lesen nicht plötzlich
+ * kurz.
+ */
+export const MAX_WOERTER_JE_SATZ: Readonly<Record<string, number>> = {
+  A1: 12,
+  A2: 18,
+  A3: 25,
+};
+
+/**
+ * Die Erklärtexte einer Einheit, passend zur Altersstufe.
+ *
+ * **Warum es das gibt.** Die Modultexte waren in einer Fassung geschrieben, die
+ * eher zu `A2` und `A3` passt: zehn bis zwölf Wörter je Satz, einzelne mit
+ * einundzwanzig, im Textmodul einer mit achtunddreißig. Für ein achtjähriges
+ * Kind ist das zu viel — und die Kernzielgruppe ist die fünfte Klasse.
+ *
+ * Der Nutzer hat am 2026-09-18 darauf hingewiesen: Unter vierzehn muss es
+ * einfache Sprache sein.
+ *
+ * Gibt es zu einer Einheit `bloeckeEinfach`, bekommen `A1` und `A2` diese
+ * Fassung. `A3` und alles ohne einfache Fassung bekommen die ursprüngliche —
+ * **nie nichts.** Eine fehlende Übersetzung darf keinen leeren Bildschirm
+ * erzeugen.
+ */
+export function bloeckeFuer(einheit: ModulEinheit, ageBand: string): readonly string[] {
+  if (ageBand === 'A3') return einheit.bloecke;
+  const einfach = einheit.bloeckeEinfach;
+  return einfach && einfach.length > 0 ? einfach : einheit.bloecke;
+}
+
+/** Sätze eines Textes, ohne Leeres. Für die Lesbarkeitsprüfung. */
+export function saetze(text: string): readonly string[] {
+  return text
+    .split(/(?<=[.!?])\s+/u)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+}
+
+/** Wörter eines Satzes. */
+export function woerter(satz: string): readonly string[] {
+  return satz.split(/\s+/u).filter((w) => w.length > 0);
 }

@@ -1,7 +1,7 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "Rechte des Hauptfensters. Bewusst knapp gehalten: Zehni braucht keinen Dateizugriff, keine Shell und kein allgemeines Netzwerk aus der WebView heraus (ARCHITEKTUR.md, Architekturregel 2). Die einzige Ausnahme ist der Updater, und auch der laedt ausschliesslich in Rust.",
+  "description": "Rechte des Hauptfensters. Bewusst knapp gehalten: Zehni braucht keinen Dateizugriff, keine Shell und kein allgemeines Netzwerk aus der WebView heraus (ARCHITEKTUR.md, Architekturregel 2). Die einzige Ausnahme ist der Updater, und auch der laedt ausschliesslich in Rust. Dazu seit 0.1.9 das Umschalten des Vollbilds -- nur setzen und abfragen, nichts weiter am Fenster.",
   "windows": ["main"],
   "permissions": [
     "core:default",
@@ -10,9 +10,9 @@
     "sql:allow-execute",
     "sql:allow-select",
     "sql:allow-close",
-
+    "core:window:allow-set-fullscreen",
+    "core:window:allow-is-fullscreen",
     "updater:default",
-
     "process:allow-restart"
   ]
 }

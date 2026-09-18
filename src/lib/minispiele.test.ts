@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import {
+  tempo,
+  FALLDAUER_MS,
+  ABWURF_MS,
+  FALLDAUER_MIN_MS,
+  ABWURF_MIN_MS,
   alleSpielWoerter,
   regenGruppen,
   regenGruppenBis,
@@ -251,5 +256,31 @@ describe('Wortliste — Schreibweisen', () => {
       expect(wort, wort).toBe(wort.toLowerCase().trim());
       expect(wort.includes(' '), wort).toBe(false);
     }
+  });
+});
+
+describe('Tempo im Buchstabenregen — SPEC.md 8.10', () => {
+  /**
+   * Ohne Steigerung hat eine Runde keinen Bogen: Wer die Tasten kann, fängt
+   * beliebig lange weiter. Mit Steigerung findet jede Runde ihr Ende.
+   */
+  it('zieht mit jedem gefangenen Buchstaben an', () => {
+    expect(tempo(20).falldauerMs).toBeLessThan(tempo(0).falldauerMs);
+    expect(tempo(20).abwurfMs).toBeLessThan(tempo(0).abwurfMs);
+  });
+
+  it('beginnt bei den Ausgangswerten', () => {
+    expect(tempo(0).falldauerMs).toBe(FALLDAUER_MS);
+    expect(tempo(0).abwurfMs).toBe(ABWURF_MS);
+  });
+
+  /** Irgendwann muss Schluss sein, sonst wird es unmöglich statt schwer. */
+  it('läuft nicht ins Bodenlose', () => {
+    expect(tempo(100_000).falldauerMs).toBe(FALLDAUER_MIN_MS);
+    expect(tempo(100_000).abwurfMs).toBe(ABWURF_MIN_MS);
+  });
+
+  it('bleibt bei negativen Werten unverändert', () => {
+    expect(tempo(-5).falldauerMs).toBe(FALLDAUER_MS);
   });
 });

@@ -21,10 +21,10 @@ import {
   regenGruppenBis,
   regenVorrat,
   naechstesZeichen,
+  tempo,
+  SPERRE_MS,
   createRandom,
   REGEN_LEBEN,
-  FALLDAUER_MS,
-  ABWURF_MS,
 } from '../../lib/minispiele';
 import { de } from '../../i18n/de';
 
@@ -36,6 +36,14 @@ interface Tropfen {
   readonly links: number;
   /** Zeitstempel des Abwurfs. */
   readonly start: number;
+  /**
+   * Wie lange **dieser** Buchstabe fällt.
+   *
+   * Je Tropfen und nicht global: Zieht das Spiel an, während er unterwegs ist,
+   * würde er sonst mitten im Flug schneller — und wäre plötzlich woanders, als
+   * er eben noch war.
+   */
+  readonly dauerMs: number;
 }
 
 /** Die Optik eines Auswahlknopfes. Steht hier, damit sie nicht zweimal dasteht. */
@@ -70,8 +78,21 @@ export function Buchstabenregen({ lessonId, saat, onBeenden }: BuchstabenregenPr
    */
   const [gewaehlt, setGewaehlt] = useState<ReadonlySet<string>>(new Set());
   const [tropfen, setTropfen] = useState<readonly Tropfen[]>([]);
+  /**
+   * Die Auswahl steht **vor** dem Spiel, nicht daneben.
+   *
+   * Bis zum 2026-09-18 lag sie über der Spielfläche und blieb während des
+   * Fallens stehen. Wer sie las, verpasste Buchstaben; wer spielte, sah sie
+   * nicht. Ein Startbild löst beides: Dort ist Zeit zum Lesen, und die Regeln
+   * stehen dabei — auch die Eingabesperre, damit sie niemand erst durch ihre
+   * Folgen kennenlernt.
+   */
+  const [laeuft, setLaeuft] = useState(false);
+
   const [gefangen, setGefangen] = useState(0);
   const [verpasst, setVerpasst] = useState(0);
+  /** Bis wann die Eingabe nach einem Fehlgriff gesperrt ist. */
+  const [gesperrtBis, setGesperrtBis] = useState(0);
   const [jetzt, setJetzt] = useState(() => performance.now());
 
   const vorrat = useRef<readonly string[]>([]);
@@ -87,6 +108,7 @@ export function Buchstabenregen({ lessonId, saat, onBeenden }: BuchstabenregenPr
    * Zustandsfunktion nebenbei zählen: Die kann React zweimal aufrufen, und dann
    * zählte ein Treffer doppelt.
    */
+  const gesperrtRef = useRef(0);
   const tropfenRef = useRef<readonly Tropfen[]>([]);
   const setzeTropfen = useCallback((neu: readonly Tropfen[]): void => {
     tropfenRef.current = neu;
@@ -104,31 +126,53 @@ export function Buchstabenregen({ lessonId, saat, onBeenden }: BuchstabenregenPr
     setzeTropfen([]);
     setGefangen(0);
     setVerpasst(0);
+    setGesperrtBis(0);
+    gesperrtRef.current = 0;
     naechsteId.current = 0;
     letzterAbwurf.current = 0;
     setJetzt(performance.now());
+    setLaeuft(true);
+  }, [setzeTropfen]);
+
+  /** Zurueck zum Startbild, um die Tasten neu zu waehlen. */
+  const zurueckZurAuswahl = useCallback((): void => {
+    setzeTropfen([]);
+    setGefangen(0);
+    setVerpasst(0);
+    setGesperrtBis(0);
+    gesperrtRef.current = 0;
+    setLaeuft(false);
   }, [setzeTropfen]);
 
   // Der Spieltakt: neue Buchstaben abwerfen, unten angekommene entfernen.
+  // Jeder Tropfen merkt sich seine eigene Falldauer: Zieht das Spiel an,
+  // waehrend er faellt, wuerde er sonst mitten im Flug schneller.
   useEffect(() => {
-    if (vorbei) return;
+    if (!laeuft || vorbei) return;
 
     const id = window.setInterval(() => {
       const t = performance.now();
       setJetzt(t);
+      const { abwurfMs } = tempo(gefangen);
 
       // Unten angekommen: kostet einen Versuch.
-      const durch = tropfenRef.current.filter((x) => t - x.start >= FALLDAUER_MS);
-      let neu = tropfenRef.current.filter((x) => t - x.start < FALLDAUER_MS);
+      const durch = tropfenRef.current.filter((x) => t - x.start >= x.dauerMs);
+      let neu = tropfenRef.current.filter((x) => t - x.start < x.dauerMs);
       if (durch.length > 0) setVerpasst((n) => n + durch.length);
 
-      if (t - letzterAbwurf.current >= ABWURF_MS) {
+      if (t - letzterAbwurf.current >= abwurfMs) {
         const zeichen = naechstesZeichen(vorrat.current, rnd.current);
         if (zeichen !== undefined) {
           letzterAbwurf.current = t;
           neu = [
             ...neu,
-            { id: naechsteId.current++, zeichen, links: 6 + rnd.current() * 84, start: t },
+            {
+              id: naechsteId.current++,
+              zeichen,
+              links: 6 + rnd.current() * 84,
+              start: t,
+              dauerMs: tempo(gefangen).falldauerMs,
+            },
           ];
         }
       }
@@ -137,7 +181,7 @@ export function Buchstabenregen({ lessonId, saat, onBeenden }: BuchstabenregenPr
     }, TAKT_MS);
 
     return () => window.clearInterval(id);
-  }, [vorbei, setzeTropfen]);
+  }, [laeuft, vorbei, gefangen, setzeTropfen]);
 
   const fangen = useCallback(
     (zeichen: string) => {
@@ -150,7 +194,14 @@ export function Buchstabenregen({ lessonId, saat, onBeenden }: BuchstabenregenPr
         if (alte[i]!.zeichen !== zeichen) continue;
         if (index === -1 || alte[i]!.start < alte[index]!.start) index = i;
       }
-      if (index === -1) return;
+      // Daneben gegriffen: kurze Sperre. Sie steht als Regel auf dem
+      // Startbild -- eine Folge, die man erst im Spiel kennenlernt, waere eine
+      // Falle statt einer Regel (SPEC.md 8.11).
+      if (index === -1) {
+        gesperrtRef.current = performance.now() + SPERRE_MS;
+        setGesperrtBis(gesperrtRef.current);
+        return;
+      }
 
       setzeTropfen(alte.filter((_, i) => i !== index));
       setGefangen((n) => n + 1);
@@ -169,6 +220,9 @@ export function Buchstabenregen({ lessonId, saat, onBeenden }: BuchstabenregenPr
       }
       if (event.key.length !== 1) return;
       event.preventDefault();
+      // Waehrend der Sperre passiert nichts. Kein Ton, keine Meldung -- man
+      // sieht es an der Spielflaeche.
+      if (performance.now() < gesperrtRef.current) return;
       fangen(event.key);
     };
 
@@ -191,87 +245,76 @@ export function Buchstabenregen({ lessonId, saat, onBeenden }: BuchstabenregenPr
         </div>
       </header>
 
-      {/*
-        Auswahl der Tastenreihe. Nur was gelernt ist, steht hier — die harte
-        Regel aus SPEC.md 6.2 gilt im Spiel genauso.
+      {!laeuft ? (
+        <Startbild
+          gruppen={gruppen}
+          gewaehlt={gewaehlt}
+          onUmschalten={(id) => {
+            const neu = new Set(gewaehlt);
+            if (neu.has(id)) neu.delete(id);
+            else neu.add(id);
+            setGewaehlt(neu);
+          }}
+          onAlles={() => setGewaehlt(new Set())}
+          onLosgehen={neuStarten}
+        />
+      ) : (
+        <>
+          <div className="relative flex-1 overflow-hidden rounded-2xl border border-rand bg-flaeche">
+            {!vorbei &&
+              tropfen.map((x) => {
+                const anteil = Math.min(1, (jetzt - x.start) / x.dauerMs);
+                return (
+                  <span
+                    key={x.id}
+                    className="absolute font-tippen text-3xl font-semibold text-akzent"
+                    style={{ left: `${x.links}%`, top: `${anteil * 88}%` }}
+                  >
+                    {x.zeichen}
+                  </span>
+                );
+              })}
 
-        Ein Wechsel startet die Runde neu: Mitten im Fallen den Vorrat zu
-        tauschen, hieße Buchstaben stehen zu lassen, die nicht mehr dazugehören.
-      */}
-      {gruppen.length > 1 && (
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm text-gedaempft">
-            {de.minispiele.buchstabenregen.gruppeFrage}
-          </span>
+            {/* Die Sperre wird gezeigt, nicht nur gefuehlt: Ohne Anzeige haelt man
+            eine tote Tastatur fuer einen Fehler. */}
+            {!vorbei && gesperrtBis > jetzt && (
+              <div className="absolute inset-0 grid place-items-center bg-korrigiert/10">
+                <span className="rounded-lg bg-korrigiert px-4 py-2 font-semibold text-white">
+                  {de.minispiele.buchstabenregen.danebem}
+                </span>
+              </div>
+            )}
 
-          {/* Nichts gewählt heißt alles — deshalb ist dieser Knopf aktiv,
-              solange die Auswahl leer ist. */}
-          <button
-            type="button"
-            aria-pressed={gewaehlt.size === 0}
-            onClick={() => {
-              setGewaehlt(new Set());
-              neuStarten();
-            }}
-            className={knopf(gewaehlt.size === 0)}
-          >
-            {de.minispiele.buchstabenregen.gruppeAlles}
-          </button>
-
-          {gruppen.map((g) => (
-            <button
-              key={g.id}
-              type="button"
-              aria-pressed={gewaehlt.has(g.id)}
-              onClick={() => {
-                const neu = new Set(gewaehlt);
-                if (neu.has(g.id)) neu.delete(g.id);
-                else neu.add(g.id);
-                setGewaehlt(neu);
-                neuStarten();
-              }}
-              className={`${knopf(gewaehlt.has(g.id))} font-tippen`}
-            >
-              {g.zeichen.join(' ')}
-            </button>
-          ))}
-        </div>
-      )}
-
-      <div className="relative flex-1 overflow-hidden rounded-2xl border border-rand bg-flaeche">
-        {!vorbei &&
-          tropfen.map((x) => {
-            const anteil = Math.min(1, (jetzt - x.start) / FALLDAUER_MS);
-            return (
-              <span
-                key={x.id}
-                className="absolute font-tippen text-3xl font-semibold text-akzent"
-                style={{ left: `${x.links}%`, top: `${anteil * 88}%` }}
-              >
-                {x.zeichen}
-              </span>
-            );
-          })}
-
-        {vorbei && (
-          <div className="grid h-full place-items-center p-6 text-center">
-            <div>
-              <p className="text-sm text-gedaempft">{de.minispiele.buchstabenregen.verloren}</p>
-              <p className="mt-2 text-2xl font-semibold">
-                {de.minispiele.buchstabenregen.ergebnis(gefangen)}
-              </p>
-              <button
-                type="button"
-                onClick={neuStarten}
-                className="mt-4 rounded-xl bg-akzent px-5 py-2 font-semibold text-white"
-              >
-                {de.minispiele.buchstabenregen.nochmal}
-              </button>
-              <p className="mt-4 text-sm text-gedaempft">{de.minispiele.xpHinweis}</p>
-            </div>
+            {vorbei && (
+              <div className="grid h-full place-items-center p-6 text-center">
+                <div>
+                  <p className="text-sm text-gedaempft">{de.minispiele.buchstabenregen.verloren}</p>
+                  <p className="mt-2 text-2xl font-semibold">
+                    {de.minispiele.buchstabenregen.ergebnis(gefangen)}
+                  </p>
+                  <div className="mt-4 flex justify-center gap-3">
+                    <button
+                      type="button"
+                      onClick={neuStarten}
+                      className="rounded-xl bg-akzent px-5 py-2 font-semibold text-white"
+                    >
+                      {de.minispiele.buchstabenregen.nochmal}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={zurueckZurAuswahl}
+                      className="rounded-xl border border-rand px-5 py-2 hover:border-akzent"
+                    >
+                      {de.minispiele.buchstabenregen.andereTasten}
+                    </button>
+                  </div>
+                  <p className="mt-4 text-sm text-gedaempft">{de.minispiele.xpHinweis}</p>
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
+        </>
+      )}
 
       <div className="flex justify-end">
         <button
@@ -279,9 +322,78 @@ export function Buchstabenregen({ lessonId, saat, onBeenden }: BuchstabenregenPr
           onClick={() => onBeenden(gefangen)}
           className="rounded-xl bg-akzent px-5 py-2 font-semibold text-white"
         >
-          {vorbei ? de.minispiele.beenden : de.minispiele.zurueck}
+          {vorbei || !laeuft ? de.minispiele.beenden : de.minispiele.zurueck}
         </button>
       </div>
     </div>
+  );
+}
+
+/**
+ * Das Startbild: Tasten wählen, Regeln lesen, losgehen.
+ *
+ * **Vor dem Spiel, nicht daneben.** Bis zum 2026-09-18 stand die Auswahl über
+ * der Spielfläche und blieb während des Fallens stehen — wer sie las,
+ * verpasste Buchstaben. Hier ist Zeit dafür.
+ *
+ * Und hier stehen die Regeln, **bevor** sie wirken: dass drei durchgerutschte
+ * Buchstaben die Runde beenden, dass ein Fehlgriff kurz sperrt und dass es
+ * schneller wird. Eine Regel, die man erst durch ihre Folgen kennenlernt, ist
+ * keine Regel, sondern eine Falle.
+ */
+function Startbild({
+  gruppen,
+  gewaehlt,
+  onUmschalten,
+  onAlles,
+  onLosgehen,
+}: {
+  gruppen: readonly { id: string; zeichen: readonly string[] }[];
+  gewaehlt: ReadonlySet<string>;
+  onUmschalten: (id: string) => void;
+  onAlles: () => void;
+  onLosgehen: () => void;
+}) {
+  return (
+    <section className="flex-1 overflow-y-auto rounded-2xl border border-rand bg-flaeche p-6">
+      <h2 className="text-lg font-semibold">{de.minispiele.buchstabenregen.gruppeFrage}</h2>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button
+          type="button"
+          aria-pressed={gewaehlt.size === 0}
+          onClick={onAlles}
+          className={knopf(gewaehlt.size === 0)}
+        >
+          {de.minispiele.buchstabenregen.gruppeAlles}
+        </button>
+
+        {gruppen.map((g) => (
+          <button
+            key={g.id}
+            type="button"
+            aria-pressed={gewaehlt.has(g.id)}
+            onClick={() => onUmschalten(g.id)}
+            className={`${knopf(gewaehlt.has(g.id))} font-tippen`}
+          >
+            {g.zeichen.join(' ')}
+          </button>
+        ))}
+      </div>
+
+      <ul className="mt-6 space-y-1 text-sm text-gedaempft">
+        <li>{de.minispiele.buchstabenregen.regelLeben}</li>
+        <li>{de.minispiele.buchstabenregen.regelSperre}</li>
+        <li>{de.minispiele.buchstabenregen.regelTempo}</li>
+      </ul>
+
+      <button
+        type="button"
+        onClick={onLosgehen}
+        className="mt-6 rounded-xl bg-akzent px-5 py-2 font-semibold text-white"
+      >
+        {de.minispiele.buchstabenregen.losgehen}
+      </button>
+    </section>
   );
 }

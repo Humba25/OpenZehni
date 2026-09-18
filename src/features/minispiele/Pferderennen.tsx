@@ -23,7 +23,15 @@ import {
   ausgang,
   type Rennstufe,
 } from '../../lib/pferderennen';
+import { createRandom, regenGruppenBis, regenVorrat } from '../../lib/minispiele';
 import { de } from '../../i18n/de';
+
+/** Die Optik eines Auswahlknopfes. */
+const knopf = (aktiv: boolean): string =>
+  [
+    'rounded-lg border px-3 py-1 text-sm transition-colors',
+    aktiv ? 'border-akzent bg-akzent/10 font-semibold' : 'border-rand hover:border-akzent',
+  ].join(' ');
 
 /** Wie oft die Anzeige neu gerechnet wird. 20 Bilder je Sekunde reichen. */
 const TAKT_MS = 50;
@@ -44,8 +52,18 @@ export function Pferderennen({ lessonId, saat, onBeenden }: PferderennenProps) {
   const [stolpertBis, setStolpertBis] = useState(0);
   const [gestartet, setGestartet] = useState(false);
 
+  /** Welche Tasten auf der Strecke kommen — wie im Buchstabenregen. */
+  const gruppen = useMemo(() => regenGruppenBis(lessonId), [lessonId]);
+  const [gewaehlt, setGewaehlt] = useState<ReadonlySet<string>>(new Set());
+
   const runde = `${saat}#${rennen}`;
-  const zeichen = useMemo(() => rennzeichen(lessonId, runde), [lessonId, runde]);
+  const zeichen = useMemo(() => {
+    const alle = rennzeichen(lessonId, runde);
+    const vorrat = regenVorrat(lessonId, gruppen, gewaehlt);
+    if (gewaehlt.size === 0 || vorrat.length === 0) return alle;
+    const rnd = createRandom(`rennen#${lessonId}#${runde}#gewaehlt`);
+    return alle.map(() => vorrat[Math.floor(rnd() * vorrat.length)]!);
+  }, [lessonId, runde, gruppen, gewaehlt]);
   const huerden = useMemo(() => huerdenPositionen(stufe, runde), [stufe, runde]);
 
   const beginn = useRef(0);
@@ -178,6 +196,41 @@ export function Pferderennen({ lessonId, saat, onBeenden }: PferderennenProps) {
           </button>
         ))}
       </div>
+
+      {/* Welche Tasten auf der Strecke kommen. Nur Gelerntes (SPEC.md 6.2). */}
+      {gruppen.length > 1 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm text-gedaempft">{de.minispiele.pferderennen.tastenFrage}</span>
+          <button
+            type="button"
+            aria-pressed={gewaehlt.size === 0}
+            onClick={() => {
+              setGewaehlt(new Set());
+              neuesRennen();
+            }}
+            className={knopf(gewaehlt.size === 0)}
+          >
+            {de.minispiele.buchstabenregen.gruppeAlles}
+          </button>
+          {gruppen.map((g) => (
+            <button
+              key={g.id}
+              type="button"
+              aria-pressed={gewaehlt.has(g.id)}
+              onClick={() => {
+                const neu = new Set(gewaehlt);
+                if (neu.has(g.id)) neu.delete(g.id);
+                else neu.add(g.id);
+                setGewaehlt(neu);
+                neuesRennen();
+              }}
+              className={`${knopf(gewaehlt.has(g.id))} font-tippen`}
+            >
+              {g.zeichen.join(' ')}
+            </button>
+          ))}
+        </div>
+      )}
 
       <section className="flex-1 rounded-2xl border border-rand bg-flaeche p-6">
         {vorbei ? (

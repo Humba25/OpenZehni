@@ -24,9 +24,15 @@
         "richtig": 1,
         "erklaerung": "Eine Norm ist eine Verabredung. Ihr Nutzen entsteht dadurch, dass viele sich daran halten, nicht dadurch, dass sie besonders schlau wäre."
       },
-      "abschluss": "Eine Norm ist keine Meinung. Sie ist eine Verabredung, damit nicht jeder alles anders macht."
+      "abschluss": "Eine Norm ist keine Meinung. Sie ist eine Verabredung, damit nicht jeder alles anders macht.",
+      "bloeckeEinfach": [
+        "Wie soll ein Text aussehen? Dafür gibt es tatsächlich eine Regel.",
+        "Sie heißt DIN 5008. Sie regelt fast alles. Von Satzzeichen bis zum Aufbau eines Briefs.",
+        "Das klingt kleinlich. Ein bisschen ist es das auch.",
+        "Der Grund dahinter ist aber gut. Sind alle Texte gleich gebaut, findet man sich schnell zurecht. Man sieht sofort, wo etwas steht.",
+        "Du musst die Norm nicht auswendig können. Zehni hält sich selbst daran. Hier lernst du nur die Regeln, die oft vorkommen."
+      ]
     },
-
     {
       "id": "text-satzzeichen",
       "title": "Satzzeichen kleben nach links",
@@ -42,9 +48,16 @@
         "loesung": "Hallo, wie geht es dir? Ich habe heute geübt.",
         "erklaerung": "Vor Komma und Fragezeichen stand ein Leerzeichen zu viel, danach fehlte eines."
       },
-      "abschluss": "Wenn du sonst nichts aus diesem Modul behältst: Satzzeichen kleben nach links."
+      "abschluss": "Wenn du sonst nichts aus diesem Modul behältst: Satzzeichen kleben nach links.",
+      "bloeckeEinfach": [
+        "Die häufigste Regel von allen: Ein Satzzeichen klebt am Wort davor. Ohne Leerzeichen.",
+        "Danach kommt ein Leerzeichen.",
+        "Richtig ist: „Hallo, wie geht es dir?\"",
+        "Falsch wäre ein Leerzeichen vor dem Komma. Oder vor dem Fragezeichen.",
+        "Das gilt für alle Satzzeichen. Für Komma, Punkt, Doppelpunkt, Semikolon, Frage- und Ausrufezeichen.",
+        "Merksatz: Satzzeichen kleben nach links."
+      ]
     },
-
     {
       "id": "text-zahlen",
       "title": "Datum, Uhrzeit, Zahlen",
@@ -52,7 +65,7 @@
         "Ein Datum wird zweistellig geschrieben, mit vierstelliger Jahreszahl: 05.09.2026. Ein einstelliger Tag ohne Null davor und ein zweistelliges Jahr sind nicht erlaubt, weil beides sich verlesen lässt.",
         "Uhrzeiten bekommen einen Doppelpunkt und das Wort Uhr: 14:30 Uhr.",
         "Und Zahlen ab fünf Stellen werden von rechts in Dreiergruppen gegliedert, mit Leerzeichen: 12 345. Vierstellige bleiben, wie sie sind: 8000.",
-        "Zwischen Zahl und Einheit steht ein Leerzeichen: 5 kg, 20 %, 12 EUR."
+        "Zwischen Zahl und Einheit steht ein Leerzeichen. Also: 5 kg, 20 %, 12 EUR."
       ],
       "aufgabe": {
         "art": "textprobe",
@@ -61,9 +74,16 @@
         "loesung": "Am 05.09.2026 haben wir 24 500 Schritte gezählt.",
         "erklaerung": "Tag und Monat brauchen die führende Null, das Jahr vier Stellen. Die Zahl hat fünf Stellen und wird deshalb gegliedert."
       },
-      "abschluss": "Das Datum von hinten nach vorn zu schreiben, also 2026-09-05, ist übrigens auch erlaubt und praktisch für Dateinamen."
+      "abschluss": "Das Datum von hinten nach vorn zu schreiben, also 2026-09-05, ist übrigens auch erlaubt und praktisch für Dateinamen.",
+      "bloeckeEinfach": [
+        "Ein Datum wird zweistellig geschrieben. Das Jahr vierstellig. Also: 05.09.2026.",
+        "Ein Tag ohne Null davor ist falsch. Ein Jahr mit nur zwei Ziffern auch. Beides kann man verlesen.",
+        "Uhrzeiten bekommen einen Doppelpunkt und das Wort Uhr. Also: 14:30 Uhr.",
+        "Zahlen ab fünf Stellen werden gegliedert. Von rechts, in Dreiergruppen, mit Leerzeichen: 12 345.",
+        "Vierstellige bleiben, wie sie sind: 8000.",
+        "Zwischen Zahl und Einheit steht ein Leerzeichen. Also: 5 kg, 20 %, 12 EUR."
+      ]
     },
-
     {
       "id": "text-striche",
       "title": "Zwei Striche, die anders aussehen",
@@ -76,23 +96,56 @@
         "art": "zuordnen",
         "text": "Welcher Strich gehört wohin?",
         "faecher": [
-          { "id": "binde", "label": "Bindestrich, ohne Leerzeichen" },
-          { "id": "gedanke", "label": "Gedankenstrich, mit Leerzeichen" }
+          {
+            "id": "binde",
+            "label": "Bindestrich, ohne Leerzeichen"
+          },
+          {
+            "id": "gedanke",
+            "label": "Gedankenstrich, mit Leerzeichen"
+          }
         ],
         "karten": [
-          { "text": "E-Mail", "fach": "binde" },
-          { "text": "Nord-Süd-Richtung", "fach": "binde" },
-          { "text": "Fußball-Verein", "fach": "binde" },
-          { "text": "Kaffee-Ersatz", "fach": "binde" },
-          { "text": "Ich kam an — leider zu spät.", "fach": "gedanke" },
-          { "text": "Das Spiel war — man muss es zugeben — langweilig.", "fach": "gedanke" },
-          { "text": "Er ging weg — ohne ein Wort.", "fach": "gedanke" }
+          {
+            "text": "E-Mail",
+            "fach": "binde"
+          },
+          {
+            "text": "Nord-Süd-Richtung",
+            "fach": "binde"
+          },
+          {
+            "text": "Fußball-Verein",
+            "fach": "binde"
+          },
+          {
+            "text": "Kaffee-Ersatz",
+            "fach": "binde"
+          },
+          {
+            "text": "Ich kam an — leider zu spät.",
+            "fach": "gedanke"
+          },
+          {
+            "text": "Das Spiel war — man muss es zugeben — langweilig.",
+            "fach": "gedanke"
+          },
+          {
+            "text": "Er ging weg — ohne ein Wort.",
+            "fach": "gedanke"
+          }
         ],
         "erklaerung": "Merkhilfe: Der Bindestrich bindet zwei Teile zu einem Wort. Der Gedankenstrich schiebt einen Gedanken dazwischen und braucht deshalb Platz."
       },
-      "abschluss": "Den langen Strich bekommst du auf der deutschen Tastatur über die Zeichenauswahl deines Programms oder in Zehni ab Lektion 23."
+      "abschluss": "Den langen Strich bekommst du auf der deutschen Tastatur über die Zeichenauswahl deines Programms oder in Zehni ab Lektion 23.",
+      "bloeckeEinfach": [
+        "Es gibt zwei Striche. Man verwechselt sie ständig.",
+        "Der kurze ist der Bindestrich. Er verbindet Wörter. Er steht ohne Leerzeichen: Sommer-Ferien, E-Mail.",
+        "Der lange ist der Gedankenstrich. Er trennt einen Einschub ab.",
+        "Er hat auf beiden Seiten ein Leerzeichen. So: „Wir waren — welch Zufall — gleichzeitig da.\"",
+        "Ein Bindestrich mit Leerzeichen drumherum ist falsch. Er sieht nur aus wie ein Gedankenstrich."
+      ]
     },
-
     {
       "id": "text-aufbau",
       "title": "Überschriften und Aufzählungen",
@@ -105,27 +158,57 @@
         "art": "zuordnen",
         "text": "Was ist in Ordnung, was nicht?",
         "faecher": [
-          { "id": "gut", "label": "So ist es richtig" },
-          { "id": "schlecht", "label": "Da stimmt etwas nicht" }
+          {
+            "id": "gut",
+            "label": "So ist es richtig"
+          },
+          {
+            "id": "schlecht",
+            "label": "Da stimmt etwas nicht"
+          }
         ],
         "karten": [
-          { "text": "Überschrift ohne Punkt am Ende", "fach": "gut" },
-          { "text": "Erst Hauptüberschrift, dann Unterüberschrift", "fach": "gut" },
-          { "text": "In einer Aufzählung enden alle Punkte gleich", "fach": "gut" },
-          { "text": "Überschrift mit Punkt am Ende.", "fach": "schlecht" },
-          { "text": "Direkt mit einer Unterüberschrift anfangen", "fach": "schlecht" },
-          { "text": "In einer Aufzählung mal mit, mal ohne Punkt", "fach": "schlecht" }
+          {
+            "text": "Überschrift ohne Punkt am Ende",
+            "fach": "gut"
+          },
+          {
+            "text": "Erst Hauptüberschrift, dann Unterüberschrift",
+            "fach": "gut"
+          },
+          {
+            "text": "In einer Aufzählung enden alle Punkte gleich",
+            "fach": "gut"
+          },
+          {
+            "text": "Überschrift mit Punkt am Ende.",
+            "fach": "schlecht"
+          },
+          {
+            "text": "Direkt mit einer Unterüberschrift anfangen",
+            "fach": "schlecht"
+          },
+          {
+            "text": "In einer Aufzählung mal mit, mal ohne Punkt",
+            "fach": "schlecht"
+          }
         ],
         "erklaerung": "Eine Überschrift ist ein Schild, kein Satz. Und eine Aufzählung ist dann gut, wenn man nicht über die Form stolpert."
       },
-      "abschluss": "Formatvorlagen machen das von allein. Wer Überschriften mit fett und größer von Hand baut, macht dieselbe Arbeit dreimal."
+      "abschluss": "Formatvorlagen machen das von allein. Wer Überschriften mit fett und größer von Hand baut, macht dieselbe Arbeit dreimal.",
+      "bloeckeEinfach": [
+        "Eine Überschrift bekommt keinen Punkt am Ende. Sie ist kein Satz. Sie ist ein Schild.",
+        "Überschriften haben eine Reihenfolge. Erst die große. Darunter die kleineren.",
+        "Man überspringt keine Stufe. Genau wie im Inhaltsverzeichnis.",
+        "Bei Aufzählungen gilt: Entweder bekommen alle einen Punkt am Ende. Oder keiner.",
+        "Gemischt sieht es unordentlich aus. Darum geht es bei der ganzen Norm. Nicht um Schönheit. Um Einheitlichkeit."
+      ]
     },
-
     {
       "id": "text-brief",
       "title": "Wie ein Brief aufgebaut ist",
       "bloecke": [
-        "Ein Brief hat eine feste Reihenfolge, und die kennt jeder, der schon einmal einen bekommen hat: oben die Anschrift, darunter das Datum, dann der Betreff, dann die Anrede, der Text und zum Schluss der Gruß mit dem Namen.",
+        "Ein Brief hat eine feste Reihenfolge, und die kennt jeder, der schon einmal einen bekommen hat. Oben steht die Anschrift, darunter das Datum, dann der Betreff. Es folgen die Anrede, der Text und zum Schluss der Gruß mit dem Namen.",
         "Der Betreff ist die Zeile, die sagt, worum es geht. Er bekommt keine Überschrift „Betreff“ davor und keinen Punkt am Ende.",
         "Nach der Anrede steht ein Komma, und danach geht es klein weiter: „Sehr geehrte Frau Berg,“ und in der nächsten Zeile „vielen Dank für …“",
         "Das gilt genauso für eine E-Mail. Nur die Anschrift fällt weg."
@@ -134,23 +217,58 @@
         "art": "zuordnen",
         "text": "Was gehört in den Kopf des Briefs, was in den Schluss?",
         "faecher": [
-          { "id": "kopf", "label": "Oben" },
-          { "id": "schluss", "label": "Unten" }
+          {
+            "id": "kopf",
+            "label": "Oben"
+          },
+          {
+            "id": "schluss",
+            "label": "Unten"
+          }
         ],
         "karten": [
-          { "text": "Anschrift der Empfängerin", "fach": "kopf" },
-          { "text": "Datum", "fach": "kopf" },
-          { "text": "Betreff", "fach": "kopf" },
-          { "text": "Anrede", "fach": "kopf" },
-          { "text": "Mit freundlichen Grüßen", "fach": "schluss" },
-          { "text": "Dein Name", "fach": "schluss" },
-          { "text": "Hinweis auf eine Anlage", "fach": "schluss" }
+          {
+            "text": "Anschrift der Empfängerin",
+            "fach": "kopf"
+          },
+          {
+            "text": "Datum",
+            "fach": "kopf"
+          },
+          {
+            "text": "Betreff",
+            "fach": "kopf"
+          },
+          {
+            "text": "Anrede",
+            "fach": "kopf"
+          },
+          {
+            "text": "Mit freundlichen Grüßen",
+            "fach": "schluss"
+          },
+          {
+            "text": "Dein Name",
+            "fach": "schluss"
+          },
+          {
+            "text": "Hinweis auf eine Anlage",
+            "fach": "schluss"
+          }
         ],
         "erklaerung": "Die Reihenfolge ist immer dieselbe. Deshalb weiß man bei einem fremden Brief sofort, wo man hinschauen muss."
       },
-      "abschluss": "Ein Brief nach dieser Ordnung wirkt erwachsen, auch wenn er von dir ist. Das ist kein Trick, sondern einfach Übung."
+      "abschluss": "Ein Brief nach dieser Ordnung wirkt erwachsen, auch wenn er von dir ist. Das ist kein Trick, sondern einfach Übung.",
+      "bloeckeEinfach": [
+        "Ein Brief hat eine feste Reihenfolge. Die kennst du, wenn du schon einmal einen bekommen hast.",
+        "Ganz oben steht die Anschrift. Darunter das Datum. Dann der Betreff.",
+        "Danach die Anrede. Dann der Text. Und zum Schluss der Gruß mit dem Namen.",
+        "Der Betreff sagt, worum es geht. Davor steht nicht das Wort „Betreff\". Und dahinter kein Punkt.",
+        "Nach der Anrede steht ein Komma. Danach geht es klein weiter.",
+        "Also: „Sehr geehrte Frau Berg,\". In der nächsten Zeile dann: „vielen Dank für …\"",
+        "Für eine E-Mail gilt dasselbe. Nur die Anschrift fällt weg."
+      ]
     },
-
     {
       "id": "text-werkzeuge",
       "title": "Was das Programm für dich macht",
@@ -171,7 +289,17 @@
         "richtig": 1,
         "erklaerung": "Ein PDF behält Schrift, Abstände und Seitenumbrüche. Eine Programmdatei sieht auf einem anderen Rechner schnell anders aus, wenn dort die Schrift fehlt."
       },
-      "abschluss": "Alles, was das Programm für dich erledigt, kann auch nicht mehr kaputtgehen, wenn du später etwas änderst."
+      "abschluss": "Alles, was das Programm für dich erledigt, kann auch nicht mehr kaputtgehen, wenn du später etwas änderst.",
+      "bloeckeEinfach": [
+        "Ein Schreibprogramm kann viel, was die meisten von Hand machen.",
+        "Zum Beispiel Formatvorlagen. Du sagst einmal, wie eine Überschrift aussehen soll. Dann sehen alle so aus.",
+        "Änderst du die Vorlage, ändern sich alle mit.",
+        "Seitenzahlen gehören in die Kopfzeile oder die Fußzeile. Tipp sie nicht selbst. Sonst stimmen sie bald nicht mehr.",
+        "Die Rechtschreibprüfung findet Tippfehler. Falsche Wörter findet sie nicht.",
+        "„Der Hund biss den Man\" wird angestrichen. „Der Hund biss den Mann\" nicht, auch wenn es falsch gemeint war.",
+        "Lesen musst du also selbst.",
+        "Und wenn du etwas abgibst: als PDF. Dann sieht es bei allen so aus wie bei dir."
+      ]
     }
   ]
 }

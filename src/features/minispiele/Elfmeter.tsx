@@ -26,10 +26,17 @@ import {
   type Ecke,
   type Stufe,
 } from '../../lib/elfmeter';
-import { createRandom } from '../../lib/minispiele';
+import { createRandom, regenGruppenBis, regenVorrat } from '../../lib/minispiele';
 import { de } from '../../i18n/de';
 
 type Phase = 'zielen' | 'laden' | 'ergebnis';
+
+/** Die Optik eines Auswahlknopfes. Steht hier, damit sie nicht dreimal dasteht. */
+const knopf = (aktiv: boolean): string =>
+  [
+    'rounded-lg border px-3 py-1 text-sm transition-colors',
+    aktiv ? 'border-akzent bg-akzent/10 font-semibold' : 'border-rand hover:border-akzent',
+  ].join(' ');
 
 export interface ElfmeterProps {
   /** Aus deren Zeichenvorrat kommen Wörter und Ladezeichen (SPEC.md 8.10). */
@@ -49,11 +56,38 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
   const [getroffen, setGetroffen] = useState(false);
   const [tippfortschritt, setTippfortschritt] = useState(0);
   const [ladeAnteil, setLadeAnteil] = useState(0);
+  /**
+   * Wo der Torwart gerade steht, während geladen wird.
+   *
+   * **Reine Anzeige.** Er wandert sichtbar hin und her, damit man ihn springen
+   * sieht — welche Ecke er am Ende wirklich nimmt, entscheidet erst
+   * `torwartEcke()` beim Abschuss. Ihn hier schon festzulegen hieße, dem Kind
+   * die Antwort vorher zu zeigen.
+   */
+  const [torwartVorschau, setTorwartVorschau] = useState<Ecke | undefined>(undefined);
 
   /** Eigene Saat je Schuss, damit nicht fünfmal dieselben Wörter kommen. */
+  /**
+   * Welche Tasten beim Aufladen kommen — dieselbe Auswahl wie im
+   * Buchstabenregen, auf Wunsch des Nutzers vom 2026-09-18.
+   *
+   * Sie gilt nur fürs **Aufladen**. Die Wörter in den neun Feldern bleiben
+   * vollständig: Sie sind die Zielwahl, und aus zwei Buchstaben lassen sich
+   * keine neun verschiedenen Wörter bilden.
+   */
+  const gruppen = useMemo(() => regenGruppenBis(lessonId), [lessonId]);
+  const [gewaehlt, setGewaehlt] = useState<ReadonlySet<string>>(new Set());
+
   const runde = `${saat}#${schuss}`;
   const woerter = useMemo(() => zielwoerter(lessonId, runde), [lessonId, runde]);
-  const zeichen = useMemo(() => ladezeichen(lessonId, runde), [lessonId, runde]);
+  const zeichen = useMemo(() => {
+    const vorrat = regenVorrat(lessonId, gruppen, gewaehlt);
+    const alle = ladezeichen(lessonId, runde);
+    if (gewaehlt.size === 0 || vorrat.length === 0) return alle;
+    // Aus derselben Saat, aber nur aus den gewaehlten Tasten.
+    const rnd = createRandom(`laden#${lessonId}#${runde}#gewaehlt`);
+    return alle.map(() => vorrat[Math.floor(rnd() * vorrat.length)]!);
+  }, [lessonId, runde, gruppen, gewaehlt]);
 
   const eingabe = useRef('');
   const anschlaege = useRef(0);
@@ -71,12 +105,22 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
     eingabe.current = '';
   }, []);
 
+  /** Weiter zum nächsten Schuss. Knopf und Eingabetaste benutzen dasselbe. */
+  const naechsterSchuss = useCallback((): void => {
+    if (vorbei) return;
+    setSchuss((n) => n + 1);
+    setPhase('zielen');
+    setZiel(undefined);
+    setTorwart(undefined);
+    eingabe.current = '';
+  }, [vorbei]);
+
   /** Der Schuss ist abgegeben: Torwart springt, Ergebnis steht. */
   const abschliessen = useCallback(
     (gewaehlt: Ecke): void => {
       const schusskraft = kraft(anschlaege.current, stufe.ladezeitMs);
       const springt = torwartEcke(gewaehlt, stufe, zufall.current);
-      const tor = istTor(gewaehlt, springt, schusskraft, stufe);
+      const tor = istTor(gewaehlt, springt, schusskraft, stufe, zufall.current);
       setTorwart(springt);
       setGetroffen(tor);
       if (tor) setTore((n) => n + 1);
@@ -84,6 +128,18 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
     },
     [stufe],
   );
+
+  // Der Torwart tänzelt, solange geladen wird. Nur Anzeige, ohne Wirkung.
+  useEffect(() => {
+    if (phase !== 'laden') {
+      setTorwartVorschau(undefined);
+      return;
+    }
+    const id = window.setInterval(() => {
+      setTorwartVorschau(ECKEN[Math.floor(Math.random() * ECKEN.length)]!);
+    }, 320);
+    return () => window.clearInterval(id);
+  }, [phase]);
 
   // Die Ladeuhr. Sie laeuft einmal durch und gibt den Schuss frei.
   useEffect(() => {
@@ -112,12 +168,7 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
       if (phase === 'ergebnis') {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
-          if (vorbei) return;
-          setSchuss((n) => n + 1);
-          setPhase('zielen');
-          setZiel(undefined);
-          setTorwart(undefined);
-          eingabe.current = '';
+          naechsterSchuss();
         }
         return;
       }
@@ -156,7 +207,7 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [phase, woerter, zeichen, tore, vorbei, onBeenden]);
+  }, [phase, woerter, zeichen, tore, vorbei, naechsterSchuss, onBeenden]);
 
   const schusskraft = kraft(anschlaege.current, stufe.ladezeitMs);
 
@@ -203,6 +254,41 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
         ))}
       </div>
 
+      {/* Welche Tasten beim Aufladen kommen. Nur was gelernt ist (SPEC.md 6.2). */}
+      {gruppen.length > 1 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm text-gedaempft">{de.minispiele.elfmeter.tastenFrage}</span>
+          <button
+            type="button"
+            aria-pressed={gewaehlt.size === 0}
+            onClick={() => {
+              setGewaehlt(new Set());
+              neueRunde();
+            }}
+            className={knopf(gewaehlt.size === 0)}
+          >
+            {de.minispiele.buchstabenregen.gruppeAlles}
+          </button>
+          {gruppen.map((g) => (
+            <button
+              key={g.id}
+              type="button"
+              aria-pressed={gewaehlt.has(g.id)}
+              onClick={() => {
+                const neu = new Set(gewaehlt);
+                if (neu.has(g.id)) neu.delete(g.id);
+                else neu.add(g.id);
+                setGewaehlt(neu);
+                neueRunde();
+              }}
+              className={`${knopf(gewaehlt.has(g.id))} font-tippen`}
+            >
+              {g.zeichen.join(' ')}
+            </button>
+          ))}
+        </div>
+      )}
+
       <section className="flex-1 rounded-2xl border border-rand bg-flaeche p-6">
         {vorbei ? (
           <div className="grid h-full place-items-center text-center">
@@ -232,6 +318,18 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
                     : de.minispiele.elfmeter.gehalten}
             </p>
 
+            {/*
+              Der Countdown, gross und mittig.
+              Vorher stand die Restzeit klein unter dem Kraftbalken -- wer auf
+              die Zeichen schaut, sieht sie dort nicht. Beim Aufladen zaehlt
+              jede Sekunde, also gehoert sie dorthin, wo der Blick ohnehin ist.
+            */}
+            {phase === 'laden' && (
+              <p className="mb-2 text-center text-4xl font-bold tabular-nums text-akzent">
+                {Math.ceil((1 - ladeAnteil) * (stufe.ladezeitMs / 1000))}
+              </p>
+            )}
+
             {/* Das Tor: neun Felder, in jedem ein Wort. */}
             <div className="mx-auto grid max-w-xl grid-cols-3 gap-2 rounded-xl border-4 border-text/70 bg-grund p-2">
               {ECKEN.map((ecke, i) => {
@@ -248,7 +346,11 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
                       istTorwart ? 'ring-2 ring-korrigiert' : '',
                     ].join(' ')}
                   >
-                    {phase === 'zielen' ? (
+                    {phase === 'laden' && ecke === torwartVorschau ? (
+                      <span aria-hidden className="animate-pulse text-2xl opacity-60">
+                        🧤
+                      </span>
+                    ) : phase === 'zielen' ? (
                       <span className="font-tippen">
                         <span className="font-semibold text-akzent">
                           {woerter[i]?.slice(0, tippfortschritt) ?? ''}
@@ -281,20 +383,29 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
                     style={{ width: `${schusskraft * 100}%` }}
                   />
                 </div>
-                <p className="mt-1 text-center text-xs text-gedaempft">
+                <p className="mt-2 text-center text-sm text-gedaempft">
                   {de.minispiele.elfmeter.kraft(Math.round(schusskraft * 100))}
-                  {' · '}
-                  {de.minispiele.elfmeter.zeit(
-                    Math.ceil((1 - ladeAnteil) * (stufe.ladezeitMs / 1000)),
-                  )}
                 </p>
               </div>
             )}
 
+            {/*
+              Ein Knopf, nicht nur ein Tastaturhinweis. „Weiter mit der
+              Eingabetaste" stand klein unter dem Tor und wurde uebersehen --
+              wer ihn nicht fand, kam nach dem ersten Schuss nicht weiter und
+              hielt das Spiel fuer kaputt.
+            */}
             {phase === 'ergebnis' && (
-              <p className="mt-6 text-center text-sm text-gedaempft">
-                {de.minispiele.elfmeter.weiter}
-              </p>
+              <div className="mt-6 text-center">
+                <button
+                  type="button"
+                  onClick={naechsterSchuss}
+                  className="rounded-xl bg-akzent px-5 py-2 font-semibold text-white"
+                >
+                  {de.minispiele.elfmeter.naechster}
+                </button>
+                <p className="mt-2 text-xs text-gedaempft">{de.minispiele.elfmeter.weiter}</p>
+              </div>
             )}
           </>
         )}

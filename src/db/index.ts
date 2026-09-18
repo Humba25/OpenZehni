@@ -19,6 +19,7 @@ import {
   CONFUSION_UPSERT,
   LESSON_UNLOCK,
   LESSON_PASSES,
+  LESSON_PASSES_ALL,
   CHAR_STATS_SELECT,
   LAYOUT_VERIFIED_SET,
   LAYOUT_VERIFIED_CLEAR,
@@ -266,6 +267,16 @@ export async function saveSession(record: SessionRecord): Promise<void> {
  * wird in `sessions`, weil dort jede einzelne Runde steht — `lesson_progress`
  * kennt nur eine Summe aller Versuche.
  */
+/**
+ * Bestandene Runden je Lektion. Der Lernweg zeigt damit an, wie viele noch
+ * fehlen (`curriculum.ts`, `PFLICHTRUNDEN`).
+ */
+export async function loadPasses(): Promise<ReadonlyMap<string, number>> {
+  const d = await db();
+  const rows = await d.select<{ lesson_id: string; n: number }[]>(LESSON_PASSES_ALL);
+  return new Map(rows.map((r) => [r.lesson_id, r.n]));
+}
+
 export async function countPasses(lessonId: string): Promise<number> {
   const d = await db();
   const rows = await d.select<{ n: number }[]>(LESSON_PASSES, [lessonId]);

@@ -65,8 +65,13 @@ export interface Stufe {
   /** Wie oft der Torwart die richtige Ecke errät, zwischen 0 und 1. */
   readonly trefferquote: number;
   /**
-   * Ab welcher Kraft ein Schuss auch dann hineingeht, wenn der Torwart richtig
-   * geraten hat. 1 hieße: nie.
+   * Wie hart ein Schuss sein muss, damit er trotz richtig geratener Ecke
+   * **sicher** hineingeht.
+   *
+   * Darunter entscheidet die Kraft anteilig mit (siehe `torchance()`) — bis
+   * zum 2026-09-18 war es eine harte Schwelle: knapp darunter hielt der Torwart
+   * immer, knapp darüber nie. Der Nutzer hat gebeten, dass schnelleres Tippen
+   * die Wahrscheinlichkeit erhöht, und das ist auch das bessere Spielgefühl.
    */
   readonly durchschuss: number;
 }
@@ -166,14 +171,42 @@ export function torwartEcke(gewaehlt: Ecke, stufe: Stufe, rnd: () => number): Ec
 }
 
 /**
+ * Wie wahrscheinlich der Schuss hineingeht, zwischen 0 und 1.
+ *
+ * Springt der Torwart woanders hin: immer. Springt er richtig, wächst die
+ * Chance mit der Schusskraft — ab `durchschuss` ist sie sicher.
+ *
+ * **Warum anteilig und nicht als Schwelle.** Vorher galt: knapp darunter hielt
+ * der Torwart immer, knapp darüber nie. Zwei fast gleiche Runden führten zu
+ * völlig verschiedenen Ergebnissen, ohne dass man den Unterschied merkte. Jetzt
+ * zahlt sich jeder zusätzliche Anschlag ein Stück aus.
+ */
+export function torchance(
+  gewaehlt: Ecke,
+  torwart: Ecke,
+  schusskraft: number,
+  stufe: Stufe,
+): number {
+  if (gewaehlt !== torwart) return 1;
+  if (stufe.durchschuss <= 0) return 1;
+  return Math.max(0, Math.min(1, schusskraft / stufe.durchschuss));
+}
+
+/**
  * Ist der Schuss drin?
  *
- * Springt der Torwart woanders hin, immer. Springt er richtig, nur wenn der
- * Schuss hart genug war — dafür lohnt sich das Aufladen.
+ * Der Würfel kommt von außen, damit das Ergebnis reproduzierbar bleibt und
+ * sich prüfen lässt.
  */
-export function istTor(gewaehlt: Ecke, torwart: Ecke, schusskraft: number, stufe: Stufe): boolean {
-  if (gewaehlt !== torwart) return true;
-  return schusskraft >= stufe.durchschuss;
+export function istTor(
+  gewaehlt: Ecke,
+  torwart: Ecke,
+  schusskraft: number,
+  stufe: Stufe,
+  rnd: () => number,
+): boolean {
+  const chance = torchance(gewaehlt, torwart, schusskraft, stufe);
+  return chance >= 1 || rnd() < chance;
 }
 
 function mischen<T>(liste: readonly T[], rnd: () => number): T[] {

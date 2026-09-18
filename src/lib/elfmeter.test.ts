@@ -8,6 +8,7 @@ import {
   kraft,
   torwartEcke,
   istTor,
+  torchance,
   type Ecke,
 } from './elfmeter';
 import { createRandom } from './minispiele';
@@ -140,20 +141,46 @@ describe('Torwart und Tor', () => {
   });
 
   it('zählt ein Tor, wenn der Torwart woanders hinspringt', () => {
-    expect(istTor('oben-links', 'unten-rechts', 0, STUFEN[2]!)).toBe(true);
+    expect(torchance('oben-links', 'unten-rechts', 0, STUFEN[2]!)).toBe(1);
   });
 
-  it('lässt einen harten Schuss auch bei richtig geratener Ecke durch', () => {
+  /**
+   * Der Wunsch des Nutzers vom 2026-09-18: Je schneller getippt, desto
+   * wahrscheinlicher geht der Ball rein.
+   *
+   * Vorher war es eine harte Schwelle — knapp darunter hielt der Torwart
+   * immer, knapp darüber nie. Zwei fast gleiche Runden führten zu völlig
+   * verschiedenen Ergebnissen, ohne dass man den Unterschied merkte.
+   */
+  it('lässt die Chance mit der Schusskraft steigen', () => {
     const stufe = STUFEN[1]!;
-    expect(istTor('oben-links', 'oben-links', stufe.durchschuss, stufe)).toBe(true);
-    expect(istTor('oben-links', 'oben-links', stufe.durchschuss - 0.01, stufe)).toBe(false);
+    const chance = (k: number): number => torchance('oben-links', 'oben-links', k, stufe);
+    expect(chance(0)).toBe(0);
+    expect(chance(0.2)).toBeGreaterThan(0);
+    expect(chance(0.4)).toBeGreaterThan(chance(0.2));
+    expect(chance(stufe.durchschuss)).toBe(1);
+    expect(chance(1)).toBe(1);
   });
 
-  /** Ohne Aufladen hält der Torwart jede richtig geratene Ecke. */
-  it('hält einen schwachen Schuss in der geratenen Ecke', () => {
+  it('ist auf der schweren Stufe bei gleicher Kraft unwahrscheinlicher', () => {
+    const k = 0.5;
+    expect(torchance('oben-links', 'oben-links', k, STUFEN[2]!)).toBeLessThan(
+      torchance('oben-links', 'oben-links', k, STUFEN[0]!),
+    );
+  });
+
+  it('hält ohne Aufladen jede richtig geratene Ecke', () => {
+    const nie = (): number => 0.999;
     for (const stufe of STUFEN) {
-      expect(istTor('mitte-mitte', 'mitte-mitte', 0, stufe), stufe.id).toBe(false);
+      expect(istTor('mitte-mitte', 'mitte-mitte', 0, stufe, nie), stufe.id).toBe(false);
     }
+  });
+
+  it('lässt einen sicheren Schuss unabhängig vom Würfel durch', () => {
+    const stufe = STUFEN[1]!;
+    const pech = (): number => 0.999;
+    expect(istTor('oben-links', 'oben-links', stufe.durchschuss, stufe, pech)).toBe(true);
+    expect(istTor('oben-links', 'unten-rechts', 0, stufe, pech)).toBe(true);
   });
 
   it('kennt nur Ecken aus der Liste', () => {

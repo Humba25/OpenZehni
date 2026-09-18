@@ -10,7 +10,7 @@
  */
 
 import { useState } from 'react';
-import type { ModulEinheit } from '../../lib/module';
+import { bloeckeFuer, type ModulEinheit } from '../../lib/module';
 import {
   QuizAufgabe,
   ZuordnenAufgabe,
@@ -23,13 +23,21 @@ import { de } from '../../i18n/de';
 
 export interface EinheitScreenProps {
   readonly einheit: ModulEinheit;
+  /**
+   * Bestimmt, ob die einfache Fassung gezeigt wird (`SPEC.md` 9.8).
+   *
+   * Unter vierzehn ist einfache Sprache Pflicht, nicht Kür — die Kernzielgruppe
+   * ist die fünfte Klasse. Welche Fassung gilt, entscheidet `bloeckeFuer()`
+   * und nicht diese Komponente.
+   */
+  readonly ageBand: string;
   readonly onFertig: () => void;
   readonly onAbbrechen: () => void;
 }
 
 type Schritt = { name: 'erklaerung' } | { name: 'aufgabe' } | { name: 'aufloesung' };
 
-export function EinheitScreen({ einheit, onFertig, onAbbrechen }: EinheitScreenProps) {
+export function EinheitScreen({ einheit, ageBand, onFertig, onAbbrechen }: EinheitScreenProps) {
   const [schritt, setSchritt] = useState<Schritt>({ name: 'erklaerung' });
   const [richtig, setRichtig] = useState(false);
 
@@ -50,7 +58,7 @@ export function EinheitScreen({ einheit, onFertig, onAbbrechen }: EinheitScreenP
         {schritt.name === 'erklaerung' && (
           <section>
             <div className="grid gap-4">
-              {einheit.bloecke.map((b, i) => (
+              {bloeckeFuer(einheit, ageBand).map((b, i) => (
                 <p key={i} className="leading-relaxed">
                   {b}
                 </p>

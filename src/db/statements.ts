@@ -264,5 +264,14 @@ export const MINIGAME_SELECT_DAY = 'SELECT plays FROM minigame_plays WHERE day =
  * Dort stehen alle Versuche, auch die misslungenen. Ein Fehlversuch darf nie
  * gegen jemanden zählen (SPEC.md 8.11).
  */
+/**
+ * Bestandene Runden **aller** Lektionen auf einmal — für den Lernweg.
+ *
+ * Einzeln je Lektion abzufragen wäre bei 25 Lektionen 25 Abfragen bei jedem
+ * Öffnen der Liste.
+ */
+export const LESSON_PASSES_ALL =
+  'SELECT lesson_id, COUNT(*) AS n FROM sessions WHERE passed = 1 GROUP BY lesson_id';
+
 export const LESSON_PASSES =
   'SELECT COUNT(*) AS n FROM sessions WHERE lesson_id = $1 AND passed = 1';

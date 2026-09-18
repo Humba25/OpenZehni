@@ -23,11 +23,20 @@ export interface DekoTeil {
   readonly label: string;
   /** Welche SVG-Figur die Komponente zeichnet. */
   readonly form: string;
-  /** Position im Raum in Prozent. */
-  readonly links: number;
-  readonly oben: number;
-  /** Breite in Prozent der Raumbreite. */
-  readonly groesse: number;
+  /**
+   * Lage und Größe im Raumfenster 200 × 112, Bodenlinie bei y = 70.
+   *
+   * **Alles in derselben Einheit.** Bis zum 2026-09-18 stand hier die Breite in
+   * Prozent der Raum*breite* und die Höhe in Prozent der Raum*höhe*. Ein
+   * vierzig Prozent breiter Schreibtisch wurde dadurch rund sechshundert Pixel
+   * hoch und lief unten aus dem Bild.
+   */
+  readonly x: number;
+  readonly y: number;
+  readonly breite: number;
+  readonly hoehe: number;
+  /** Zeichenebene, klein heißt weiter hinten. Siehe `deko.json`. */
+  readonly ebene: number;
   /** Steht von Anfang an da, ohne dass es erspielt werden müsste. */
   readonly vonAnfangAn?: boolean;
 }

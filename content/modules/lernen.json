@@ -21,9 +21,15 @@
         "rechts": "In einem Jahr bin ich ein Jahr weiter oder ein Jahr älter. Beides passiert sowieso.",
         "erklaerung": "Das Jahr vergeht in beiden Fällen. Der Unterschied ist nur, ob am Ende etwas dabei herauskommt."
       },
-      "abschluss": "Dieser Satz gehört dir, nicht dem Programm. Du musst ihn niemandem sagen. Es reicht, wenn du ihn kennst, wenn du ihn das nächste Mal denkst."
+      "abschluss": "Dieser Satz gehört dir, nicht dem Programm. Du musst ihn niemandem sagen. Es reicht, wenn du ihn kennst, wenn du ihn das nächste Mal denkst.",
+      "bloeckeEinfach": [
+        "Ein Gedanke kommt in jedem Alter vor. Er heißt: Dafür ist es zu spät. Er stimmt nie.",
+        "Bei dir klingt er so: Die anderen können das längst. Vielleicht stimmt das sogar. Aber sie haben früher angefangen. Nicht mit mehr Talent.",
+        "Du siehst nur, wo sie heute sind. Ihren Anfang hast du nie gesehen. Der sah genauso aus wie deiner.",
+        "Später heißt derselbe Gedanke: Dafür bin ich zu alt. Wer mit vierzig so denkt, denkt es mit fünfzig wieder. Dann sind zehn Jahre weg.",
+        "Der früheste Anfang ist immer jetzt. Nicht weil jetzt gut wäre. Sondern weil alles andere später ist."
+      ]
     },
-
     {
       "id": "lernen-e4",
       "title": "„Noch nicht“ ist ein vollständiger Satz",
@@ -54,9 +60,14 @@
         ],
         "erklaerung": "Zwei Wörter, und aus einem Schlussstrich wird ein Zwischenstand."
       },
-      "abschluss": "Es geht nicht darum, sich etwas schönzureden. Es geht darum, eine Sache richtig zu benennen: Du bist nicht fertig, und das ist etwas anderes als unfähig."
+      "abschluss": "Es geht nicht darum, sich etwas schönzureden. Es geht darum, eine Sache richtig zu benennen: Du bist nicht fertig, und das ist etwas anderes als unfähig.",
+      "bloeckeEinfach": [
+        "Zwei Sätze klingen ähnlich. „Ich kann das nicht.\" Und: „Ich kann das noch nicht.\"",
+        "Der erste Satz ist ein Urteil über dich. Der zweite sagt nur etwas über die Zeit. Das ist ein großer Unterschied.",
+        "Mit Fehlern ist es genauso. Ein Fehler sagt nichts über dich. Er sagt dir, was als Nächstes dran ist.",
+        "Zehni macht das von selbst. Tasten, die du oft verfehlst, kommen öfter dran. Nicht als Strafe. Dort ist noch etwas zu holen."
+      ]
     },
-
     {
       "id": "lernen-e6",
       "title": "Üben, das wirklich wirkt",
@@ -70,24 +81,60 @@
         "art": "zuordnen",
         "text": "Was bringt beim Lernen wirklich etwas?",
         "faecher": [
-          { "id": "wirkt", "label": "Bringt viel" },
-          { "id": "scheint", "label": "Fühlt sich nur fleißig an" }
+          {
+            "id": "wirkt",
+            "label": "Bringt viel"
+          },
+          {
+            "id": "scheint",
+            "label": "Fühlt sich nur fleißig an"
+          }
         ],
         "karten": [
-          { "text": "Sich selbst abfragen, ohne nachzusehen", "fach": "wirkt" },
-          { "text": "An fünf Tagen je zehn Minuten üben", "fach": "wirkt" },
-          { "text": "Jemandem erklären, was man gerade gelernt hat", "fach": "wirkt" },
-          { "text": "Alte Fehler noch einmal gezielt üben", "fach": "wirkt" },
-          { "text": "Im Buch alles bunt markieren", "fach": "scheint" },
-          { "text": "Den Text dreimal durchlesen", "fach": "scheint" },
-          { "text": "Am Abend vorher fünf Stunden am Stück", "fach": "scheint" },
-          { "text": "Eine hübsche Zusammenfassung abschreiben", "fach": "scheint" }
+          {
+            "text": "Sich selbst abfragen, ohne nachzusehen",
+            "fach": "wirkt"
+          },
+          {
+            "text": "An fünf Tagen je zehn Minuten üben",
+            "fach": "wirkt"
+          },
+          {
+            "text": "Jemandem erklären, was man gerade gelernt hat",
+            "fach": "wirkt"
+          },
+          {
+            "text": "Alte Fehler noch einmal gezielt üben",
+            "fach": "wirkt"
+          },
+          {
+            "text": "Im Buch alles bunt markieren",
+            "fach": "scheint"
+          },
+          {
+            "text": "Den Text dreimal durchlesen",
+            "fach": "scheint"
+          },
+          {
+            "text": "Am Abend vorher fünf Stunden am Stück",
+            "fach": "scheint"
+          },
+          {
+            "text": "Eine hübsche Zusammenfassung abschreiben",
+            "fach": "scheint"
+          }
         ],
         "erklaerung": "Alles im rechten Fach hat dasselbe Problem: Es fühlt sich an, als würde man etwas verstehen, aber man muss dabei nichts aus dem Kopf holen. Genau das Herausholen ist die Arbeit, die hängen bleibt."
       },
-      "abschluss": "Du musst nicht mehr üben. Du musst anders üben, und meistens ist das sogar weniger."
+      "abschluss": "Du musst nicht mehr üben. Du musst anders üben, und meistens ist das sogar weniger.",
+      "bloeckeEinfach": [
+        "Zwei Dinge helfen beim Lernen am meisten. Sich selbst abfragen. Und über mehrere Tage verteilt üben.",
+        "Das ist gut erforscht. Es gilt für Vokabeln genauso wie für Tasten.",
+        "Abfragen heißt: den Stoff aus dem Kopf holen. Nicht noch einmal nachlesen. Wer eine Vokabel nachschlägt, fühlt sich sicher. Wer sie aufsagt, lernt sie.",
+        "Verteilt üben heißt: Fünfmal zehn Minuten bringen mehr als einmal fünfzig. Dafür gibt es in Zehni das Tagesziel.",
+        "Und noch etwas Ehrliches: Markieren und Abschreiben fühlen sich fleißig an. Sie bringen aber wenig. Das darfst du wissen."
+      ]
     },
-
     {
       "id": "lernen-e7",
       "title": "Anfangen, obwohl man keine Lust hat",
@@ -101,21 +148,56 @@
         "art": "zuordnen",
         "text": "Du sollst ein Referat über Island halten. Welcher erste Schritt ist klein genug, um heute anzufangen?",
         "faecher": [
-          { "id": "klein", "label": "Klein genug für heute" },
-          { "id": "gross", "label": "Zu groß zum Anfangen" }
+          {
+            "id": "klein",
+            "label": "Klein genug für heute"
+          },
+          {
+            "id": "gross",
+            "label": "Zu groß zum Anfangen"
+          }
         ],
         "karten": [
-          { "text": "Drei Seiten über Island öffnen und den ersten Absatz lesen", "fach": "klein" },
-          { "text": "Fünf Stichpunkte aufschreiben, über die ich reden will", "fach": "klein" },
-          { "text": "Eine Karte von Island suchen und abspeichern", "fach": "klein" },
-          { "text": "Die Überschrift auf das leere Blatt schreiben", "fach": "klein" },
-          { "text": "Das Referat schreiben", "fach": "gross" },
-          { "text": "Alles über Island herausfinden", "fach": "gross" },
-          { "text": "Das Referat fertig üben, bis es sitzt", "fach": "gross" }
+          {
+            "text": "Drei Seiten über Island öffnen und den ersten Absatz lesen",
+            "fach": "klein"
+          },
+          {
+            "text": "Fünf Stichpunkte aufschreiben, über die ich reden will",
+            "fach": "klein"
+          },
+          {
+            "text": "Eine Karte von Island suchen und abspeichern",
+            "fach": "klein"
+          },
+          {
+            "text": "Die Überschrift auf das leere Blatt schreiben",
+            "fach": "klein"
+          },
+          {
+            "text": "Das Referat schreiben",
+            "fach": "gross"
+          },
+          {
+            "text": "Alles über Island herausfinden",
+            "fach": "gross"
+          },
+          {
+            "text": "Das Referat fertig üben, bis es sitzt",
+            "fach": "gross"
+          }
         ],
         "erklaerung": "Die kleinen Schritte haben eines gemeinsam: Man weiß bei jedem genau, wann er fertig ist. Bei den großen weiß man das nicht, und deshalb fängt man sie nicht an."
       },
-      "abschluss": "Der erste Schritt muss nicht gut sein. Er muss nur klein genug sein, dass du ihn machst."
+      "abschluss": "Der erste Schritt muss nicht gut sein. Er muss nur klein genug sein, dass du ihn machst.",
+      "bloeckeEinfach": [
+        "Auf Lust zu warten ist der langsamste Weg. Lust kommt selten vorher. Meistens kommt sie erst nach ein paar Minuten.",
+        "Deshalb ein Trick: Nimm dir nicht vor, fertig zu werden. Nimm dir vor, anzufangen. Zwei Minuten.",
+        "Wenn es nach zwei Minuten immer noch furchtbar ist, darfst du aufhören. Meistens hörst du nicht auf.",
+        "Zerlege große Sachen in kleine Schritte. Jeder Schritt soll in zwanzig Minuten zu schaffen sein.",
+        "Räum Ablenkungen vorher weg. Das ist leichter, als ihnen später zu widerstehen.",
+        "Viele nehmen einen Wecker: 25 Minuten arbeiten, 5 Minuten Pause. Das Verfahren ist nach einer Küchenuhr benannt."
+      ]
     }
   ]
 }

@@ -30,6 +30,8 @@ import { Lernstube } from '../features/motivation/Lernstube';
 import { Maskottchen, MaskottchenMitSpruch } from '../features/mascot/Maskottchen';
 import { UpdateHinweis } from '../features/update/UpdateHinweis';
 import { useUpdater } from '../features/update/useUpdater';
+import { useVollbild } from '../features/vollbild/useVollbild';
+import { VollbildKnopf, VollbildAusstieg } from '../features/vollbild/VollbildKnopf';
 import { maskottchenFuer } from '../lib/maskottchen';
 import {
   getOrCreateProfile,
@@ -37,6 +39,7 @@ import {
   saveSession,
   unlockLesson,
   countPasses,
+  loadPasses,
   loadCharStats,
   loadLastSpeed,
   markLayoutVerified,
@@ -204,6 +207,8 @@ export function App() {
   const [ansicht, setAnsicht] = useState<Ansicht>({ name: 'laden' });
   const [profile, setProfile] = useState<Profile | null>(null);
   const [progress, setProgress] = useState<ReadonlyMap<string, LessonProgress>>(new Map());
+  /** Bestandene Runden je Lektion — der Lernweg zeigt damit an, was noch fehlt. */
+  const [passes, setPasses] = useState<ReadonlyMap<string, number>>(new Map());
   const [themen, setThemen] = useState<readonly string[]>([]);
   const [stand, setStand] = useState<Gesamtstand>(LEER);
   const [tagesaufgabe, setTagesaufgabe] = useState<Tagesaufgabe | undefined>(undefined);
@@ -215,6 +220,7 @@ export function App() {
   // Einmal fuer die ganze App: Hinweis unten rechts und Einstellungen zeigen
   // denselben Stand (SPEC.md 11.1).
   const updater = useUpdater();
+  const vollbild = useVollbild();
 
   /** Liest alles neu, was die Kopfzeile und der Lernweg brauchen. */
   const standNeuLaden = useCallback(async (dailyGoalMin: number): Promise<void> => {
@@ -272,6 +278,7 @@ export function App() {
         setBlind(p.blindMode);
         const fortschritt = await loadProgress();
         setProgress(fortschritt);
+        setPasses(await loadPasses());
         await standNeuLaden(p.dailyGoalMin);
         await motivationNeuLaden(p.id, fortschritt);
 
@@ -511,6 +518,7 @@ export function App() {
 
         const neuerFortschritt = await loadProgress();
         setProgress(neuerFortschritt);
+        setPasses(await loadPasses());
         await standNeuLaden(profile?.dailyGoalMin ?? 10);
         if (profile) await motivationNeuLaden(profile.id, neuerFortschritt);
 
@@ -688,8 +696,15 @@ export function App() {
           onModule={() => setAnsicht({ name: 'modulbereich' })}
           onSpiele={() => setAnsicht({ name: 'spiele' })}
           onEinstellungen={() => setAnsicht({ name: 'einstellungen' })}
+          vollbildAn={vollbild.an}
+          onVollbild={vollbild.umschalten}
         />
       )}
+
+      {/* Der Notausgang aus dem Vollbild. Nur dann, wenn keine Kopfzeile da ist
+          — also waehrend einer Uebung oder eines Spiels. Sonst haette man im
+          Vollbild genau dort keinen sichtbaren Weg zurueck. */}
+      {vollbild.an && !zeigtKopfzeile && <VollbildAusstieg onUmschalten={vollbild.umschalten} />}
 
       {/* `overflow-y-auto` ist hier keine Kosmetik: Ohne Scrollbereich wächst
           ein zu hoher Bildschirm aus diesem Kasten heraus und malt über die
@@ -735,6 +750,7 @@ export function App() {
         {ansicht.name === 'lernweg' && (
           <LessonList
             progress={progress}
+            passes={passes}
             erledigt={erledigteEinheiten}
             onStart={(l) => void starten(l)}
             onZwischenstueck={(id) => void zwischenstueckOeffnen(id)}
@@ -834,6 +850,7 @@ export function App() {
         {ansicht.name === 'moduleinheit' && (
           <EinheitScreen
             einheit={ansicht.einheit}
+            ageBand={profile?.ageBand ?? 'A2'}
             onAbbrechen={() => setAnsicht(zurueckZu(ansicht.zurueck))}
             onFertig={() => {
               void (async () => {
@@ -1084,6 +1101,8 @@ function Kopfzeile({
   onModule,
   onSpiele,
   onEinstellungen,
+  vollbildAn,
+  onVollbild,
 }: {
   stand: Gesamtstand;
   name: string;
@@ -1096,6 +1115,8 @@ function Kopfzeile({
   onModule: () => void;
   onSpiele: () => void;
   onEinstellungen: () => void;
+  vollbildAn: boolean;
+  onVollbild: () => void;
 }) {
   const f = levelFortschritt(stand.xp);
 
@@ -1175,6 +1196,10 @@ function Kopfzeile({
       <Reiter offen={aktiv === 'lernstube'} onClick={onLernstube}>
         {de.lernstube.oeffnen}
       </Reiter>
+
+      {/* Kein `Reiter`: Das Vollbild ist kein Bereich, in dem man sich
+          befindet, sondern ein Schalter. Er sieht deshalb anders aus. */}
+      <VollbildKnopf an={vollbildAn} onUmschalten={onVollbild} />
 
       <Reiter offen={aktiv === 'einstellungen'} onClick={onEinstellungen}>
         {de.einstellungen.oeffnen}

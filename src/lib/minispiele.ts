@@ -52,11 +52,42 @@ export const SPIEL_SEKUNDEN = 60;
  */
 export const REGEN_LEBEN = 3;
 
-/** Wie lange ein Buchstabe von oben nach unten braucht. */
+/** Wie lange ein Buchstabe zu Beginn von oben nach unten braucht. */
 export const FALLDAUER_MS = 5500;
 
-/** Abstand zwischen zwei neuen Buchstaben. */
+/** Abstand zwischen zwei neuen Buchstaben zu Beginn. */
 export const ABWURF_MS = 900;
+
+/**
+ * Wie lange die Eingabe nach einem Fehlgriff gesperrt ist.
+ *
+ * **Wird vorher angesagt**, nicht nachträglich bestraft: Auf dem Startbild
+ * steht, was ein falscher Anschlag kostet. Eine Regel, die man erst durch
+ * ihre Folgen kennenlernt, ist keine Regel, sondern eine Falle.
+ */
+export const SPERRE_MS = 1000;
+
+/**
+ * Wie stark das Spiel mit jedem gefangenen Buchstaben anzieht.
+ *
+ * Ohne Steigerung hat eine Runde keinen Bogen: Wer die Tasten kann, fängt
+ * beliebig lange weiter, und wer sie nicht kann, verliert gleich. Mit
+ * Steigerung findet jede Runde ihr eigenes Ende.
+ *
+ * Nach unten begrenzt, sonst wird es irgendwann unmöglich statt schwer.
+ */
+export const TEMPO_PRO_TREFFER = 0.985;
+export const FALLDAUER_MIN_MS = 1800;
+export const ABWURF_MIN_MS = 350;
+
+/** Falldauer und Abwurfabstand nach so vielen gefangenen Buchstaben. */
+export function tempo(gefangen: number): { falldauerMs: number; abwurfMs: number } {
+  const faktor = Math.pow(TEMPO_PRO_TREFFER, Math.max(0, gefangen));
+  return {
+    falldauerMs: Math.max(FALLDAUER_MIN_MS, FALLDAUER_MS * faktor),
+    abwurfMs: Math.max(ABWURF_MIN_MS, ABWURF_MS * faktor),
+  };
+}
 
 /**
  * Wie viele Wörter mindestens zur Verfügung stehen müssen, damit „Wortsalat"
