@@ -148,8 +148,18 @@ durch Tests abzusichern, nicht durch Sorgfalt.
   nie ein Beispielwert als ihr Wert ausgegeben (`MODUL-LERNEN.md` 1.1, 7).
 - **Kein Lerntypentest, keine Lerntypen-Lehre** — wissenschaftlich nicht belegt
   (`MODUL-LERNEN.md` 3).
-- **Keine Bestrafungsmechanik**: keine Leben, keine Countdowns, die eine Übung
-  abbrechen, kein Fehlerton, kein Zwangsdialog beim Start.
+- **Keine Bestrafungsmechanik**: keine Leben, die den **Zugang** begrenzen,
+  keine Countdowns, die eine Übung abbrechen, kein Fehlerton, kein
+  Zwangsdialog beim Start.
+
+  Die Grenze verläuft zwischen „du darfst jetzt nicht mehr" und „diese Runde
+  ist zu Ende". Das Erste ist verboten. Das Zweite ist in einem **Minispiel**
+  erlaubt, weil ein Spiel ein Ende braucht, das man selbst herbeiführt —
+  `buchstabenregen` endet seit dem 2026-09-18 nach drei durchgerutschten
+  Buchstaben, und die nächste Runde beginnt mit einem Klick (`SPEC.md` 8.10).
+
+  **Im Lernpfad gilt die Regel unverändert und ohne Ausnahme.** Dort gibt es
+  nichts zu verlieren.
 - **Performance-Budget einhalten** (Spec 12.1): Kaltstart ≤ 4 s, RAM ≤ 250 MB,
   Eingabelatenz ≤ 30 ms p95, Installer ≤ 20 MB. Eine neue Abhängigkeit, die
   spürbar Startzeit oder Bundlegröße kostet, ist zu begründen oder zu lassen.

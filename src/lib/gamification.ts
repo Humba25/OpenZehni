@@ -20,8 +20,7 @@ export type XpReason =
   | 'abzeichen'
   | 'tagesaufgabe'
   | 'tastenjagd'
-  | 'minispiel'
-  | 'wochenziel';
+  | 'minispiel';
 
 export const XP: Record<XpReason, number> = {
   lektion: 50,
@@ -32,7 +31,6 @@ export const XP: Record<XpReason, number> = {
   tagesaufgabe: 35,
   tastenjagd: 15,
   minispiel: 10,
-  wochenziel: 120,
 };
 
 /** Der Blindmodus gibt 20 % der Einheit obendrauf (SPEC.md 8.1). */

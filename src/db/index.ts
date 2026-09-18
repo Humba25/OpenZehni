@@ -18,6 +18,7 @@ import {
   CHAR_STATS_UPSERT,
   CONFUSION_UPSERT,
   LESSON_UNLOCK,
+  LESSON_PASSES,
   CHAR_STATS_SELECT,
   LAYOUT_VERIFIED_SET,
   LAYOUT_VERIFIED_CLEAR,
@@ -258,6 +259,19 @@ export async function saveSession(record: SessionRecord): Promise<void> {
 }
 
 /** Schaltet eine Lektion frei, falls sie es noch nicht ist. */
+/**
+ * Wie oft diese Lektion bestanden wurde.
+ *
+ * Die Freischaltung hängt daran (`curriculum.ts`, `PFLICHTRUNDEN`). Gezählt
+ * wird in `sessions`, weil dort jede einzelne Runde steht — `lesson_progress`
+ * kennt nur eine Summe aller Versuche.
+ */
+export async function countPasses(lessonId: string): Promise<number> {
+  const d = await db();
+  const rows = await d.select<{ n: number }[]>(LESSON_PASSES, [lessonId]);
+  return rows[0]?.n ?? 0;
+}
+
 export async function unlockLesson(lessonId: string): Promise<void> {
   const d = await db();
   await d.execute(LESSON_UNLOCK, [lessonId]);

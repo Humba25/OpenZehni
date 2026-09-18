@@ -1,6 +1,6 @@
 [package]
 name = "zehni"
-version = "0.1.7"
+version = "0.1.8"
 description = "Zehni - 10-Finger-Tastschreiben lernen, offline und kostenlos"
 authors = ["Mika Schlundt"]
 edition = "2021"

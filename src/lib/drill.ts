@@ -15,6 +15,9 @@
  */
 
 import { getLesson, newCharsOf } from './curriculum';
+import wortdaten from '../../content/minispiele.json';
+
+const WORTLISTE: readonly string[] = wortdaten.woerter as readonly string[];
 
 /** Vokale des Deutschen. `y` zählt hier nicht mit — es ist zu selten, um Silben zu tragen. */
 const VOWELS = new Set([...'aeiouäöü']);
@@ -37,6 +40,11 @@ const NEVER_INITIAL = new Set(['ß']);
 const JOINING_ONLY = new Set(['-']);
 
 export interface DrillOptions {
+  /**
+   * Echte Wörter, die eingestreut werden dürfen. Leer heißt: reiner
+   * Silbendrill, wie in `L01` bis `L06`.
+   */
+  readonly woerter?: readonly string[] | undefined;
   /** Vollständiger Zeichenvorrat der Lektion. Nichts außerhalb davon wird erzeugt. */
   readonly chars: string;
   /** Zeichen, die diese Lektion neu einführt. Sie machen rund 40 % der Anschläge aus. */
@@ -182,8 +190,26 @@ export function generateDrill(options: DrillOptions): string {
   const groups: string[] = [];
   let length = 0;
 
+  /*
+   * Anteil echter Wörter, sobald welche zur Verfügung stehen.
+   *
+   * Zwei Fünftel: genug, damit sich die Übung nach Sprache anfühlt, wenig
+   * genug, dass die neuen Tasten noch gehäuft vorkommen — darum geht es im
+   * Drill (SPEC.md 9.7).
+   *
+   * Bevorzugt werden Wörter, die eine der neuen Tasten enthalten. Ein Wort
+   * ohne die Taste, die gerade geübt wird, trägt zum Zweck der Lektion nichts
+   * bei.
+   */
+  const woerter = options.woerter ?? [];
+  const mitNeuen = woerter.filter((w) => [...w].some((c) => newChars.has(c)));
+  const wortquelle = mitNeuen.length >= 6 ? mitNeuen : woerter;
+
   while (length < minLength) {
-    let group = buildGroup(alphabet, newChars, emphasize, rnd);
+    let group =
+      wortquelle.length > 0 && rnd() < 0.4
+        ? wortquelle[Math.floor(rnd() * wortquelle.length)]!
+        : buildGroup(alphabet, newChars, emphasize, rnd);
     if (group.length === 0) continue;
 
     // Der Bindestrich verbindet zwei Wortteile zu einer Zusammensetzung -
@@ -383,5 +409,38 @@ export function drillForLesson(
     newChars: newCharsOf(lessonId),
     emphasize: emphasize.slice(0, 3),
     seed: `${lessonId}#${attempt}`,
+    woerter: drillWoerter(lesson.chars),
   });
+}
+
+/**
+ * Wie viele echte Wörter es mindestens geben muss, bevor welche in den Drill
+ * kommen.
+ *
+ * Darunter käme immer dasselbe Wort, und das wäre kein Üben, sondern
+ * Auswendiglernen. In `L06` sind es sechs — da bleibt es beim Silbendrill.
+ */
+export const MIN_DRILLWOERTER = 12;
+
+/**
+ * Die echten Wörter, die sich mit diesem Zeichenvorrat schreiben lassen.
+ *
+ * **Warum das nötig ist.** Der Drill baut aussprechbare Kunstsilben, und das
+ * muss er auch: In `L01` gibt es nur `f` und `j`, da ist kein Wort möglich.
+ * Er tat es aber **auch dann**, wenn längst echte Wörter möglich gewesen wären
+ * — ab `L07` sind es vierzehn, ab `L09` fünfundfünfzig.
+ *
+ * Der Nutzer hat am 2026-09-18 darauf hingewiesen: Sobald man Wörter schreiben
+ * kann, gehören sie in die Übung. Das ist auch fachlich richtig — Tippen lernt
+ * man an Wörtern, nicht an Buchstabenfolgen.
+ *
+ * Unter `MIN_DRILLWOERTER` bleibt es beim reinen Silbendrill.
+ *
+ * Die Wortliste liegt in `content/minispiele.json`. Sie ist dort entstanden,
+ * gehört aber der Sprache und nicht dem Spiel; `wortsalat` benutzt dieselbe.
+ */
+export function drillWoerter(chars: string): readonly string[] {
+  const erlaubt = new Set([...chars]);
+  const passend = WORTLISTE.filter((w) => [...w].every((c) => erlaubt.has(c)));
+  return passend.length >= MIN_DRILLWOERTER ? passend : [];
 }

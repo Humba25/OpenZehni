@@ -192,21 +192,6 @@ export const CHALLENGE_DONE =
 /** Weggeklickt. Die Karte kommt heute nicht wieder (SPEC.md 8.6). */
 export const CHALLENGE_DISMISS = 'UPDATE daily_challenge SET dismissed = 1 WHERE day = $1';
 
-// ---------------------------------------------------------- Wochenziel
-
-export const WEEKLY_SELECT = 'SELECT * FROM weekly_goal WHERE week = $1';
-
-export const WEEKLY_INSERT =
-  'INSERT INTO weekly_goal (week, target, progress, reward_given) VALUES ($1, $2, 0, 0) ' +
-  'ON CONFLICT (week) DO NOTHING';
-
-export const WEEKLY_PROGRESS_SET = 'UPDATE weekly_goal SET progress = $2 WHERE week = $1';
-
-export const WEEKLY_REWARD_GIVEN = 'UPDATE weekly_goal SET reward_given = 1 WHERE week = $1';
-
-/** Wie oft das Wochenziel schon erreicht wurde — für die Lernstube (SPEC.md 8.4). */
-export const WEEKLY_WINS = 'SELECT COUNT(*) AS n FROM weekly_goal WHERE reward_given = 1';
-
 /**
  * Wie viele **verschiedene** Lektionen in einem Zeitraum bestanden wurden.
  *
@@ -214,10 +199,6 @@ export const WEEKLY_WINS = 'SELECT COUNT(*) AS n FROM weekly_goal WHERE reward_g
  * Lektionen geschafft. Der Zeitraum wird halboffen angegeben — `$1` inklusive,
  * `$2` exklusiv —, damit sich Wochen lückenlos aneinanderreihen.
  */
-export const LESSONS_PASSED_BETWEEN =
-  'SELECT COUNT(DISTINCT lesson_id) AS n FROM sessions ' +
-  'WHERE passed = 1 AND started_at >= $1 AND started_at < $2';
-
 // -------------------------------------------- Blindmodus und Geisterschreiber
 
 /** Geübte Zeit im Blindmodus, für das Abzeichen „blindflug" (SPEC.md 8.2). */
@@ -274,3 +255,14 @@ export const MINIGAME_ADD =
   'ON CONFLICT (day) DO UPDATE SET plays = minigame_plays.plays + 1';
 
 export const MINIGAME_SELECT_DAY = 'SELECT plays FROM minigame_plays WHERE day = $1';
+
+/**
+ * Wie oft eine Lektion **bestanden** wurde — Grundlage für die Freischaltung
+ * (`curriculum.ts`, `PFLICHTRUNDEN`).
+ *
+ * Gezählt werden Runden mit `passed = 1`, nicht `lesson_progress.attempts`:
+ * Dort stehen alle Versuche, auch die misslungenen. Ein Fehlversuch darf nie
+ * gegen jemanden zählen (SPEC.md 8.11).
+ */
+export const LESSON_PASSES =
+  'SELECT COUNT(*) AS n FROM sessions WHERE lesson_id = $1 AND passed = 1';

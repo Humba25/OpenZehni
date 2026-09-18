@@ -28,12 +28,6 @@ import {
   CHALLENGE_PROGRESS_SET,
   CHALLENGE_DONE,
   CHALLENGE_DISMISS,
-  WEEKLY_SELECT,
-  WEEKLY_INSERT,
-  WEEKLY_PROGRESS_SET,
-  WEEKLY_REWARD_GIVEN,
-  WEEKLY_WINS,
-  LESSONS_PASSED_BETWEEN,
   BLIND_MS,
   SETTINGS_SET,
   PROFILE_EINSTELLUNGEN_SET,
@@ -362,62 +356,17 @@ describe('Tagesaufgabe — SPEC.md 8.6', () => {
   });
 });
 
-describe('Wochenziel — SPEC.md 8.8', () => {
-  const WOCHE = '2026-W38';
-
-  it('legt das Ziel der Woche einmal an', () => {
-    run(WEEKLY_INSERT, [WOCHE, 5]);
-    run(WEEKLY_INSERT, [WOCHE, 9]);
-    const w = alle<{ target: number; progress: number }>('SELECT * FROM weekly_goal');
-    expect(w).toHaveLength(1);
-    expect(w[0]!.target).toBe(5);
-  });
-
-  it('schreibt Fortschritt und Belohnung fort', () => {
-    run(WEEKLY_INSERT, [WOCHE, 5]);
-    run(WEEKLY_PROGRESS_SET, [WOCHE, 3]);
-    expect(alleMit<{ progress: number }>(WEEKLY_SELECT, [WOCHE])[0]!.progress).toBe(3);
-    run(WEEKLY_REWARD_GIVEN, [WOCHE]);
-    expect(alleMit<{ reward_given: number }>(WEEKLY_SELECT, [WOCHE])[0]!.reward_given).toBe(1);
-  });
-
-  it('zaehlt die erreichten Wochenziele fuer die Lernstube', () => {
-    run(WEEKLY_INSERT, ['2026-W37', 3]);
-    run(WEEKLY_REWARD_GIVEN, ['2026-W37']);
-    run(WEEKLY_INSERT, ['2026-W38', 4]);
-    expect(alle<{ n: number }>(WEEKLY_WINS)[0]!.n).toBe(1);
-  });
-});
-
-describe('Bestandene Lektionen je Zeitraum', () => {
+/**
+ * Grundlage für das Abzeichen „Blindflug" (SPEC.md 8.2).
+ *
+ * Der Test stand bis zum 2026-09-18 im Block „Bestandene Lektionen je
+ * Zeitraum", der mit dem Wochenziel entfallen ist. Er hat damit nichts zu tun
+ * und steht jetzt für sich.
+ */
+describe('Blindmodus — SPEC.md 8.2', () => {
   const runde = (lessonId: string, at: string, passed: number, blind = 0): void => {
     run(SESSION_INSERT, [lessonId, at, 60000, 100, 0, 0, 100, 95, null, 'drill', blind, passed]);
   };
-
-  /** Die Woche 2026-W38, halboffen: Montag einschliesslich bis Montag darauf. */
-  const inDerWoche = (): number =>
-    alleMit<{ n: number }>(LESSONS_PASSED_BETWEEN, ['2026-09-14', '2026-09-21'])[0]!.n;
-
-  /** Verschiedene Lektionen, nicht Runden: Fuenfmal L01 ist nicht fuenf Lektionen. */
-  it('zaehlt verschiedene Lektionen, nicht Runden', () => {
-    runde('L01', '2026-09-14T10:00:00Z', 1);
-    runde('L01', '2026-09-15T10:00:00Z', 1);
-    runde('L02', '2026-09-16T10:00:00Z', 1);
-    expect(inDerWoche()).toBe(2);
-  });
-
-  it('laesst nicht bestandene Runden aus', () => {
-    runde('L03', '2026-09-14T10:00:00Z', 0);
-    expect(inDerWoche()).toBe(0);
-  });
-
-  /** Halboffen, damit sich Wochen luckenlos aneinanderreihen. */
-  it('grenzt den Zeitraum halboffen ab', () => {
-    runde('L01', '2026-09-21T00:00:00Z', 1);
-    expect(inDerWoche()).toBe(0);
-    runde('L02', '2026-09-14T00:00:00Z', 1);
-    expect(inDerWoche()).toBe(1);
-  });
 
   it('summiert die Zeit im Blindmodus', () => {
     runde('L01', '2026-09-14T10:00:00Z', 1, 1);

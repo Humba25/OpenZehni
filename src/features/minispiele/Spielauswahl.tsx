@@ -46,6 +46,18 @@ export function Spielauswahl({ lessonId, onSpielen, onZurueck }: SpielauswahlPro
           />
 
           <Karte
+            titel={de.minispiele.elfmeter.titel}
+            beschreibung={de.minispiele.elfmeter.beschreibung}
+            onSpielen={() => onSpielen('elfmeter')}
+          />
+
+          <Karte
+            titel={de.minispiele.pferderennen.titel}
+            beschreibung={de.minispiele.pferderennen.beschreibung}
+            onSpielen={() => onSpielen('pferderennen')}
+          />
+
+          <Karte
             titel={de.minispiele.wortsalat.titel}
             beschreibung={de.minispiele.wortsalat.beschreibung}
             onSpielen={salatGeht ? () => onSpielen('wortsalat') : undefined}

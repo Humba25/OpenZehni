@@ -24,8 +24,6 @@ export interface Belohnung {
   readonly xp: number;
   readonly neueAbzeichen: readonly string[];
   readonly tageszielGeradeErreicht: boolean;
-  /** Neues Deko-Teil für die Lernstube, wenn das Wochenziel fiel (SPEC.md 8.8). */
-  readonly wochenzielTeil?: string;
   /** XP-Stand nach dieser Runde — für den Fortschrittsbalken (SPEC.md 6.5, Schritt 4). */
   readonly xpGesamt: number;
   /** Das neue Level, falls eines erreicht wurde. */
@@ -44,6 +42,14 @@ export interface ResultScreenProps {
   readonly letzteStrokesMin?: number | null;
   readonly belohnung?: Belohnung;
   /**
+   * Wie viele bestandene Runden dieser Lektion noch fehlen, bis die nächste
+   * aufgeht (`curriculum.ts`, `PFLICHTRUNDEN`). 0 heißt: Sie ist auf.
+   *
+   * **Das muss dastehen.** Sonst besteht jemand eine Lektion, es passiert
+   * sichtbar nichts, und er hält es für einen Fehler.
+   */
+  readonly nochRunden?: number;
+  /**
    * Das Angebot der Tastenjagd (SPEC.md 8.9), fertig gebaut von außen. Es steht
    * hier, weil es nach der Auswertung kommt — und es ist ein Angebot: Diese
    * Komponente zwingt niemanden hinein.
@@ -61,6 +67,7 @@ export function ResultScreen({
   bestBefore,
   letzteStrokesMin,
   belohnung,
+  nochRunden = 0,
   jagdangebot,
   onRepeat,
   onContinue,
@@ -173,17 +180,12 @@ export function ResultScreen({
                 {de.belohnung.tagesziel}
               </span>
             )}
-            {belohnung.wochenzielTeil !== undefined && (
-              <span className="rounded-full bg-richtig px-4 py-1.5 font-semibold text-white">
-                {de.wochenziel.geschafft}
-              </span>
-            )}
           </div>
         )}
 
-        {belohnung?.wochenzielTeil !== undefined && (
-          <p className="mt-2 text-sm text-gedaempft">
-            {de.wochenziel.neuesTeil(belohnung.wochenzielTeil)}
+        {result.passed && nochRunden > 0 && (
+          <p className="mt-4 rounded-xl border border-akzent/40 bg-akzent/5 p-3 text-center text-sm">
+            {de.auswertung.nochRunden(nochRunden)}
           </p>
         )}
 

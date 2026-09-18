@@ -28,7 +28,7 @@ export interface LessonListProps {
   readonly onModul: (einheitId: string) => void;
   readonly onSpiel: (spiel: MinispielId) => void;
   /**
-   * Karten über der Liste: Tagesaufgabe, Wochenziel, Begrüßung (SPEC.md 8.6,
+   * Karten über der Liste: Tagesaufgabe, Begrüßung (SPEC.md 8.6,
    * 8.8). Sie kommen von außen, weil sie an der Datenbank hängen und diese
    * Komponente keine Abfragen kennt (ARCHITEKTUR.md, Architekturregel 3).
    */

@@ -118,9 +118,15 @@ describe('Das Höchstlevel ist erreichbar — SPEC.md 8.1, 15.14', () => {
   const proTag =
     XP.tagesziel + XP.tagesaufgabe + XP.tastenjagd + MINISPIEL_XP_PRO_TAG * XP.minispiel;
 
-  /** XP nach `tage` Tagen fast täglichen Übens, Lernpfad und Abzeichen inbegriffen. */
-  const nachTagen = (tage: number): number =>
-    einmalig + tage * proTag + Math.floor(tage / 7) * XP.wochenziel;
+  /**
+   * XP nach `tage` Tagen fast täglichen Übens, Lernpfad und Abzeichen
+   * inbegriffen.
+   *
+   * Bis zum 2026-09-18 kamen je Woche 120 XP fürs Wochenziel dazu. Das ist
+   * gestrichen (SPEC.md 8.8) — die Kurve muss also ohne diesen Zuschlag
+   * erreichbar bleiben.
+   */
+  const nachTagen = (tage: number): number => einmalig + tage * proTag;
 
   it('bringt den ganzen Lernpfad über die ersten Level hinaus', () => {
     // Wer alles einmal durchgespielt hat, soll nicht bei Level 3 stehen.

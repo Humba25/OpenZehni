@@ -20,11 +20,12 @@ import { Modulbereich } from '../features/modules/Modulbereich';
 import { Spielauswahl } from '../features/minispiele/Spielauswahl';
 import { Buchstabenregen } from '../features/minispiele/Buchstabenregen';
 import { Wortsalat } from '../features/minispiele/Wortsalat';
+import { Elfmeter } from '../features/minispiele/Elfmeter';
+import { Pferderennen } from '../features/minispiele/Pferderennen';
 import { EinheitScreen } from '../features/modules/EinheitScreen';
 import { AbzeichenGalerie } from '../features/stats/Abzeichen';
 import { Einstellungen } from '../features/settings/Einstellungen';
 import { TagesaufgabeKarte } from '../features/motivation/Tagesaufgabe';
-import { WochenzielBalken } from '../features/motivation/Wochenziel';
 import { Lernstube } from '../features/motivation/Lernstube';
 import { Maskottchen, MaskottchenMitSpruch } from '../features/mascot/Maskottchen';
 import { UpdateHinweis } from '../features/update/UpdateHinweis';
@@ -35,6 +36,7 @@ import {
   loadProgress,
   saveSession,
   unlockLesson,
+  countPasses,
   loadCharStats,
   loadLastSpeed,
   markLayoutVerified,
@@ -66,15 +68,19 @@ import {
   ladeTagesaufgabe,
   tagesaufgabeFortschreiben,
   tagesaufgabeAusblenden,
-  ladeWochenziel,
-  wochenzielBelohnt,
-  ladeWochenzielSiege,
   ladeBlindMinuten,
   speichereEinstellungen,
   minispielGespielt,
   type Tagesaufgabe,
 } from '../db/motivation';
-import { getLesson, nextLesson, allLessons, type Lesson } from '../lib/curriculum';
+import {
+  getLesson,
+  nextLesson,
+  allLessons,
+  lektionFreigegeben,
+  PFLICHTRUNDEN,
+  type Lesson,
+} from '../lib/curriculum';
 import { provideText, pickFact, topicsWithContent } from '../lib/text-provider';
 import { weakestChars } from '../lib/typing-engine';
 import { faelligesInterlude, getInterlude, type Interlude } from '../lib/interludes';
@@ -83,8 +89,6 @@ import { type MinispielId } from '../lib/minispiele';
 import { jagdAngebot, type Jagdangebot } from '../lib/tastenjagd';
 import { geistLaeuft } from '../lib/geist';
 import { laengsteFehlerfreieStrecke, type Ereignis } from '../lib/challenges';
-import { belohnungFaellig, zielErreicht, type Wochenstand } from '../lib/wochenziel';
-import { neuesTeil } from '../lib/lernstube';
 import {
   XP,
   xpFuerRunde,
@@ -162,6 +166,11 @@ type Ansicht =
       bestBefore: number | null;
       letzteStrokesMin: number | null;
       belohnung: Belohnung;
+      /**
+       * Wie viele bestandene Runden dieser Lektion noch fehlen, bis die
+       * nächste aufgeht. 0 heißt: Sie ist auf.
+       */
+      nochRunden: number;
       /** Angebot der Tastenjagd, falls die Datenlage eines hergibt (8.9). */
       jagd?: Jagdangebot | undefined;
     };
@@ -173,7 +182,6 @@ export interface Gesamtstand {
   readonly serieTage: number;
   readonly minutenHeute: number;
   readonly tageszielErreicht: boolean;
-  readonly wochenzielSiege: number;
   /** Längste Serie — der Trost nach einem gerissenen Lauf (SPEC.md 8.3). */
   readonly serieLaengste: number;
   readonly jokerUebrig: number;
@@ -187,7 +195,6 @@ const LEER: Gesamtstand = {
   serieTage: 0,
   minutenHeute: 0,
   tageszielErreicht: false,
-  wochenzielSiege: 0,
   serieLaengste: 0,
   jokerUebrig: 0,
   tageSeitLetztem: 0,
@@ -200,7 +207,6 @@ export function App() {
   const [themen, setThemen] = useState<readonly string[]>([]);
   const [stand, setStand] = useState<Gesamtstand>(LEER);
   const [tagesaufgabe, setTagesaufgabe] = useState<Tagesaufgabe | undefined>(undefined);
-  const [wochenziel, setWochenziel] = useState<Wochenstand | undefined>(undefined);
   const [blind, setBlind] = useState(false);
   const [abzeichen, setAbzeichen] = useState<ReadonlyMap<string, string>>(new Map());
   const [erledigteEinheiten, setErledigteEinheiten] = useState<ReadonlySet<string>>(new Set());
@@ -212,12 +218,11 @@ export function App() {
 
   /** Liest alles neu, was die Kopfzeile und der Lernweg brauchen. */
   const standNeuLaden = useCallback(async (dailyGoalMin: number): Promise<void> => {
-    const [xp, serie, heute, interessen, siege, tageSeitLetztem, module] = await Promise.all([
+    const [xp, serie, heute, interessen, tageSeitLetztem, module] = await Promise.all([
       loadXp(),
       loadStreak(),
       loadActivity(),
       loadInterests(),
-      ladeWochenzielSiege(),
       ladeTageSeitLetztem(),
       loadModules(),
     ]);
@@ -227,7 +232,6 @@ export function App() {
       serieTage: serie.currentDays,
       minutenHeute: Math.round(heute.activeMs / 60000),
       tageszielErreicht: heute.activeMs >= dailyGoalMin * 60000,
-      wochenzielSiege: siege,
       serieLaengste: serie.longestDays,
       jokerUebrig: serie.freezesLeft,
       tageSeitLetztem,
@@ -239,7 +243,7 @@ export function App() {
   }, []);
 
   /**
-   * Tagesaufgabe und Wochenziel nachladen.
+   * Tagesaufgabe nachladen.
    *
    * Getrennt vom übrigen Stand, weil beides zusätzliche Abfragen kostet und
    * nur der Lernweg es braucht. Fällt es aus, fehlen die Karten — der Lernpfad
@@ -252,9 +256,8 @@ export function App() {
           [...stand.values()].filter((p) => p.status !== 'locked').map((p) => p.lessonId),
         );
         setTagesaufgabe(await ladeTagesaufgabe(profilId, freigeschaltet));
-        setWochenziel(await ladeWochenziel());
       } catch (error) {
-        console.warn('Zehni: Tagesaufgabe oder Wochenziel nicht lesbar', error);
+        console.warn('Zehni: Tagesaufgabe nicht lesbar', error);
       }
     },
     [],
@@ -446,6 +449,9 @@ export function App() {
         xpGesamt: stand.xp,
       };
       let jagd: Jagdangebot | undefined;
+      // 0 heisst: Die naechste Lektion ist offen. Wird unten gesetzt, sobald
+      // feststeht, wie oft diese Lektion schon bestanden wurde.
+      let nochRunden = 0;
       let letzteStrokesMin: number | null = null;
 
       try {
@@ -471,9 +477,16 @@ export function App() {
           confusions: result.snapshot.confusions,
         });
 
+        // Die naechste Lektion geht erst nach PFLICHTRUNDEN bestandenen Runden
+        // auf (curriculum.ts). Eine einzige geglueckte Runde zeigt, dass jemand
+        // die Tasten gefunden hat, nicht dass er sie kann.
         if (result.passed) {
-          const naechste = nextLesson(runde.lesson.id);
-          if (naechste) await unlockLesson(naechste.id);
+          const bestanden = await countPasses(runde.lesson.id);
+          nochRunden = Math.max(0, PFLICHTRUNDEN - bestanden);
+          if (lektionFreigegeben(bestanden)) {
+            const naechste = nextLesson(runde.lesson.id);
+            if (naechste) await unlockLesson(naechste.id);
+          }
         }
 
         belohnung = await belohnungenVerbuchen({
@@ -481,7 +494,6 @@ export function App() {
           neueBestleistung,
           dailyGoalMin: profile?.dailyGoalMin ?? 10,
           levelVorher: stand.level,
-          wochenzielSiegeVorher: stand.wochenzielSiege,
         });
 
         // Tagesaufgabe (SPEC.md 8.6). Die fehlerfreie Strecke kommt aus dem
@@ -518,6 +530,7 @@ export function App() {
         bestBefore,
         letzteStrokesMin,
         belohnung,
+        nochRunden,
         jagd,
       });
     },
@@ -525,7 +538,6 @@ export function App() {
       progress,
       profile,
       stand.level,
-      stand.wochenzielSiege,
       stand.xp,
       standNeuLaden,
       motivationNeuLaden,
@@ -748,18 +760,13 @@ export function App() {
                     }}
                   />
                 )}
-                {wochenziel && <WochenzielBalken stand={wochenziel} />}
               </div>
             }
           />
         )}
 
         {ansicht.name === 'lernstube' && (
-          <Lernstube
-            level={stand.level}
-            wochenziele={stand.wochenzielSiege}
-            onZurueck={() => setAnsicht({ name: 'lernweg' })}
-          />
+          <Lernstube level={stand.level} onZurueck={() => setAnsicht({ name: 'lernweg' })} />
         )}
 
         {ansicht.name === 'abzeichen' && (
@@ -795,6 +802,20 @@ export function App() {
           <>
             {ansicht.spiel === 'buchstabenregen' && (
               <Buchstabenregen
+                lessonId={hoechsteLektion}
+                saat={String(stand.xp)}
+                onBeenden={() => void spielBeendet(ansicht.zurueck)}
+              />
+            )}
+            {ansicht.spiel === 'elfmeter' && (
+              <Elfmeter
+                lessonId={hoechsteLektion}
+                saat={String(stand.xp)}
+                onBeenden={() => void spielBeendet(ansicht.zurueck)}
+              />
+            )}
+            {ansicht.spiel === 'pferderennen' && (
+              <Pferderennen
                 lessonId={hoechsteLektion}
                 saat={String(stand.xp)}
                 onBeenden={() => void spielBeendet(ansicht.zurueck)}
@@ -908,6 +929,7 @@ export function App() {
             bestBefore={ansicht.bestBefore}
             letzteStrokesMin={ansicht.letzteStrokesMin}
             belohnung={ansicht.belohnung}
+            nochRunden={ansicht.nochRunden}
             hasNext={nextLesson(ansicht.lesson.id) !== undefined}
             onRepeat={() => void starten(ansicht.lesson)}
             onContinue={() => void weiterNachAuswertung(ansicht.lesson, ansicht.result.passed)}
@@ -948,7 +970,7 @@ export function App() {
 }
 
 /**
- * Verbucht XP, Tagesziel, Serie, Wochenziel und Abzeichen für eine beendete
+ * Verbucht XP, Tagesziel, Serie und Abzeichen für eine beendete
  * Runde.
  *
  * Die Reihenfolge ist nicht beliebig: Erst die Übungszeit, weil davon das
@@ -960,7 +982,6 @@ async function belohnungenVerbuchen(e: {
   neueBestleistung: boolean;
   dailyGoalMin: number;
   levelVorher: number;
-  wochenzielSiegeVorher: number;
 }): Promise<Belohnung> {
   let xp = xpFuerRunde({
     sterne: e.result.stars,
@@ -981,20 +1002,9 @@ async function belohnungenVerbuchen(e: {
 
   await addXp(xp);
 
-  // Wochenziel (SPEC.md 8.8). Der Fortschritt zaehlt sich aus den Runden selbst
-  // zusammen; hier ist nur zu pruefen, ob die Belohnung faellig ist.
-  let dekoTeil: string | undefined;
-  const woche = await ladeWochenziel();
-  if (belohnungFaellig(woche)) {
-    await wochenzielBelohnt(woche.week);
-    await addXp(XP.wochenziel);
-    xp += XP.wochenziel;
-    const teil = neuesTeil(
-      { level: e.levelVorher, wochenziele: e.wochenzielSiegeVorher },
-      { level: e.levelVorher, wochenziele: e.wochenzielSiegeVorher + 1 },
-    );
-    dekoTeil = teil?.label;
-  }
+  // Das Wochenziel ist am 2026-09-18 gestrichen worden (SPEC.md 8.8). Ein
+  // sichtbares Wochenziel wirkt als Stoppsignal: Ist der Balken voll, ist die
+  // Woche gefuehlt erledigt. Deko-Teile kommen jetzt allein aus den Leveln.
 
   // Abzeichen erst danach: Sie muessen die neue Serie und die neue Uebungszeit
   // kennen (SPEC.md 8.2).
@@ -1042,7 +1052,6 @@ async function belohnungenVerbuchen(e: {
     tageszielGeradeErreicht,
     xpGesamt,
     ...(levelNachher > e.levelVorher ? { levelAufstieg: levelNachher } : {}),
-    ...(zielErreicht(woche) && dekoTeil !== undefined ? { wochenzielTeil: dekoTeil } : {}),
   };
 }
 

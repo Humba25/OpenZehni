@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateDrill, drillForLesson } from './drill';
+import { generateDrill, drillForLesson, drillWoerter, MIN_DRILLWOERTER } from './drill';
 import { allLessons, getLesson, newCharsOf } from './curriculum';
 import { countStrokes } from './metrics';
 
@@ -225,5 +225,56 @@ describe('Didaktische Zusagen aus SPEC.md 9.7', () => {
     const ohne = [...drillForLesson('L13', 5)].filter((c) => c === 'ü').length;
     const mit = [...drillForLesson('L13', 5, ['ü'])].filter((c) => c === 'ü').length;
     expect(mit).toBeGreaterThan(ohne);
+  });
+});
+
+describe('Echte Wörter im Drill — SPEC.md 9.7', () => {
+  /**
+   * Der Hinweis des Nutzers vom 2026-09-18: Sobald man Wörter schreiben kann,
+   * gehören sie in die Übung. Vorher baute der Drill auch dann Kunstsilben,
+   * wenn längst echte Wörter möglich waren.
+   */
+  it('streut ab genug Wörtern echte Wörter ein', () => {
+    const lesson = getLesson('L09')!;
+    const woerter = new Set(drillWoerter(lesson.chars));
+    expect(woerter.size).toBeGreaterThanOrEqual(MIN_DRILLWOERTER);
+
+    let gefunden = 0;
+    for (let versuch = 0; versuch < 8; versuch++) {
+      for (const gruppe of drillForLesson('L09', versuch).split(' ')) {
+        // Satzzeichen, die der Drill anhängt, gehören nicht zum Wort.
+        if (woerter.has(gruppe.replace(/[.,!?;:-]+$/u, ''))) gefunden++;
+      }
+    }
+    expect(gefunden, 'in acht Runden kam kein einziges echtes Wort vor').toBeGreaterThan(0);
+  });
+
+  /** In `L01` gibt es nur `f` und `j`. Da ist kein Wort möglich, und das ist gut so. */
+  it('bleibt beim Silbendrill, solange es zu wenige Wörter gibt', () => {
+    for (const id of ['L01', 'L02', 'L03', 'L06']) {
+      expect(drillWoerter(getLesson(id)!.chars), id).toEqual([]);
+    }
+  });
+
+  /**
+   * Die harte Regel aus 6.2 gilt auch für eingestreute Wörter: **kein
+   * ungelerntes Zeichen.** Geprüft für jede Lektion, nicht für eine Auswahl.
+   */
+  it('bringt über die Wörter kein ungelerntes Zeichen herein', () => {
+    for (const lesson of allLessons()) {
+      const erlaubt = new Set([...lesson.chars]);
+      for (const wort of drillWoerter(lesson.chars)) {
+        for (const c of wort) {
+          expect(erlaubt.has(c), `${lesson.id}: '${c}' in '${wort}' ist dort nicht gelernt`).toBe(
+            true,
+          );
+        }
+      }
+    }
+  });
+
+  it('bleibt reproduzierbar', () => {
+    expect(drillForLesson('L09', 3)).toBe(drillForLesson('L09', 3));
+    expect(drillForLesson('L09', 3)).not.toBe(drillForLesson('L09', 4));
   });
 });

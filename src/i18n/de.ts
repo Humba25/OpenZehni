@@ -398,6 +398,13 @@ export const de = {
     bisZumNaechsten: (fehlend: number, level: number): string =>
       `noch ${fehlend} XP bis Level ${level}`,
     hoechstesLevel: 'Höchstes Level erreicht',
+    // Muss dastehen: Sonst besteht jemand eine Lektion, es passiert sichtbar
+    // nichts, und er haelt es fuer einen Fehler (SPEC.md 6.2).
+    nochRunden: (n: number): string =>
+      n === 1
+        ? 'Noch eine geschaffte Runde, dann geht die nächste Lektion auf.'
+        : `Noch ${n} geschaffte Runden, dann geht die nächste Lektion auf.`,
+
     levelAufstieg: (level: number): string => `Level ${level} erreicht!`,
     weiter: 'Weiter',
     nochmal: 'Nochmal',
@@ -443,15 +450,6 @@ export const de = {
     geschafft: 'Aufgabe geschafft!',
     stand: (a: number, b: number): string => `${a} von ${b}`,
     belohnung: (n: number): string => `+${n} XP`,
-  },
-
-  wochenziel: {
-    titel: 'Diese Woche',
-    stand: (a: number, b: number): string =>
-      b === 1 ? `${a} von 1 Lektion` : `${a} von ${b} Lektionen`,
-    geschafft: 'Wochenziel geschafft!',
-    neuesTeil: (label: string): string => `Neu in deiner Lernstube: ${label}`,
-    erklaerung: 'Der Balken fängt jeden Montag neu an.',
   },
 
   tastenjagd: {
@@ -550,6 +548,69 @@ export const de = {
       gefangen: (n: number): string => (n === 1 ? '1 gefangen' : `${n} gefangen`),
       ergebnis: (n: number): string =>
         n === 1 ? 'Du hast 1 Buchstaben gefangen.' : `Du hast ${n} Buchstaben gefangen.`,
+
+      // Keine Uhr mehr: Die Runde endet an den Fehlversuchen (SPEC.md 8.10).
+      leben: (n: number): string => (n === 1 ? 'Noch 1 Versuch' : `Noch ${n} Versuche`),
+      verloren: 'Drei sind durchgerutscht. Runde vorbei.',
+      nochmal: 'Nochmal',
+
+      // Auswahl des Zeichenvorrats. Die Knöpfe zeigen die Tasten selbst — „f j"
+      // braucht keine Erklärung, „L02" schon. Mehrfachauswahl ist möglich.
+      gruppeFrage: 'Welche Tasten sollen fallen?',
+      gruppeAlles: 'Alles, was du kannst',
+    },
+
+    elfmeter: {
+      titel: 'Elfmeterschießen',
+      beschreibung: 'Tipp das Wort in der Ecke, die du treffen willst. Dann lad den Schuss auf.',
+      schuss: (a: number, b: number): string => `Schuss ${a} von ${b}`,
+      tore: (n: number): string => (n === 1 ? '1 Tor' : `${n} Tore`),
+
+      stufeFrage: 'Wie schwer?',
+      stufen: {
+        leicht: 'Leicht',
+        mittel: 'Mittel',
+        schwer: 'Schwer',
+      } as Record<string, string>,
+
+      zielen: 'Such dir eine Ecke aus und tipp das Wort.',
+      laden: 'Jetzt schnell! Jedes Zeichen macht den Schuss härter.',
+      kraft: (n: number): string => `Schusskraft ${n} Prozent`,
+      zeit: (s: number): string => `noch ${s} s`,
+
+      tor: 'Tor!',
+      gehalten: 'Gehalten. Der Torwart hat die Ecke erraten.',
+      weiter: 'Weiter mit der Eingabetaste.',
+
+      ergebnis: (tore: number, schuesse: number): string =>
+        `${tore} von ${schuesse} Schüssen waren drin.`,
+      nochmal: 'Nochmal',
+    },
+
+    pferderennen: {
+      titel: 'Pferderennen',
+      beschreibung: 'Tippen treibt dein Pferd an. Vor jeder Hürde: Leertaste!',
+      strecke: (n: number): string => `${n} Prozent der Strecke`,
+
+      stufeFrage: 'Wie schnell?',
+      stufen: {
+        gemuetlich: 'Gemütlich',
+        flott: 'Flott',
+        rasant: 'Rasant',
+      } as Record<string, string>,
+
+      losgehen: 'Tipp das erste Zeichen, dann geht es los.',
+      laufen: 'Immer weiter!',
+      springen: 'Hürde! Leertaste!',
+      gestolpert: 'Gestolpert. Gleich geht es weiter.',
+
+      gewonnen: 'Gewonnen!',
+      verloren: 'Das andere Pferd war schneller.',
+      huerdenBilanz: (geschafft: number, gesamt: number): string =>
+        gesamt === 0
+          ? 'Keine Hürden auf dieser Strecke.'
+          : `${geschafft} von ${gesamt} Hürden übersprungen.`,
+      nochmal: 'Nochmal',
     },
 
     wortsalat: {
@@ -569,7 +630,7 @@ export const de = {
   modulbereich: {
     titel: 'Module',
     oeffnen: 'Module',
-    untertitel: 'Kannst du jederzeit machen, in jeder Reihenfolge.',
+    untertitel: 'Alles sofort spielbar, in jeder Reihenfolge, so viel du willst.',
     zurueck: 'Zurück',
     stand: (a: number, b: number): string => `${a} von ${b} gemacht`,
     imLernpfad: 'Kommt im Lernweg',
@@ -577,9 +638,8 @@ export const de = {
     erledigt: 'Gemacht',
     starten: 'Ansehen',
     nochmal: 'Nochmal ansehen',
-    // Die Einheiten im Lernpfad werden dort gespielt, nicht hier. Sonst
-    // bekaeme man eine Falle zu sehen, bevor sie im Lernweg drankommt.
-    nurImLernpfad: 'Diese Einheit kommt unterwegs im Lernweg.',
+    // Hinweis, keine Schranke: Wer will, macht alles sofort.
+    imLernpfadHinweis: 'Kommt im Lernweg noch einmal vor.',
   },
 
   einheit: {

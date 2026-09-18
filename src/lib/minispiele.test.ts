@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import {
+  alleSpielWoerter,
+  regenGruppen,
+  regenGruppenBis,
+  regenVorrat,
   createRandom,
   regenZeichen,
   naechstesZeichen,
@@ -12,6 +16,7 @@ import {
   MIN_WOERTER,
 } from './minispiele';
 import { allLessons, getLesson } from './curriculum';
+import { isSchreibweiseKorrekt } from './schreibweise';
 
 describe('Buchstabenregen — SPEC.md 8.10', () => {
   /** Die harte Regel aus SPEC.md 6.2 gilt auch im Spiel. */
@@ -144,5 +149,107 @@ describe('Rahmen', () => {
   it('hält die Runde kurz', () => {
     expect(SPIEL_SEKUNDEN).toBeGreaterThanOrEqual(30);
     expect(SPIEL_SEKUNDEN).toBeLessThanOrEqual(120);
+  });
+});
+
+describe('Tastengruppen für Buchstabenregen — SPEC.md 8.10', () => {
+  const bis = (order: number) => allLessons().filter((l) => l.order <= order);
+
+  it('gibt je Lektion eine Gruppe mit genau deren neuen Tasten', () => {
+    const g = regenGruppen(bis(3));
+    expect(g.map((x) => x.zeichen.join(''))).toEqual(['fj', 'dk', 'sl']);
+  });
+
+  /** L05 bringt keine neuen Tasten — eine leere Gruppe wäre ein toter Knopf. */
+  it('lässt Lektionen ohne neue Tasten aus', () => {
+    const g = regenGruppen(bis(5));
+    expect(g.some((x) => x.id === 'L05')).toBe(false);
+    expect(g).toHaveLength(4);
+  });
+
+  /**
+   * Die harte Regel aus 6.2: **kein ungelerntes Zeichen.** Sie gilt auch im
+   * Spiel — ein Kind soll keine Taste jagen, die es nie gezeigt bekommen hat.
+   */
+  it('bietet nie ein Zeichen an, das noch nicht gelernt ist', () => {
+    for (const lesson of allLessons()) {
+      const erlaubt = new Set([...lesson.chars]);
+      for (const gruppe of regenGruppen(bis(lesson.order))) {
+        for (const z of gruppe.zeichen) {
+          expect(erlaubt.has(z), `${lesson.id}/${gruppe.id}: '${z}' ist dort nicht gelernt`).toBe(
+            true,
+          );
+        }
+      }
+    }
+  });
+
+  it('kommt ohne freigeschaltete Lektionen zurecht', () => {
+    expect(regenGruppen([])).toEqual([]);
+    expect(regenGruppenBis('L99')).toEqual([]);
+  });
+});
+
+describe('Vorrat aus mehreren Gruppen — SPEC.md 8.10', () => {
+  const gruppen = regenGruppen(allLessons().filter((l) => l.order <= 4));
+  const sortiert = (x: readonly string[]): string[] => [...x].sort();
+
+  /** Der Kern des Wunsches: „vielleicht nur d k, oder vielleicht d f j k." */
+  it('legt mehrere gewählte Gruppen zusammen', () => {
+    expect(sortiert(regenVorrat('L04', gruppen, new Set(['L02'])))).toEqual(['d', 'k']);
+    expect(sortiert(regenVorrat('L04', gruppen, new Set(['L01', 'L02'])))).toEqual([
+      'd',
+      'f',
+      'j',
+      'k',
+    ]);
+  });
+
+  /**
+   * Ohne Auswahl der **volle** Vorrat der Lektion, nicht die Summe der
+   * Gruppen. Die Großbuchstaben haben keine eigene Gruppe — `L20` führt nur
+   * die Umschalttasten ein —, wären über die Gruppen also nicht zu erreichen.
+   */
+  it('nimmt ohne Auswahl den vollen Vorrat der Lektion', () => {
+    expect(sortiert(regenVorrat('L04', gruppen, new Set()))).toEqual([
+      'a',
+      'd',
+      'f',
+      'j',
+      'k',
+      'l',
+      's',
+      'ö',
+    ]);
+    expect(regenVorrat('L21', regenGruppen(allLessons()), new Set())).toContain('A');
+  });
+
+  it('liefert für eine unbekannte Gruppe nichts', () => {
+    expect(regenVorrat('L04', gruppen, new Set(['gibtsnicht']))).toEqual([]);
+  });
+});
+
+/**
+ * Die Wortliste ist seit dem 2026-09-18 nicht mehr nur Spielmaterial: Der Drill
+ * streut sie in die Übungen ein (`drill.ts`). Damit gilt für sie dieselbe
+ * Regel wie für jeden ausgegebenen Text.
+ *
+ * **Fünf Wörter standen in Ausweichschreibung darin** — `tuer`, `gemuese`,
+ * `kaefer`, `loeffel`, `ruecken`. Im Spiel fiel das nie auf, weil dort nur
+ * abgetippt und nichts eingeübt wird. In einer Übung ist es ein eingeübter
+ * Rechtschreibfehler, und das darf ein Schreibtrainer nicht (ARCHITEKTUR.md).
+ */
+describe('Wortliste — Schreibweisen', () => {
+  it('enthält kein Wort in Ausweichschreibung', () => {
+    for (const wort of alleSpielWoerter()) {
+      expect(isSchreibweiseKorrekt(wort), `'${wort}' ist eine Ausweichschreibung`).toBe(true);
+    }
+  });
+
+  it('enthält nur Kleinbuchstaben ohne Leerzeichen', () => {
+    for (const wort of alleSpielWoerter()) {
+      expect(wort, wort).toBe(wort.toLowerCase().trim());
+      expect(wort.includes(' '), wort).toBe(false);
+    }
   });
 });

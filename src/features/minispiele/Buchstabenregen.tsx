@@ -5,17 +5,24 @@
  * DOM ohne Spiel-Engine und ohne neue Abhängigkeit, wie die Spec es verlangt
  * (Performance-Budget 12.1).
  *
- * **Keine Leben, kein Verlieren-Bildschirm.** Ein verpasster Buchstabe
- * verschwindet unten und sonst passiert nichts. Das Spiel endet, wenn die Zeit
- * um ist, und ist sofort neu startbar.
+ * **Drei Fehlversuche, dann ist die Runde vorbei** (seit 2026-09-18,
+ * Entscheidung des Nutzers). Keine Uhr mehr: Ein Countdown, der etwas beendet,
+ * ist ausdrücklich unerwünscht (SPEC.md 8.11). Jetzt hängt das Ende daran, wie
+ * gut man ist, und die nächste Runde beginnt sofort.
+ *
+ * Das sind **keine Leben, die den Zugang begrenzen** — das verbietet 8.11 und
+ * es bleibt verboten. Nach der dritten verpassten Taste ist die Runde zu Ende,
+ * nicht das Spiel.
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useMemo } from 'react';
 import {
-  regenZeichen,
+  regenGruppenBis,
+  regenVorrat,
   naechstesZeichen,
   createRandom,
-  SPIEL_SEKUNDEN,
+  REGEN_LEBEN,
   FALLDAUER_MS,
   ABWURF_MS,
 } from '../../lib/minispiele';
@@ -31,6 +38,13 @@ interface Tropfen {
   readonly start: number;
 }
 
+/** Die Optik eines Auswahlknopfes. Steht hier, damit sie nicht zweimal dasteht. */
+const knopf = (aktiv: boolean): string =>
+  [
+    'rounded-lg border px-3 py-1 text-sm transition-colors',
+    aktiv ? 'border-akzent bg-akzent/10 font-semibold' : 'border-rand hover:border-akzent',
+  ].join(' ');
+
 /** Wie oft die Anzeige neu gerechnet wird. 20 Bilder je Sekunde reichen. */
 const TAKT_MS = 50;
 
@@ -42,12 +56,26 @@ export interface BuchstabenregenProps {
 }
 
 export function Buchstabenregen({ lessonId, saat, onBeenden }: BuchstabenregenProps) {
+  /**
+   * Welche Tastenreihe fällt. Die Auswahl steht **im Spiel**, nicht davor: So
+   * funktioniert sie auch, wenn die Runde aus dem Lernweg heraus beginnt, und
+   * man kann zwischen zwei Runden wechseln, ohne das Spiel zu verlassen.
+   */
+  const gruppen = useMemo(() => regenGruppenBis(lessonId), [lessonId]);
+
+  /**
+   * Die gewählten Gruppen. **Leer heißt alles** — das ist die Vorgabe und das
+   * Verhalten von vorher. Mehrfachauswahl ist hier der Kern: „vielleicht nur
+   * d k, oder vielleicht d f j k."
+   */
+  const [gewaehlt, setGewaehlt] = useState<ReadonlySet<string>>(new Set());
   const [tropfen, setTropfen] = useState<readonly Tropfen[]>([]);
   const [gefangen, setGefangen] = useState(0);
-  const [verbleibend, setVerbleibend] = useState(SPIEL_SEKUNDEN);
+  const [verpasst, setVerpasst] = useState(0);
   const [jetzt, setJetzt] = useState(() => performance.now());
 
-  const vorrat = useRef(regenZeichen(lessonId));
+  const vorrat = useRef<readonly string[]>([]);
+  vorrat.current = regenVorrat(lessonId, gruppen, gewaehlt);
   const rnd = useRef(createRandom(`regen#${lessonId}#${saat}`));
   const naechsteId = useRef(0);
   const letzterAbwurf = useRef(0);
@@ -65,14 +93,21 @@ export function Buchstabenregen({ lessonId, saat, onBeenden }: BuchstabenregenPr
     setTropfen(neu);
   }, []);
 
-  const vorbei = verbleibend <= 0;
+  const vorbei = verpasst >= REGEN_LEBEN;
 
-  // Die Uhr. Sie laeuft bis null und bleibt dort stehen.
-  useEffect(() => {
-    if (vorbei) return;
-    const id = window.setInterval(() => setVerbleibend((s) => Math.max(0, s - 1)), 1000);
-    return () => window.clearInterval(id);
-  }, [vorbei]);
+  /**
+   * Sofort wieder spielbar — das ist der Unterschied zwischen „Runde vorbei"
+   * und „Zugang begrenzt" (SPEC.md 8.11). Ohne diesen Knopf wäre das Ende eine
+   * Sackgasse, und genau die soll es nirgends geben (ARCHITEKTUR.md).
+   */
+  const neuStarten = useCallback((): void => {
+    setzeTropfen([]);
+    setGefangen(0);
+    setVerpasst(0);
+    naechsteId.current = 0;
+    letzterAbwurf.current = 0;
+    setJetzt(performance.now());
+  }, [setzeTropfen]);
 
   // Der Spieltakt: neue Buchstaben abwerfen, unten angekommene entfernen.
   useEffect(() => {
@@ -82,8 +117,10 @@ export function Buchstabenregen({ lessonId, saat, onBeenden }: BuchstabenregenPr
       const t = performance.now();
       setJetzt(t);
 
-      // Unten angekommen: verschwindet, und sonst passiert nichts.
+      // Unten angekommen: kostet einen Versuch.
+      const durch = tropfenRef.current.filter((x) => t - x.start >= FALLDAUER_MS);
       let neu = tropfenRef.current.filter((x) => t - x.start < FALLDAUER_MS);
+      if (durch.length > 0) setVerpasst((n) => n + durch.length);
 
       if (t - letzterAbwurf.current >= ABWURF_MS) {
         const zeichen = naechstesZeichen(vorrat.current, rnd.current);
@@ -148,9 +185,58 @@ export function Buchstabenregen({ lessonId, saat, onBeenden }: BuchstabenregenPr
         </div>
         <div className="flex items-center gap-4 text-sm text-gedaempft">
           <span className="tabular-nums">{de.minispiele.buchstabenregen.gefangen(gefangen)}</span>
-          <span className="tabular-nums">{de.minispiele.verbleibend(verbleibend)}</span>
+          <span className="tabular-nums">
+            {de.minispiele.buchstabenregen.leben(Math.max(0, REGEN_LEBEN - verpasst))}
+          </span>
         </div>
       </header>
+
+      {/*
+        Auswahl der Tastenreihe. Nur was gelernt ist, steht hier — die harte
+        Regel aus SPEC.md 6.2 gilt im Spiel genauso.
+
+        Ein Wechsel startet die Runde neu: Mitten im Fallen den Vorrat zu
+        tauschen, hieße Buchstaben stehen zu lassen, die nicht mehr dazugehören.
+      */}
+      {gruppen.length > 1 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm text-gedaempft">
+            {de.minispiele.buchstabenregen.gruppeFrage}
+          </span>
+
+          {/* Nichts gewählt heißt alles — deshalb ist dieser Knopf aktiv,
+              solange die Auswahl leer ist. */}
+          <button
+            type="button"
+            aria-pressed={gewaehlt.size === 0}
+            onClick={() => {
+              setGewaehlt(new Set());
+              neuStarten();
+            }}
+            className={knopf(gewaehlt.size === 0)}
+          >
+            {de.minispiele.buchstabenregen.gruppeAlles}
+          </button>
+
+          {gruppen.map((g) => (
+            <button
+              key={g.id}
+              type="button"
+              aria-pressed={gewaehlt.has(g.id)}
+              onClick={() => {
+                const neu = new Set(gewaehlt);
+                if (neu.has(g.id)) neu.delete(g.id);
+                else neu.add(g.id);
+                setGewaehlt(neu);
+                neuStarten();
+              }}
+              className={`${knopf(gewaehlt.has(g.id))} font-tippen`}
+            >
+              {g.zeichen.join(' ')}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="relative flex-1 overflow-hidden rounded-2xl border border-rand bg-flaeche">
         {!vorbei &&
@@ -170,10 +256,18 @@ export function Buchstabenregen({ lessonId, saat, onBeenden }: BuchstabenregenPr
         {vorbei && (
           <div className="grid h-full place-items-center p-6 text-center">
             <div>
-              <p className="text-2xl font-semibold">
+              <p className="text-sm text-gedaempft">{de.minispiele.buchstabenregen.verloren}</p>
+              <p className="mt-2 text-2xl font-semibold">
                 {de.minispiele.buchstabenregen.ergebnis(gefangen)}
               </p>
-              <p className="mt-2 text-sm text-gedaempft">{de.minispiele.xpHinweis}</p>
+              <button
+                type="button"
+                onClick={neuStarten}
+                className="mt-4 rounded-xl bg-akzent px-5 py-2 font-semibold text-white"
+              >
+                {de.minispiele.buchstabenregen.nochmal}
+              </button>
+              <p className="mt-4 text-sm text-gedaempft">{de.minispiele.xpHinweis}</p>
             </div>
           </div>
         )}

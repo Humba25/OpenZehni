@@ -557,7 +557,20 @@ Die Anordnung steht als Plan in `content/lernpfad.json` — Inhalte sind Daten,
 kein Code (`ARCHITEKTUR.md`, Architekturregel 4). Verbindlich dabei:
 
 - **Keine Station hält auf.** Die nächste Lektion wird allein durch die vorige
-  freigeschaltet. `lib/lernpfad.ts` kennt keine Funktion, die aus einer Station
+  freigeschaltet — und zwar, seit dem 2026-09-18, nach **zwei bestandenen
+  Runden** statt einer (`curriculum.ts`, `PFLICHTRUNDEN`).
+
+  Der Nutzer hat die Lernkurve mehrfach als zu steil bezeichnet. Eine einzige
+  geglückte Runde zeigt, dass jemand die Tasten **gefunden** hat, nicht dass er
+  sie **kann**; der nächste Satz Tasten kam, bevor der letzte saß. Zwei Runden
+  bedeuten über den ganzen Pfad knapp eine Stunde mehr.
+
+  Gezählt werden **bestandene** Runden, nicht Versuche: Ein Fehlversuch zählt
+  nie gegen jemanden (8.11). Was noch fehlt, steht in der Auswertung — sonst
+  besteht jemand eine Lektion, es passiert sichtbar nichts, und er hält es für
+  einen Fehler.
+
+  Die Zahl ist an echten Daten nachzujustieren (15.11). `lib/lernpfad.ts` kennt keine Funktion, die aus einer Station
   eine Bedingung machen könnte.
 - **Eine Station ist offen, sobald die Lektion davor offen ist** — nicht erst,
   wenn sie bestanden wurde. Wer an einer Lektion hängt, soll etwas anderes
@@ -780,20 +793,35 @@ eigene Rekord (`NORMEN.md`-fern, reine Motivation).
   läuft die Übung normal weiter und die Auswertung sagt sachlich, wie knapp es
   war. Er ist ein Schrittmacher, kein Countdown (siehe 8.10).
 
-### 8.8 Wochenziel
+### 8.8 Wochenziel — ~~geplant~~ **gestrichen am 2026-09-18**
 
-Ein größeres Ziel über die Woche mit sichtbarem Balken, zum Beispiel
-„5 Lektionen diese Woche". Belohnung: ein Abzeichen oder ein Deko-Teil für die
-Lernstube (8.4).
+Vorgesehen war ein Wochenziel mit sichtbarem Balken, zum Beispiel „5 Lektionen
+diese Woche", mit einem Deko-Teil als Belohnung.
 
-- Die Woche läuft **Montag bis Sonntag** (ISO 8601, wie in `NORMEN.md` 5 für
-  Datumsangaben zugrunde gelegt).
-- Das Ziel richtet sich nach der tatsächlichen Aktivität der Vorwoche und darf
-  **nie um mehr als eine Einheit steigen**. Damit kann daraus keine Tretmühle
-  werden, die sich mit jedem guten Ergebnis selbst hochschraubt.
-- Nicht erreicht: Der Balken beginnt am Montag neu. Keine Meldung, keine
-  Einordnung, kein Verlust — wie bei der Serie (8.3) gilt: motivieren, nicht
-  bestrafen.
+**Gestrichen auf Entscheidung des Nutzers, und die Begründung ist gut:** Ein
+sichtbares Ziel wirkt als **Stoppsignal**. Ist der Balken voll, ist die Woche
+gefühlt erledigt — das Ziel sagt dem Kind nicht nur, was es schaffen soll,
+sondern auch, wann es aufhören darf. Das kleinste Ziel lag bei drei Lektionen;
+wer mehr könnte, hörte nach drei auf.
+
+Die Sorge, die hier vermieden werden sollte, war die Tretmühle: ein Ziel, das
+sich mit jedem guten Ergebnis selbst hochschraubt. Dagegen half die Deckelung —
+gegen die entgegengesetzte Wirkung half sie nicht.
+
+**Was an die Stelle tritt: nichts.** Es gibt weiterhin das Tagesziel (8.3), das
+an Minuten hängt und nicht an Lektionen, und die Serie. Beides misst, ob
+überhaupt geübt wurde, nicht wie viel genug ist.
+
+**Folgen im Bestand:**
+
+- Deko-Teile kommen allein aus den Leveln (8.4). 29 Levelaufstiege stehen 15
+  erspielbaren Teilen gegenüber — das reicht.
+- Die 120 XP je erreichtem Wochenziel entfallen. Die Level-Kurve trägt auch
+  ohne sie: Nach einem Jahr fast täglichen Übens stehen rund 48 400 XP zur
+  Verfügung, Level 30 verlangt 43 500 (8.1). `gamification.test.ts` prüft das.
+- Die Tabelle `weekly_goal` bleibt in der Datenbank stehen — eine ausgelieferte
+  Migration wird nie verändert (`ARCHITEKTUR.md`, Architekturregel 3) — und
+  wird von nichts mehr gelesen.
 
 ### 8.9 Tastenjagd
 
@@ -830,11 +858,84 @@ Verbindliche Schranken, damit die Spiele nicht gegen 8.11 verstoßen:
   `char_stats` oder in irgendeine Bewertung ein. XP ja, Sterne nein.
 - **Ein Minispiel schaltet nie eine Lektion frei.** Wer nur spielt, kommt im
   Lernpfad nicht voran — und wer nicht spielt, verpasst nichts.
-- Keine Leben, kein Verlieren-Bildschirm. Ein Spiel endet von selbst und ist
-  sofort neu startbar. Eine Zeitbegrenzung *innerhalb* eines Minispiels ist
-  zulässig, weil es keine Übung ist, die dadurch abgebrochen würde.
+- **Keine Leben, die den Zugang begrenzen** (8.11). Jede Runde ist sofort neu
+  startbar — immer, ohne Wartezeit, ohne Bedingung.
+
+  **Drei Fehlversuche innerhalb einer Runde sind erlaubt** (seit 2026-09-18,
+  Entscheidung des Nutzers). Hier stand vorher pauschal „keine Leben"; das war
+  zu weit gefasst. Gemeint ist in 8.11 das Modell, bei dem der *Zugang* endet —
+  nicht die Runde. Ein Spiel braucht ein Ende, das man selbst herbeiführt.
+
+  **`buchstabenregen` hat seit demselben Tag keine Uhr mehr.** Die Runde endet,
+  wenn drei Buchstaben unten ankommen. Das ist näher an 8.11 als die Uhr davor:
+  „Kein Countdown, der eine laufende Übung abbricht."
+
+  Bei `wortsalat` bleibt die Zeitbegrenzung — dort gibt es nichts, was
+  durchrutschen könnte.
+- **Der Zeichenvorrat ist wählbar** (seit 2026-09-18). In `buchstabenregen`
+  gibt es je Lektion eine Gruppe mit genau deren neuen Tasten, beschriftet mit
+  den Zeichen selbst: `f j`, `d k`, `s l` und so weiter.
+
+  **Mehrere Gruppen lassen sich kombinieren** — „nur d k, oder vielleicht
+  d f j k". Das ist die Einheit, in der jemand denkt, der gerade eine Lektion
+  hinter sich hat; eine ganze Tastenreihe wäre dafür zu grob.
+
+  Vorher fiel immer der volle Vorrat der zuletzt freigeschalteten Lektion. Wer
+  gezielt zwei Tasten üben wollte, konnte das nicht.
+
+  Zwei Feinheiten, die beim Bauen aufgefallen sind:
+
+  - `L05` und `L20` bekommen **keine** Gruppe. `L05` bringt keine neue Taste,
+    und `L20` führt die beiden Umschalttasten ein — die können nicht fallen.
+    Ein Knopf ohne Zeichen dahinter wäre eine Sackgasse.
+  - **Ohne Auswahl fällt der volle Vorrat der Lektion, nicht die Summe der
+    Gruppen.** Das ist nicht dasselbe: Weil `L20` keine Gruppe hat, wären die
+    Großbuchstaben über die Gruppen nicht zu erreichen.
+
+  Angeboten wird nur, was gelernt ist (harte Regel aus 6.2); ein Test prüft das
+  für jede Lektion und jede Gruppe.
 - Umsetzung als DOM/SVG ohne Spiel-Engine und ohne neue Abhängigkeit
   (Performance-Budget 12.1).
+
+#### 8.10.1 Zwei weitere Spiele — Ideen des Nutzers vom 2026-09-18
+
+Beide haben einen tragfähigen Tippkern und einen Überbau, der Zehni sprengen
+würde. Die Trennung steht hier, damit sie nicht beim Bauen verlorengeht.
+
+**Elfmeterschießen.** Ecke wählen (links, Mitte, rechts × oben, Mitte, unten),
+dann den Schuss „aufladen", indem man schnell zufällige Zeichen tippt.
+Schwierigkeitsstufen, später Ligen und Stadien zum Hocharbeiten.
+
+**Pferderennen.** Zufällige Zeichen tippen, um zu laufen, Leertaste zum
+Springen. Später eine kleine Welt mit verschiedenen Pferden, Strecken und
+Verbesserungen, in der Art von „Rival Stars Horse Racing".
+
+**Was daran gut ist:**
+
+- Beide Kernschleifen sind **echtes Tippen** mit sofortiger Rückmeldung. Das
+  Aufladen ist nichts anderes als ein Drill mit einem Bild drumherum, und genau
+  so soll ein Minispiel sein.
+- Die Leertaste beim Springen ist ein Gewinn: Sie wird mit dem Daumen
+  geschlagen und kommt sonst nur nebenbei vor.
+- Beide lassen sich als DOM/SVG ohne Spiel-Engine bauen, wie 8.10 es verlangt.
+
+**Was teuer ist, und zwar sehr:**
+
+- **Ligen, Stadien, Pferde, Strecken, Verbesserungen.** Das ist ein eigenes
+  Fortschrittssystem mit dauerhaftem Zustand (neue Tabellen, also Migrationen),
+  einer Wirtschaft, die ausbalanciert sein will, und vor allem **Bildern**.
+  Zehni hat bisher keine Grafik außer Maskottchen und Tastatur.
+- Der Installer hat 17 MB Luft. Für SVG reicht das reichlich, für gezeichnete
+  Bilder ist es schnell weg — und die Zielhardware sind alte Laptops (12.1).
+
+**Empfehlung:** Erst **eine** Kernschleife bauen, schlank, im Stil der beiden
+vorhandenen Spiele (zusammen 765 Zeilen). Dann sehen, ob sie überhaupt gespielt
+wird, bevor ein Fortschrittssystem dazukommt. Ein Spiel, das niemand zweimal
+anfasst, braucht keine Ligen.
+
+**Ein Vorschlag zur Ecke:** Sie per Mausklick zu wählen, ist der einzige
+Schritt ohne Tippen. Schöner wäre, in jeder Ecke steht ein kurzes Wort — wer es
+tippt, schießt dorthin. Damit ist auch die Zielwahl eine Übung.
 
 > **Aufwandshinweis:** Die Minispiele sind unter allen Punkten dieses Abschnitts
 > der mit Abstand teuerste und der einzige, der nichts zum Lernpfad beiträgt.
@@ -844,7 +945,9 @@ Verbindliche Schranken, damit die Spiele nicht gegen 8.11 verstoßen:
 
 - Kein Countdown, der eine laufende Übung abbricht.
 - Keine Bestenliste gegen andere (es gibt nur ein Profil).
-- Keine Herzen/Leben, die den Zugang begrenzen.
+- Keine Herzen/Leben, die den **Zugang** begrenzen. (Ein Minispiel darf eine
+  Runde nach drei Fehlversuchen beenden — die nächste beginnt sofort, siehe
+  8.10.)
 - Kein Ton, der bei Fehlern spielt. (Erfolgstöne ja, dezent, abschaltbar.)
 
 ### 8.12 Einstellungsbildschirm
@@ -1123,6 +1226,31 @@ Das senkt ihre Dringlichkeit nicht, verschiebt aber ihren Zweck: Sie liefern die
 Modul sind `L01`, `L02` und `L03` nicht spielbar, und M1 ist definiert als
 „die Grundreihe von Anfang bis Ende üben".
 
+#### Echte Wörter im Drill (seit 2026-09-18)
+
+Der Drill baute reine Kunstsilben — auch dann, wenn längst echte Wörter möglich
+waren. Ab `L07` sind es vierzehn, ab `L09` fünfundfünfzig, ab `L15` über
+hundert. Der Nutzer hat darauf hingewiesen: Sobald man Wörter schreiben kann,
+gehören sie in die Übung. Das ist auch fachlich richtig — Tippen lernt man an
+Wörtern, nicht an Buchstabenfolgen.
+
+**Regel:** Stehen mindestens zwölf Wörter zur Verfügung, werden rund zwei
+Fünftel der Gruppen durch echte Wörter ersetzt. Bevorzugt solche, die eine der
+**neuen** Tasten enthalten — ein Wort ohne die Taste, die gerade geübt wird,
+trägt zum Zweck der Lektion nichts bei.
+
+Darunter bleibt es beim Silbendrill: In `L01` gibt es nur `f` und `j`, in
+`L06` reicht es für sechs Wörter, und dann käme immer dasselbe.
+
+Die Wortliste liegt in `content/minispiele.json` und wird mit „Wortsalat"
+geteilt. Sie ist dort entstanden, gehört aber der Sprache und nicht dem Spiel.
+
+> **Dabei aufgefallen:** Fünf Wörter standen in Ausweichschreibung darin —
+> `tuer`, `gemuese`, `kaefer`, `loeffel`, `ruecken`. Im Spiel wird nur
+> abgetippt, dort fiel es nie auf; in einer **Übung** wäre es ein eingeübter
+> Rechtschreibfehler. Richtiggestellt und durch einen Test gegen
+> `checkSchreibweise()` abgesichert.
+
 ### 9.8 Altersstufen
 
 Ein Kind von neun Jahren braucht andere Texte als eines von zwölf — gleiche
@@ -1206,7 +1334,27 @@ zu garantieren ist.
 
 Gleiche Spielmechanik (XP, Abzeichen), aber kein Tipp-Drill. Jedes Modul besteht
 aus 5–8 Einheiten à 3–5 Minuten: kurze Erklärung → interaktive Aufgabe →
-Auswertung. Inhalte komplett lokal (JSON in `content/modules/`), keine KI.
+Auswertung. Inhalte komplett lokal (JSON in `content/modules/`).
+
+**Alle Einheiten sind im Modulbereich sofort spielbar, in jeder Reihenfolge, so
+viele hintereinander wie gewollt** (Entscheidung des Nutzers vom 2026-09-18).
+
+Bis dahin war gesperrt, was im Lernweg als Station vorkommt — und das waren
+**alle siebzehn**. Der Modulbereich versprach „jederzeit, in jeder Reihenfolge"
+und lieferte davon nichts. Wer den Stoff am Stück durcharbeiten wollte, konnte
+es nicht.
+
+Die Begründung des Nutzers: Der Stoff muss schnell durchlaufen werden, sonst
+vergisst man ihn, und bei Kindern und Jugendlichen reißt die Aufmerksamkeit.
+Über Monate verteilte Häppchen erreichen das Gegenteil dessen, was sie sollen.
+
+**Was das kostet, und zwar ehrlich:** Die drei Medienkompetenz-Fallen (6.6.1)
+wirken durch Überraschung. Wer sie vorher im Modulbereich spielt, dem passiert
+im Lernweg nichts Unerwartetes mehr. Die Einheit vermittelt trotzdem, worum es
+geht — sie trifft nur nicht mehr.
+
+Im Lernweg bleiben die Einheiten als Stationen stehen. Wer eine schon gemacht
+hat, sieht sie dort als erledigt.
 
 ### 10.1 Medienkompetenz (`modul-medien`)
 

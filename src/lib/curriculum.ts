@@ -236,3 +236,32 @@ export function readingLevel(lessonId: string, ageBand: AgeBand): number {
   const shift = ageBand === 'A1' ? -3 : ageBand === 'A3' ? +3 : 0;
   return Math.min(25, Math.max(1, lesson.order + shift));
 }
+
+/**
+ * Wie oft eine Lektion bestanden werden muss, bevor die nächste aufgeht.
+ *
+ * **Bis zum 2026-09-18 genügte eine Runde.** Der Nutzer hat die Lernkurve
+ * mehrfach als zu steil bezeichnet, und das trifft hier zu: Eine einzige
+ * geglückte Runde zeigt, dass jemand die Tasten **gefunden** hat, nicht dass
+ * er sie **kann**. Der nächste Satz Tasten kam, bevor der letzte saß.
+ *
+ * Zwei Runden sind die kleinste Änderung, die etwas bewirkt. Sie bedeuten
+ * ungefähr vier Minuten je Lektion statt zwei — bei 25 Lektionen also eine
+ * knappe Stunde mehr über den ganzen Pfad.
+ *
+ * **Das ist eine Zahl, die an echten Daten nachzujustieren ist** (SPEC.md
+ * 15.11). Hängt jemand fest, ist sie zu hoch; kommt Langeweile auf, ebenso.
+ * Sie steht deshalb hier allein und nicht verstreut im Code.
+ */
+export const PFLICHTRUNDEN = 2;
+
+/**
+ * Ist die Lektion oft genug bestanden, um die nächste freizugeben?
+ *
+ * Gezählt werden **bestandene** Runden, nicht Versuche. Wer sechsmal antritt
+ * und zweimal besteht, ist durch; wer zehnmal antritt und nie besteht, nicht.
+ * Ein Fehlversuch darf nie gegen jemanden zählen (SPEC.md 8.11).
+ */
+export function lektionFreigegeben(bestandeneRunden: number): boolean {
+  return bestandeneRunden >= PFLICHTRUNDEN;
+}

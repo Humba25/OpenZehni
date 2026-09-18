@@ -9,26 +9,48 @@
  * - **Kein Ergebnis fließt in eine Bewertung.** Dieses Modul liefert Zeichen
  *   und Wörter, sonst nichts. Es gibt hier keine Funktion, die eine Punktzahl
  *   nach `sessions`, `lesson_progress` oder `char_stats` tragen könnte.
- * - **Keine Leben, kein Verlieren.** Ein Spiel endet, wenn die Zeit um ist.
- *   Es gibt keinen Zustand „verloren" und keine Abbruchbedingung.
+ * - **Keine Leben, die den Zugang begrenzen** (SPEC.md 8.11). Das ist das
+ *   Duolingo-Modell: Herzen alle, Tür zu, komm morgen wieder. So etwas gibt es
+ *   hier nicht — jede Runde ist sofort neu startbar, immer.
+ *
+ *   Drei Fehlversuche **innerhalb** einer Runde sind etwas anderes und seit
+ *   dem 2026-09-18 erlaubt (Entscheidung des Nutzers, SPEC.md 8.10). Sie
+ *   beenden die Runde, nicht den Zugang.
  *
  * Reine Logik: kein React, kein Tauri, kein Datenbankzugriff
  * (ARCHITEKTUR.md, Architekturregel 1).
  */
 
 import daten from '../../content/minispiele.json';
-import { getLesson } from './curriculum';
+import { getLesson, allLessons } from './curriculum';
 
-export type MinispielId = 'buchstabenregen' | 'wortsalat';
+export type MinispielId = 'buchstabenregen' | 'wortsalat' | 'elfmeter' | 'pferderennen';
 
 /**
- * Wie lange eine Runde dauert.
+ * Wie lange eine Runde „Wortsalat" dauert.
  *
  * Eine Zeitbegrenzung **innerhalb** eines Minispiels ist ausdrücklich zulässig
  * (SPEC.md 8.10): Es ist keine Übung, die dadurch abgebrochen würde. Nach
  * Ablauf steht das Ergebnis da und ein Knopf zum Neustarten, sonst nichts.
+ *
+ * **„Buchstabenregen" hat seit dem 2026-09-18 keine Uhr mehr.** Dort endet die
+ * Runde an den Fehlversuchen (`REGEN_LEBEN`). Das ist näher an 8.11 als eine
+ * Uhr: „Kein Countdown, der eine laufende Übung abbricht."
  */
 export const SPIEL_SEKUNDEN = 60;
+
+/**
+ * Wie viele Buchstaben unten ankommen dürfen, bevor die Runde vorbei ist.
+ *
+ * **Kein Verstoß gegen 8.11.** Dort steht „Keine Herzen/Leben, die den *Zugang*
+ * begrenzen" — gemeint ist das Modell, bei dem man nach dem dritten Fehler
+ * nicht mehr spielen darf. Hier ist die Runde vorbei und die nächste beginnt
+ * mit einem Tastendruck.
+ *
+ * Was ein Spiel braucht, ist ein Ende, das man selbst herbeiführt. Vorher kam
+ * es von einer Uhr; jetzt hängt es daran, wie gut man ist.
+ */
+export const REGEN_LEBEN = 3;
 
 /** Wie lange ein Buchstabe von oben nach unten braucht. */
 export const FALLDAUER_MS = 5500;
@@ -47,6 +69,17 @@ export const ABWURF_MS = 900;
 export const MIN_WOERTER = 12;
 
 const WOERTER: readonly string[] = daten.woerter as readonly string[];
+
+/**
+ * Die ganze Wortliste.
+ *
+ * Sie ist nicht nur Spielmaterial: `drill.ts` streut dieselben Wörter in die
+ * Übungen ein. Deshalb muss sie prüfbar sein, und deshalb steht sie hier
+ * offen — die Prüfungen laufen in `minispiele.test.ts`.
+ */
+export function alleSpielWoerter(): readonly string[] {
+  return WOERTER;
+}
 
 /** Kleiner, reproduzierbarer Zufallsgenerator (mulberry32, wie in `drill.ts`). */
 export function createRandom(seed: string): () => number {
@@ -155,4 +188,80 @@ export function salatrunden(lessonId: string, anzahl: number, saat: string): rea
     runden.push({ wort, verdreht: verwuerfeln(wort, rnd) });
   }
   return runden;
+}
+
+// ------------------------------------------------- Auswahl des Zeichenvorrats
+
+/**
+ * Eine wählbare Tastengruppe für „Buchstabenregen".
+ *
+ * **Eine Gruppe je Lektion, mit genau deren neuen Tasten.** Nicht je Reihe: Der
+ * Nutzer will „ich habe die Lektion mit f und j gemacht, jetzt nur d und k" —
+ * und das ist die Einheit, in der er denkt. Eine ganze Reihe wäre dafür zu
+ * grob.
+ *
+ * Die Bezeichnung sind die Zeichen selbst, also `f j`. Das braucht keine
+ * Übersetzung und ist für ein Kind unmittelbar zu lesen — anders als `L02`.
+ *
+ * Lektionen ohne neue **fallende** Zeichen kommen nicht vor: `L05` („Erste
+ * echte Wörter") bringt keine neue Taste, und `L20` führt die beiden
+ * Umschalttasten ein — die lassen sich nicht als fallender Buchstabe zeigen.
+ * Ein Knopf ohne Zeichen dahinter wäre eine Sackgasse.
+ */
+export interface Zeichengruppe {
+  /** Die Lektion, aus der die Tasten stammen. */
+  readonly id: string;
+  /** Die neuen Tasten dieser Lektion, ohne Leerzeichen. */
+  readonly zeichen: readonly string[];
+}
+
+/**
+ * Welche Gruppen zur Verfügung stehen — eine je Lektion mit neuen Tasten.
+ *
+ * **Nur bereits Gelerntes** (SPEC.md 8.10, harte Regel aus 6.2): Angeboten wird
+ * ausschließlich, was in den übergebenen Lektionen vorkommt.
+ */
+export function regenGruppen(
+  freigeschaltet: readonly { id: string; order: number; newChars: readonly string[] }[],
+): readonly Zeichengruppe[] {
+  return [...freigeschaltet]
+    .sort((a, b) => a.order - b.order)
+    .map((l) => ({
+      id: l.id,
+      // Nur einzelne, fallbare Zeichen. `newChars` enthält bei `L20` die
+      // Beschreibungen „Umschalt links" und „Umschalt rechts" — das ist keine
+      // Taste, die von oben fallen kann.
+      zeichen: [...new Set(l.newChars)].filter(
+        (c) => [...c].length === 1 && c !== ' ' && c !== '\n',
+      ),
+    }))
+    .filter((g) => g.zeichen.length > 0);
+}
+
+/** Die Gruppen, die bis zu dieser Lektion zur Verfügung stehen. */
+export function regenGruppenBis(lessonId: string): readonly Zeichengruppe[] {
+  const lesson = getLesson(lessonId);
+  if (!lesson) return [];
+  return regenGruppen(allLessons().filter((l) => l.order <= lesson.order));
+}
+
+/**
+ * Die Zeichen der gewählten Gruppen, zusammengelegt.
+ *
+ * **Mehrfachauswahl ist der Kern der Sache:** „vielleicht nur d k, oder
+ * vielleicht d f j k."
+ *
+ * **Ist nichts gewählt, fällt der volle Vorrat der Lektion** — nicht die Summe
+ * der Gruppen. Das ist nicht dasselbe: Die Großbuchstaben haben keine eigene
+ * Gruppe, weil `L20` nur die Umschalttasten einführt. Über die Gruppen wären
+ * sie also nicht zu erreichen, über den vollen Vorrat schon.
+ */
+export function regenVorrat(
+  lessonId: string,
+  gruppen: readonly Zeichengruppe[],
+  gewaehlt: ReadonlySet<string>,
+): readonly string[] {
+  if (gewaehlt.size === 0) return regenZeichen(lessonId);
+  const passend = gruppen.filter((g) => gewaehlt.has(g.id));
+  return [...new Set(passend.flatMap((g) => [...g.zeichen]))];
 }

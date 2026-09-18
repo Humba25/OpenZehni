@@ -6,8 +6,11 @@
  * und Besitzgefühl. Deko-Teile schalten nichts frei, geben keine XP und gehen
  * nie wieder verloren.
  *
- * Woher die Teile kommen: eines je erreichtem Level (SPEC.md 8.1) und eines je
- * erreichtem Wochenziel (SPEC.md 8.8).
+ * Woher die Teile kommen: eines je erreichtem Level (SPEC.md 8.1).
+ *
+ * Bis zum 2026-09-18 gab es zusätzlich eines je erreichtem Wochenziel. Das
+ * Wochenziel ist gestrichen (SPEC.md 8.8); die Level allein reichen aus, weil
+ * es 29 Levelaufstiege gibt und nur 15 erspielbare Teile.
  *
  * Reine Logik: kein React, kein Tauri, kein Datenbankzugriff
  * (ARCHITEKTUR.md, Architekturregel 1).
@@ -41,8 +44,6 @@ export const DEKO_GESAMT = TEILE.length;
 export interface Besitzstand {
   /** Erreichtes Level (SPEC.md 8.1). */
   readonly level: number;
-  /** Wie oft das Wochenziel schon erreicht wurde (SPEC.md 8.8). */
-  readonly wochenziele: number;
 }
 
 /**
@@ -53,7 +54,7 @@ export interface Besitzstand {
  * erspielt wurde.
  */
 export function verdienteTeile(b: Besitzstand): number {
-  return Math.max(0, b.level - 1) + Math.max(0, b.wochenziele);
+  return Math.max(0, b.level - 1);
 }
 
 /**

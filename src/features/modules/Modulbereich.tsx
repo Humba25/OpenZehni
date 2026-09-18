@@ -83,21 +83,31 @@ function ModulKarte({
             >
               <span className="min-w-0 flex-1 font-medium">{e.title}</span>
 
-              {e.imLernpfad ? (
-                <span className="text-sm text-gedaempft" title={de.modulbereich.nurImLernpfad}>
+              {/*
+                Bis zum 2026-09-18 war hier gesperrt, was im Lernweg vorkommt —
+                und das waren **alle siebzehn** Einheiten. Der Modulbereich
+                versprach „jederzeit, in jeder Reihenfolge" und lieferte nichts
+                davon.
+
+                Jetzt ist alles sofort spielbar (SPEC.md 10, Entscheidung des
+                Nutzers). Wo eine Einheit im Lernweg wiederkommt, steht als
+                Hinweis daneben — als Auskunft, nicht als Schranke.
+              */}
+              {e.imLernpfad && !gemacht && (
+                <span className="text-sm text-gedaempft">
                   {e.afterLesson
                     ? de.modulbereich.imLernpfadNach(e.afterLesson)
                     : de.modulbereich.imLernpfad}
                 </span>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => onStart(e.id)}
-                  className="rounded-lg border border-rand px-3 py-1.5 text-sm hover:border-akzent"
-                >
-                  {gemacht ? de.modulbereich.nochmal : de.modulbereich.starten}
-                </button>
               )}
+
+              <button
+                type="button"
+                onClick={() => onStart(e.id)}
+                className="rounded-lg border border-rand px-3 py-1.5 text-sm hover:border-akzent"
+              >
+                {gemacht ? de.modulbereich.nochmal : de.modulbereich.starten}
+              </button>
 
               {gemacht && (
                 <span className="text-sm font-semibold text-richtig">

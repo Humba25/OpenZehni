@@ -15,12 +15,11 @@ import { de } from '../../i18n/de';
 
 export interface LernstubeProps {
   readonly level: number;
-  readonly wochenziele: number;
   readonly onZurueck: () => void;
 }
 
-export function Lernstube({ level, wochenziele, onZurueck }: LernstubeProps) {
-  const teile = eingerichteteTeile({ level, wochenziele });
+export function Lernstube({ level, onZurueck }: LernstubeProps) {
+  const teile = eingerichteteTeile({ level });
   const voll = teile.length >= DEKO_GESAMT;
 
   return (
