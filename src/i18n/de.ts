@@ -620,12 +620,18 @@ export const de = {
 
       tastenFrage: 'Welche Tasten beim Aufladen?',
       zielen: 'Such dir eine Ecke aus und tipp das Wort.',
-      laden: 'Jetzt schnell! Jedes Zeichen macht den Schuss härter.',
+      // Sagt jetzt, dass der Text ein Ende hat und was am Ende passiert --
+      // vorher lief eine endlose Zeichenfolge, und man tippte ins Blaue.
+      laden: 'Tipp die Zeile! Wer sie schafft, schießt sofort und mit voller Kraft.',
       kraft: (n: number): string => `Schusskraft ${n} Prozent`,
+      daneben: 'Daneben. Tipp das hervorgehobene Zeichen.',
       zeit: (s: number): string => `noch ${s} s`,
 
       tor: 'Tor!',
       gehalten: 'Gehalten. Der Torwart hat die Ecke erraten.',
+      // Ein zu schwacher Schuss geht auch in der freien Ecke nicht hinein.
+      // Das muss dastehen, sonst lernt niemand, woran es lag.
+      zuSchwach: 'Zu lasch. Der Torwart kommt noch heran — tipp schneller.',
       naechster: 'Nächster Schuss',
       weiter: 'Oder die Eingabetaste drücken.',
 

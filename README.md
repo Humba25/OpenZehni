@@ -56,11 +56,13 @@ darf dabei ruhig weniger können, solange es das Wesentliche kann.
 
 ## Installieren
 
-**Immer die neueste Version:**
+**Downloadseite:** <https://humba25.github.io/OpenZehni/>
+
+Oder direkt:
 [Zehni-Setup.exe](https://github.com/Humba25/OpenZehni/releases/latest/download/Zehni-Setup.exe)
 
-Diese Adresse ändert sich nie. Alle Ausgaben samt Signaturen liegen unter
-[Releases](../../releases).
+Beide Adressen ändern sich nie und führen immer zur neuesten Version. Alle
+Ausgaben samt Signaturen liegen unter [Releases](../../releases).
 
 Anleitung für Eltern: [`docs/INSTALL.md`](docs/INSTALL.md).
 

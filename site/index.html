@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Zehni — Zehnfingerschreiben lernen</title>
+    <meta
+      name="description"
+      content="Zehni bringt Kindern das Zehnfingerschreiben bei. Kostenlos, ohne Konto, ohne Werbung. Alles bleibt auf dem eigenen Rechner."
+    />
+    <link rel="icon" href="maus.svg" type="image/svg+xml" />
+
+    <!--
+      Diese Seite wird einmal gebaut und danach nicht mehr angefasst.
+
+      Die Versionsnummer holt sie sich beim Öffnen selbst; der Downloadknopf
+      zeigt auf eine Adresse, die sich nie ändert. Ein Release ändert an dieser
+      Datei also nichts.
+
+      Kein Zählpixel, kein fremdes Skript, keine Schrift aus dem Netz. Eine
+      Seite, die für Medienkompetenz wirbt und nebenbei drei Firmen mitteilt,
+      wer sie aufgerufen hat, wäre ihr eigener Gegenbeweis.
+    -->
+    <style>
+      :root {
+        --grund: rgb(246 247 250);
+        --flaeche: rgb(255 255 255);
+        --rand: rgb(219 223 232);
+        --text: rgb(26 32 44);
+        --gedaempft: rgb(108 118 138);
+        --akzent: rgb(37 99 173);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --grund: rgb(22 26 34);
+          --flaeche: rgb(32 38 48);
+          --rand: rgb(58 66 80);
+          --text: rgb(232 236 243);
+          --gedaempft: rgb(150 160 178);
+          --akzent: rgb(106 168 240);
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--grund);
+        color: var(--text);
+        font-family:
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          sans-serif;
+        line-height: 1.6;
+      }
+      main {
+        max-width: 44rem;
+        margin: 0 auto;
+        padding: 3rem 1rem 4rem;
+      }
+      header {
+        text-align: center;
+      }
+      h1 {
+        font-size: 2.6rem;
+        margin: 0.6rem 0 0.2rem;
+      }
+      .untertitel {
+        color: var(--gedaempft);
+        font-size: 1.15rem;
+        margin: 0 0 2rem;
+      }
+      .maus {
+        width: 84px;
+        height: 84px;
+      }
+
+      .knopf {
+        display: inline-block;
+        background: var(--akzent);
+        color: #fff;
+        font-size: 1.25rem;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 0.9rem 2.2rem;
+        border-radius: 0.9rem;
+      }
+      .knopf:hover,
+      .knopf:focus-visible {
+        filter: brightness(1.08);
+      }
+      .unterknopf {
+        color: var(--gedaempft);
+        font-size: 0.95rem;
+        margin-top: 0.7rem;
+      }
+
+      section {
+        background: var(--flaeche);
+        border: 1px solid var(--rand);
+        border-radius: 1rem;
+        padding: 1.2rem 1.4rem;
+        margin-top: 1.6rem;
+      }
+      h2 {
+        font-size: 1.15rem;
+        margin: 0 0 0.6rem;
+      }
+      ul {
+        margin: 0;
+        padding-left: 1.2rem;
+      }
+      li + li {
+        margin-top: 0.4rem;
+      }
+      a {
+        color: var(--akzent);
+      }
+      footer {
+        margin-top: 2.5rem;
+        text-align: center;
+        color: var(--gedaempft);
+        font-size: 0.9rem;
+      }
+      footer a {
+        margin: 0 0.5rem;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <header>
+        <!-- Dieselbe Maus wie in der App. -->
+        <svg class="maus" viewBox="0 0 100 100" role="img" aria-label="Zehni, die Maus">
+          <ellipse cx="30" cy="34" rx="15" ry="15" fill="#b9bec7" />
+          <ellipse cx="70" cy="34" rx="15" ry="15" fill="#b9bec7" />
+          <ellipse cx="30" cy="34" rx="8" ry="8" fill="#e8b4bc" />
+          <ellipse cx="70" cy="34" rx="8" ry="8" fill="#e8b4bc" />
+          <ellipse cx="50" cy="56" rx="30" ry="27" fill="#c9ced6" />
+          <circle cx="39" cy="50" r="4" fill="#2c3242" />
+          <circle cx="61" cy="50" r="4" fill="#2c3242" />
+          <ellipse cx="50" cy="63" rx="5" ry="4" fill="#e8909c" />
+          <path d="M 50 67 v 5" stroke="#2c3242" stroke-width="2" fill="none" />
+          <path
+            d="M 50 72 q -7 5 -14 3 M 50 72 q 7 5 14 3"
+            stroke="#2c3242"
+            stroke-width="2"
+            fill="none"
+          />
+        </svg>
+
+        <h1>Zehni</h1>
+        <p class="untertitel">Zehnfingerschreiben lernen. Kostenlos.</p>
+
+        <a
+          class="knopf"
+          href="https://github.com/Humba25/OpenZehni/releases/latest/download/Zehni-Setup.exe"
+          >Zehni herunterladen</a
+        >
+        <p class="unterknopf">
+          <span id="version">Für Windows</span> · Danach aktualisiert sich Zehni von selbst.
+        </p>
+      </header>
+
+      <section>
+        <h2>Was Zehni macht</h2>
+        <ul>
+          <li>
+            25 Lektionen von der Grundstellung bis zum Abschlusstest — alle Buchstaben, Zahlen und
+            Satzzeichen der deutschen Tastatur.
+          </li>
+          <li>
+            Dazu zwei Module: <strong>Medienkompetenz</strong> (Passwörter, Quellen prüfen, Werbung
+            erkennen, Bilder vom Computer erkennen) und <strong>Lernen lernen</strong>.
+          </li>
+          <li>Spiele zum Üben, Abzeichen, ein Tagesziel — nichts davon ist Pflicht.</li>
+          <li>Mehrere Kinder an einem Rechner, jedes mit eigenem Fortschritt.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Was Zehni nicht macht</h2>
+        <ul>
+          <li><strong>Kein Konto, kein Passwort, keine E-Mail-Adresse.</strong></li>
+          <li>Keine Werbung, keine Käufe, nichts kostet etwas.</li>
+          <li>
+            <strong>Nichts verlässt den Rechner.</strong> Der Lernfortschritt liegt in einer Datei
+            auf dem eigenen Gerät. Zehni fragt nur nach, ob es eine neue Version gibt — sonst geht
+            es nie ins Internet.
+          </li>
+          <li>Keine Strafen, keine verlorenen Leben, kein „du hast heute noch nicht geübt".</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Beim Installieren warnt Windows — das ist normal</h2>
+        <p>
+          Zehni hat kein gekauftes Zertifikat. Windows zeigt deshalb „Der Computer wurde durch
+          Windows geschützt". Das heißt nicht, dass etwas nicht stimmt, sondern nur, dass niemand
+          dafür bezahlt hat.
+        </p>
+        <p>
+          Wie man daran vorbeikommt, steht Schritt für Schritt in der
+          <a href="https://github.com/Humba25/OpenZehni/blob/main/docs/INSTALL.md"
+            >Anleitung für Eltern</a
+          >. Dort steht auch, woran man erkennt, dass die Datei wirklich von hier stammt — denn eine
+          Warnung wegzuklicken, ohne zu wissen warum, ist genau der Reflex, den Zehni Kindern
+          abgewöhnen will.
+        </p>
+      </section>
+
+      <footer>
+        <a href="https://github.com/Humba25/OpenZehni">Quelltext</a>
+        <a href="https://github.com/Humba25/OpenZehni/blob/main/docs/DATENSCHUTZ.md">Datenschutz</a>
+        <a href="https://github.com/Humba25/OpenZehni/blob/main/docs/INSTALL.md">Für Eltern</a>
+        <a href="https://github.com/Humba25/OpenZehni/releases">Alle Versionen</a>
+        <p>Freie Software unter der GPL-3.0.</p>
+      </footer>
+    </main>
+
+    <script>
+      /*
+       * Die Versionsnummer nachtragen.
+       *
+       * Rein kosmetisch: Der Downloadknopf zeigt auf eine feste Adresse und
+       * funktioniert auch dann, wenn diese Abfrage scheitert -- bei gesperrtem
+       * Skript, ohne Netz oder wenn GitHub die Anfrage abweist. Deshalb steht
+       * im Text von Anfang an etwas Sinnvolles, das hier nur ergaenzt wird.
+       */
+      fetch('https://api.github.com/repos/Humba25/OpenZehni/releases/latest', {
+        headers: { Accept: 'application/vnd.github+json' },
+      })
+        .then((a) => (a.ok ? a.json() : Promise.reject(new Error(String(a.status)))))
+        .then((r) => {
+          const nummer = String(r.tag_name || '').replace(/^v/, '');
+          if (!/^\d+\.\d+\.\d+$/.test(nummer)) return;
+          document.getElementById('version').textContent = 'Version ' + nummer + ' für Windows';
+        })
+        .catch(() => {
+          /* Ohne Nummer ist die Seite vollstaendig. */
+        });
+    </script>
+  </body>
+</html>

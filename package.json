@@ -1,7 +1,7 @@
 {
   "name": "zehni",
   "private": true,
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "description": "Zehni - 10-Finger-Tastschreiben lernen, offline und kostenlos",
   "scripts": {

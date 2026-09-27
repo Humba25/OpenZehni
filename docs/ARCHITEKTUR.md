@@ -65,6 +65,19 @@ Vor jedem Commit müssen `npm run lint`, `npm test`, `cargo clippy`,
 `cargo fmt --check` und `cargo test` fehlerfrei durchlaufen. Wer Inhalte
 geändert hat, zusätzlich `npm run validate:seed` und `npm run check:din5008`.
 
+> **Eine Prüfung wird nie durch `tail` oder `head` geschickt.** In einer
+> Pipeline zählt der Rückgabewert des letzten Glieds: `npm run check:din5008 |
+> tail -2` endet auf 0, auch wenn die Prüfung fehlgeschlagen ist. Steht das
+> dann in einer Kette mit `&&`, läuft der Commit durch, und die letzte Zeile
+> sagt sogar „Fehlerhaft: 1" — gelesen hat sie nur niemand.
+>
+> Das ist am 2026-09-16 schon einmal passiert und am 2026-09-27 ein zweites
+> Mal, bei der DIN-Prüfung. Zweimal derselbe Fehler heißt: Die Regel gehört
+> dorthin, wo man sie vor **jedem** Commit liest — also hierher.
+>
+> Wer die Ausgabe kürzen will, prüft den Rückgabewert getrennt
+> (`npm run check:din5008; echo $?`) oder lässt sie ganz stehen.
+
 **Wer `tauri.conf.json`, die Plugins in `src-tauri/src/lib.rs` oder die
 Berechtigungen in `src-tauri/capabilities/` anfasst, startet die App
 anschließend wirklich** — `npm run dev`, bis das Fenster offen ist. Kein Test

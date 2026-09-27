@@ -15,11 +15,12 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-  ECKEN,
   STUFEN,
   SCHUESSE_PRO_RUNDE,
+  eckenAnzahl,
+  benutzteEcken,
   zielwoerter,
-  ladezeichen,
+  ladetext,
   kraft,
   torwartEcke,
   istTor,
@@ -65,6 +66,10 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
    * die Antwort vorher zu zeigen.
    */
   const [torwartVorschau, setTorwartVorschau] = useState<Ecke | undefined>(undefined);
+  /** Letzter Anschlag daneben -- nur zur Anzeige. */
+  const [fehlgriff, setFehlgriff] = useState(false);
+  /** Gehalten, obwohl die Ecke frei war -- dann lag es an der Schusskraft. */
+  const [zuSchwach, setZuSchwach] = useState(false);
 
   /** Eigene Saat je Schuss, damit nicht fünfmal dieselben Wörter kommen. */
   /**
@@ -79,15 +84,17 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
   const [gewaehlt, setGewaehlt] = useState<ReadonlySet<string>>(new Set());
 
   const runde = `${saat}#${schuss}`;
+  const ecken = useMemo(() => benutzteEcken(eckenAnzahl(lessonId)), [lessonId]);
   const woerter = useMemo(() => zielwoerter(lessonId, runde), [lessonId, runde]);
+
+  /**
+   * Der Ladetext als Zeichenkette — genau so lang, wie sich in der Ladezeit
+   * schaffen lässt. Wer ihn zu Ende tippt, schießt sofort.
+   */
   const zeichen = useMemo(() => {
-    const vorrat = regenVorrat(lessonId, gruppen, gewaehlt);
-    const alle = ladezeichen(lessonId, runde);
-    if (gewaehlt.size === 0 || vorrat.length === 0) return alle;
-    // Aus derselben Saat, aber nur aus den gewaehlten Tasten.
-    const rnd = createRandom(`laden#${lessonId}#${runde}#gewaehlt`);
-    return alle.map(() => vorrat[Math.floor(rnd() * vorrat.length)]!);
-  }, [lessonId, runde, gruppen, gewaehlt]);
+    const vorrat = gewaehlt.size > 0 ? regenVorrat(lessonId, gruppen, gewaehlt) : undefined;
+    return ladetext(lessonId, runde, stufe, vorrat);
+  }, [lessonId, runde, gruppen, gewaehlt, stufe]);
 
   const eingabe = useRef('');
   const anschlaege = useRef(0);
@@ -112,21 +119,25 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
     setPhase('zielen');
     setZiel(undefined);
     setTorwart(undefined);
+    setFehlgriff(false);
     eingabe.current = '';
   }, [vorbei]);
 
   /** Der Schuss ist abgegeben: Torwart springt, Ergebnis steht. */
   const abschliessen = useCallback(
     (gewaehlt: Ecke): void => {
-      const schusskraft = kraft(anschlaege.current, stufe.ladezeitMs);
+      const schusskraft = kraft(anschlaege.current, zeichen.length);
       const springt = torwartEcke(gewaehlt, stufe, zufall.current);
       const tor = istTor(gewaehlt, springt, schusskraft, stufe, zufall.current);
       setTorwart(springt);
       setGetroffen(tor);
+      // Warum nicht? Stand die Ecke frei, lag es an der Kraft -- und genau das
+      // muss dastehen, sonst lernt niemand, woran es lag.
+      setZuSchwach(!tor && springt !== gewaehlt);
       if (tor) setTore((n) => n + 1);
       setPhase('ergebnis');
     },
-    [stufe],
+    [stufe, zeichen.length],
   );
 
   // Der Torwart tänzelt, solange geladen wird. Nur Anzeige, ohne Wirkung.
@@ -136,10 +147,10 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
       return;
     }
     const id = window.setInterval(() => {
-      setTorwartVorschau(ECKEN[Math.floor(Math.random() * ECKEN.length)]!);
+      setTorwartVorschau(ecken[Math.floor(Math.random() * ecken.length)]!);
     }, 320);
     return () => window.clearInterval(id);
-  }, [phase]);
+  }, [phase, ecken]);
 
   // Die Ladeuhr. Sie laeuft einmal durch und gibt den Schuss frei.
   useEffect(() => {
@@ -188,7 +199,7 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
           zeichenIndex.current = 0;
           setTippfortschritt(0);
           setLadeAnteil(0);
-          setZiel(ECKEN[treffer]!);
+          setZiel(ecken[treffer]!);
           setPhase('laden');
           return;
         }
@@ -197,19 +208,40 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
         return;
       }
 
-      // Aufladen: Jedes richtige Zeichen zaehlt, falsche werden ignoriert.
+      // Aufladen.
       if (event.key === zeichen[zeichenIndex.current]) {
         zeichenIndex.current += 1;
         anschlaege.current += 1;
         setTippfortschritt(zeichenIndex.current);
+        setFehlgriff(false);
+
+        // Text zu Ende: sofort schiessen, mit voller Kraft. Der Schuss gehoert
+        // damit dem Kind und nicht der Uhr.
+        if (zeichenIndex.current >= zeichen.length && ziel !== undefined) abschliessen(ziel);
+        return;
       }
+
+      // Fehlgriff: sichtbar, aber ohne Strafe ausser der verlorenen Zeit --
+      // dieselbe Linie wie im Buchstabenregen (SPEC.md 8.11).
+      setFehlgriff(true);
     };
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [phase, woerter, zeichen, tore, vorbei, naechsterSchuss, onBeenden]);
+  }, [
+    phase,
+    woerter,
+    zeichen,
+    ecken,
+    ziel,
+    tore,
+    vorbei,
+    naechsterSchuss,
+    abschliessen,
+    onBeenden,
+  ]);
 
-  const schusskraft = kraft(anschlaege.current, stufe.ladezeitMs);
+  const schusskraft = kraft(anschlaege.current, zeichen.length);
 
   return (
     <div className="mx-auto flex h-full max-w-3xl flex-col gap-4 p-6">
@@ -315,7 +347,9 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
                   ? de.minispiele.elfmeter.laden
                   : getroffen
                     ? de.minispiele.elfmeter.tor
-                    : de.minispiele.elfmeter.gehalten}
+                    : zuSchwach
+                      ? de.minispiele.elfmeter.zuSchwach
+                      : de.minispiele.elfmeter.gehalten}
             </p>
 
             {/*
@@ -330,9 +364,13 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
               </p>
             )}
 
-            {/* Das Tor: neun Felder, in jedem ein Wort. */}
+            {/*
+              Das Tor. Wie viele Felder es hat, haengt davon ab, wie viele klar
+              unterscheidbare Woerter die Lektion hergibt (SPEC.md 8.10.1).
+              Neun Felder mit `ff`, `jf`, `jj`, `fjf` … waren ein Suchbild.
+            */}
             <div className="mx-auto grid max-w-xl grid-cols-3 gap-2 rounded-xl border-4 border-text/70 bg-grund p-2">
-              {ECKEN.map((ecke, i) => {
+              {ecken.map((ecke, i) => {
                 const istZiel = ziel === ecke;
                 const istTorwart = torwart === ecke;
                 return (
@@ -369,12 +407,27 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
 
             {phase === 'laden' && (
               <div className="mx-auto mt-6 max-w-xl">
-                <p className="text-center font-tippen text-2xl tracking-widest">
+                {/*
+                  Der ganze Ladetext steht da, nicht nur ein Ausschnitt. Vorher
+                  lief eine Folge zufaelliger Einzelzeichen durch, die nie
+                  endete -- man tippte, bis die Uhr abgelaufen war. Jetzt ist
+                  das Ende sichtbar, und wer es erreicht, schiesst sofort.
+                */}
+                <p
+                  className={[
+                    'break-words rounded-lg border px-3 py-2 text-center font-tippen text-xl leading-relaxed transition-colors',
+                    fehlgriff ? 'border-korrigiert bg-korrigiert/10' : 'border-rand',
+                  ].join(' ')}
+                >
                   <span className="text-gedaempft/40">
-                    {zeichen.slice(Math.max(0, zeichenIndex.current - 4), zeichenIndex.current)}
+                    {zeichen.slice(0, zeichenIndex.current)}
                   </span>
-                  <span className="font-semibold text-akzent">{zeichen[zeichenIndex.current]}</span>
-                  <span>{zeichen.slice(zeichenIndex.current + 1, zeichenIndex.current + 8)}</span>
+                  <span className="rounded bg-akzent/20 font-semibold text-akzent">
+                    {zeichen[zeichenIndex.current] === ' '
+                      ? '␣'
+                      : (zeichen[zeichenIndex.current] ?? '')}
+                  </span>
+                  <span>{zeichen.slice(zeichenIndex.current + 1)}</span>
                 </p>
 
                 <div className="mt-4 h-3 overflow-hidden rounded-full bg-rand/50">
@@ -384,7 +437,9 @@ export function Elfmeter({ lessonId, saat, onBeenden }: ElfmeterProps) {
                   />
                 </div>
                 <p className="mt-2 text-center text-sm text-gedaempft">
-                  {de.minispiele.elfmeter.kraft(Math.round(schusskraft * 100))}
+                  {fehlgriff
+                    ? de.minispiele.elfmeter.daneben
+                    : de.minispiele.elfmeter.kraft(Math.round(schusskraft * 100))}
                 </p>
               </div>
             )}

@@ -1,0 +1,64 @@
+# Veroeffentlicht die Downloadseite aus `site/` auf GitHub Pages (SPEC.md 11.5).
+#
+# **Die Seite kennt keine Versionsnummer.** Der Downloadknopf zeigt auf
+# `releases/latest/download/Zehni-Setup.exe`, eine Adresse, die sich nie
+# aendert; die Nummer holt sich die Seite beim Oeffnen selbst. Ein Release
+# aendert an `site/` also nichts, und dieser Workflow laeuft deshalb **nicht**
+# bei jedem Tag, sondern nur, wenn wirklich jemand die Seite anfasst.
+#
+# Einmalig einzurichten: Settings -> Pages -> Source auf "GitHub Actions".
+# Ohne das scheitert der Job mit "Pages is not enabled".
+name: Seite
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - '.github/workflows/seite.yml'
+  workflow_dispatch:
+
+# Nur lesen, was noetig ist. `pages` und `id-token` verlangt die
+# Veroeffentlichung selbst.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Zwei Laeufe gleichzeitig wuerden sich gegenseitig ueberschreiben. Der
+# laufende wird aber nicht abgebrochen -- eine halb veroeffentlichte Seite
+# waere schlimmer als eine, die einen Moment aelter ist.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  veroeffentlichen:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Vor dem Veroeffentlichen: Zeigt der Knopf noch dorthin, wo er soll?
+      # Ein vertippter Link faellt sonst erst auf, wenn jemand ihn anklickt.
+      - name: Downloadadresse pruefen
+        run: |
+          set -euo pipefail
+          ADRESSE='https://github.com/Humba25/OpenZehni/releases/latest/download/Zehni-Setup.exe'
+          if ! grep -qF "$ADRESSE" site/index.html; then
+            echo "Die feste Downloadadresse steht nicht in site/index.html."
+            exit 1
+          fi
+          echo "Downloadadresse gefunden."
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

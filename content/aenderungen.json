@@ -3,6 +3,17 @@
   "comment": "Was sich je Version geaendert hat, in der Sprache der Leute, die Zehni benutzen (SPEC.md 11.4). Neueste Version zuerst. Kein Entwicklerprotokoll: Hier steht, was jemand merkt, wenn er die App oeffnet -- nicht, welche Datei umgebaut wurde. Wer einen Punkt nicht in einem Satz erklaeren kann, der fuer ein Kind Sinn ergibt, laesst ihn weg.",
   "versionen": [
     {
+      "version": "0.2.1",
+      "datum": "2026-09-27",
+      "punkte": [
+        "Elfmeterschießen ist umgebaut. Jetzt entscheidet allein dein Tippen: Wer nichts tippt, trifft nie, und wer die Zeile schafft, trifft immer.",
+        "Beim Aufladen stehen echte Wörter statt zufälliger Buchstaben. Die Zeile hat ein Ende — wer es erreicht, schießt sofort und mit voller Kraft.",
+        "Das Tor hat am Anfang weniger Ecken. Vorher standen dort neun Wörter, die sich kaum unterschieden.",
+        "Wenn der Ball nicht reingeht, steht jetzt dabei, woran es lag: an der Ecke oder am Tempo.",
+        "Das ä wird früher gelernt. Es liegt direkt neben dem ö auf der Grundreihe, kam aber bisher erst viel später zusammen mit dem b. Jetzt kommt es in Lektion 6 zu g und h — und dann ist die Grundreihe wirklich komplett."
+      ]
+    },
+    {
       "version": "0.2.0",
       "datum": "2026-09-18",
       "punkte": [

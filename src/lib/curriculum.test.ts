@@ -9,7 +9,7 @@ import {
   passesFinalTest,
   readingLevel,
 } from './curriculum';
-import { isTypable } from './charset';
+import { isTypable, T1_KEYS } from './charset';
 
 describe('Lektionsdaten — SPEC.md 6.2', () => {
   it('kennt genau 25 Lektionen', () => {
@@ -205,5 +205,72 @@ describe('Lesestufe — SPEC.md 9.8', () => {
   it('bleibt im Bereich 1 bis 25', () => {
     expect(readingLevel('L01', 'A1')).toBe(1);
     expect(readingLevel('L25', 'A3')).toBe(25);
+  });
+});
+
+/**
+ * Der Lernpfad und das Tastaturmodell müssen dasselbe Bild von der Tastatur
+ * haben (`charset.ts`, `T1_KEYS`).
+ *
+ * **Woher der Test kommt.** Der Nutzer hat am 2026-09-27 gefragt, wie die
+ * Tasten über und unter der Grundstellung gelernt werden. Beim Nachsehen fiel
+ * auf: Das `ä` liegt laut `charset.ts` auf der **Grundreihe** (rechter kleiner
+ * Finger, direkt neben dem `ö`), wurde aber erst in `L18` zusammen mit dem `b`
+ * aus der unteren Reihe gelernt — vierzehn Lektionen nachdem eine Lektion
+ * „Die Grundreihe ist komplett" hieß.
+ *
+ * **Beide Seiten waren für sich in Ordnung**, und genau deshalb hat es niemand
+ * gemerkt: Die Tastaturgrafik zeigte das `ä` an der richtigen Stelle, der
+ * Lernpfad brachte es irgendwann. Nur zusammen ergaben sie einen Widerspruch.
+ */
+describe('Lernpfad und Tastaturmodell — SPEC.md 6.2', () => {
+  /** In welcher Lektion ein Zeichen zum ersten Mal drankommt. */
+  function eingefuehrtIn(zeichen: string): number | null {
+    const l = allLessons().find((x) => x.newChars.includes(zeichen));
+    return l ? l.order : null;
+  }
+
+  it('lernt die ganze Grundreihe, bevor die obere Reihe beginnt', () => {
+    const grundreihe = T1_KEYS.filter((t) => t.row === 'home' && /^[a-zäöü]$/.test(t.base));
+    const obere = T1_KEYS.filter((t) => t.row === 'top' && /^[a-zäöü]$/.test(t.base));
+
+    const ersteObere = Math.min(
+      ...obere.map((t) => eingefuehrtIn(t.base)).filter((n): n is number => n !== null),
+    );
+
+    for (const t of grundreihe) {
+      const wann = eingefuehrtIn(t.base);
+      expect(wann, `'${t.base}' kommt im Lernpfad gar nicht vor`).not.toBeNull();
+      expect(
+        wann!,
+        `'${t.base}' liegt auf der Grundreihe, kommt aber erst nach der oberen`,
+      ).toBeLessThan(ersteObere);
+    }
+  });
+
+  /**
+   * Eine Lektion, die verspricht, eine Reihe sei komplett, muss das auch
+   * einlösen. Bis zum 2026-09-27 hieß `L04` so, obwohl `g`, `h` und `ä`
+   * fehlten.
+   */
+  it('nennt eine Reihe erst dann komplett, wenn sie es ist', () => {
+    const fertig = allLessons().find((l) => l.title === 'Die Grundreihe ist komplett');
+    expect(fertig, 'Keine Lektion heisst so').toBeDefined();
+
+    const bisDahin = new Set([...fertig!.chars]);
+    for (const t of T1_KEYS.filter((x) => x.row === 'home' && /^[a-zäöü]$/.test(x.base))) {
+      expect(bisDahin.has(t.base), `'${t.base}' fehlt noch in ${fertig!.id}`).toBe(true);
+    }
+  });
+
+  /** Jedes Zeichen kommt genau einmal neu — sonst stimmt der Vorrat nicht. */
+  it('führt kein Zeichen zweimal ein', () => {
+    const gesehen = new Set<string>();
+    for (const l of allLessons()) {
+      for (const c of l.newChars) {
+        expect(gesehen.has(c), `'${c}' wird in ${l.id} ein zweites Mal eingefuehrt`).toBe(false);
+        gesehen.add(c);
+      }
+    }
   });
 });

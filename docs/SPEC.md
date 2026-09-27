@@ -404,9 +404,9 @@ nicht gelernt wurden** (harte Regel, betrifft auch KI-Texte).
 | 1 | `L01` | `f j` + Leertaste | Grundstellung finden, Tastgefühl |
 | 2 | `L02` | `d k` | |
 | 3 | `L03` | `s l` | |
-| 4 | `L04` | `a ö` | Grundreihe komplett |
+| 4 | `L04` | `a ö` | Grundstellung steht (die acht Tasten unter den Fingern) |
 | 5 | `L05` | — | Wiederholung Grundreihe, erste echte Wörter |
-| 6 | `L06` | `g h` | Zeigefinger-Streckung |
+| 6 | `L06` | `g h ä` | **Grundreihe komplett** — die Streckungen: Zeigefinger zu `g`/`h`, kleiner Finger zu `ä` |
 | 7 | `L07` | `e i` | obere Reihe beginnt |
 | 8 | `L08` | `r u` | |
 | 9 | `L09` | `t z` | |
@@ -418,7 +418,7 @@ nicht gelernt wurden** (harte Regel, betrifft auch KI-Texte).
 | 15 | `L15` | `c ,` | |
 | 16 | `L16` | `x .` | erste Satzzeichen |
 | 17 | `L17` | `y n` | |
-| 18 | `L18` | `b ä` | |
+| 18 | `L18` | `b` | untere Reihe komplett |
 | 19 | `L19` | `ß -` | |
 | 20 | `L20` | Umschalt links/rechts | Großbuchstaben (Umschalt immer gegengleich!) |
 | 21 | `L21` | `! ?` `;` `:` | Satzzeichen mit Umschalt |
@@ -429,6 +429,33 @@ nicht gelernt wurden** (harte Regel, betrifft auch KI-Texte).
 
 **Wiederholungslektionen** (`L05`, `L13`, `L24`) und die adaptive Wiederholung
 (6.4) sind Pflicht, nicht optional.
+
+#### Welche Tasten der Lernpfad abdeckt — und welche nicht
+
+Vollständig: alle drei Buchstabenreihen (`L01`–`L19`), die Zahlenreihe (`L22`),
+Umschalt (`L20`), die Satzzeichen `. , ! ? ; : -` und `@ / ( ) "` mit AltGr
+(`L21`, `L23`). Das ganze Alphabet, `ä ö ü ß`, Groß und klein.
+
+**Bewusst nicht dabei**, Entscheidung des Nutzers vom 2026-09-27:
+
+| Zeichen | Lage |
+|---|---|
+| `+ * ~` | rechts neben `ü`, rechter kleiner Finger |
+| `#` | rechts neben `ä`, rechter kleiner Finger |
+| `< > \|` | links neben `y`, linker kleiner Finger |
+| `^ ´ \`` | Totentasten der Zahlenreihe |
+| `§ $ % & = ' _ °` | Umschaltebene der Zahlenreihe |
+| `€ { } [ ] \ µ ² ³` | AltGr-Ebene |
+
+**Die Begründung ist nicht „vergessen", sondern „zu wenig Ertrag".** Zehni
+richtet sich an ein Kind, das flüssig schreiben lernen soll; jede zusätzliche
+Taste kostet eine Lektion und bringt ein Zeichen, das in einem Schultext kaum
+vorkommt. Die Totentasten `^` und `´` sind dazu ein eigenes Thema — sie
+erzeugen erst zusammen mit dem nächsten Anschlag ein Zeichen, und das ist ein
+Sonderfall, der die Regel „eine Taste, ein Zeichen" durchbricht.
+
+Wer den Lernpfad erweitert, findet die Lücke als offenen Punkt in 15.19
+wieder — damit sie eine Entscheidung bleibt und nicht zum Versehen wird.
 
 ### 6.3 Bestehenskriterien
 
@@ -1010,6 +1037,48 @@ tippt, schießt dorthin. Damit ist auch die Zielwahl eine Übung.
 > **Aufwandshinweis:** Die Minispiele sind unter allen Punkten dieses Abschnitts
 > der mit Abstand teuerste und der einzige, der nichts zum Lernpfad beiträgt.
 > Sie stehen deshalb in Meilenstein M6 und dürfen kein früheres Ziel verzögern.
+
+##### Der Umbau vom 2026-09-20
+
+Der Nutzer: „ich finde das Elfmeter schießen ist immer noch etwas komisch und
+erfüllt nicht wirklich seinen Zweck." Nachgemessen hatte er in allen Punkten
+recht, und zwar deutlicher, als die Formulierung vermuten ließ.
+
+**1. Das Tippen entschied so gut wie nichts.** Ein Schuss in die freie Ecke
+ging *immer* hinein, auch mit Kraft null. Wer überhaupt nichts tippte, traf auf
+„leicht" in vier von fünf Fällen und selbst auf „schwer" in jedem zweiten. Das
+Spiel war ein Würfelspiel mit Tastaturgeräusch.
+
+Behoben durch `MINDESTKRAFT`: Unterhalb davon rollt der Ball dem Torwart in die
+Arme, egal wohin er gesprungen ist. **Nichts getippt heißt jetzt nie ein Tor**,
+voll getippt heißt immer eines.
+
+**2. Die Zielwörter waren nicht unterscheidbar.** In `L01` standen neun Felder
+mit `ff`, `jf`, `jj`, `jjj`, `ffj`, `fjf`, `jfj`, `fj`, `jff` — neun Kästchen,
+die sich nur in der Anordnung zweier Buchstaben unterschieden. Das ist keine
+Zielwahl, sondern ein Suchbild.
+
+Deshalb hat das Tor jetzt so viele Ecken, wie die Lektion **klar
+unterscheidbare** Wörter hergibt: zwei bis neun. Und jedes Feld bekommt einen
+eigenen Anfangsbuchstaben — damit steht mit dem ersten Anschlag fest, wohin der
+Schuss geht.
+
+**3. Das Aufladen war keine Tippübung.** Es lief eine Folge von sechzig
+zufälligen Einzelzeichen durch, die nie endete; man tippte, bis die Uhr ablief.
+Keine Wortgrenze, kein Rhythmus, kein erreichbares Ende. Jetzt steht dort eine
+Zeile aus echten Wörtern der Lektion, genau so lang, wie sich in der Ladezeit
+schaffen lässt. **Wer sie zu Ende tippt, schießt sofort** — der Schuss gehört
+dem Kind und nicht der Uhr. Ein Fehlgriff wird sichtbar, wie im Buchstabenregen.
+
+**4. Die Rückmeldung log.** „Der Torwart hat die Ecke erraten" stand auch dann
+da, wenn die Ecke frei war und der Schuss nur zu schwach. Jetzt sagt sie, woran
+es lag.
+
+**Die Schwierigkeitsstufen sind das geforderte Tempo**, und die Zahlen dafür
+sind aus dem Lernpfad genommen (`curriculum.ts`, `targetStrokesMin`): 60, 100
+und 140 Anschläge je Minute. „Schwer" ist damit genau so schnell wie das
+Schnellste, was der Kurs überhaupt je verlangt — **ein Spiel darf nicht mehr
+fordern als der Unterricht.**
 
 ### 8.11 Was ausdrücklich nicht gebaut wird
 
@@ -1702,6 +1771,38 @@ ist größer als `0.1.9`.
 Prüfungen: Ein fehlender Eintrag wird nicht laut. Die App zeigt dann einfach
 den vorigen, und niemand erfährt, was neu ist.
 
+### 11.5 Die Downloadseite
+
+Eine schlichte Seite mit einem Knopf „Zehni herunterladen", veröffentlicht über
+GitHub Pages aus `site/`. Sie ist die Adresse, die man weitergeben kann, ohne
+dass der Empfänger GitHub verstehen muss.
+
+**Sie wird einmal gebaut und danach nicht mehr angefasst.** Zwei Entscheidungen
+sorgen dafür:
+
+- Der Knopf zeigt auf `releases/latest/download/Zehni-Setup.exe`, die feste
+  Adresse aus 11.2. Ein Release ändert daran nichts.
+- Die Versionsnummer steht **nicht** im Quelltext, sondern wird beim Öffnen
+  nachgeladen. Eine eingetragene Nummer wäre genau das, was diese Seite
+  vermeiden soll: etwas, das bei jedem Release nachzuziehen ist.
+
+Scheitert das Nachladen — gesperrtes Skript, kein Netz, GitHub weist ab —, ist
+die Seite trotzdem vollständig. Der Knopf funktioniert, und statt der Nummer
+steht „Für Windows".
+
+**Nichts wird von fremden Servern geladen.** Keine Schrift, kein Skript, kein
+Zählpixel. Eine Seite, die für Medienkompetenz wirbt und nebenbei drei Firmen
+mitteilt, wer sie aufgerufen hat, wäre ihr eigener Gegenbeweis. `seite.test.ts`
+hält das fest, zusammen mit der festen Downloadadresse.
+
+Auf der Seite steht auch, dass Windows beim Installieren warnt und warum
+(11.2) — verschwiegen wäre es ein böses Erwachen, und wer eine Warnung
+wegklickt, ohne zu wissen warum, übt den Reflex, den Zehni abgewöhnen will.
+
+**Einmalig einzurichten:** In den Einstellungen des öffentlichen Repositorys
+unter *Pages* die Quelle auf *GitHub Actions* stellen. Ohne das scheitert der
+Workflow `seite.yml` mit „Pages is not enabled".
+
 ---
 
 ## 12. Nichtfunktionale Anforderungen
@@ -2033,6 +2134,21 @@ Punkt der Gamification und der einzige, der nichts zum Lernpfad beiträgt.
     Was dabei **nicht** angetastet wird, ist der dauerhafte Teil: Wo kommt das
     her, wer steht mit seinem Namen dafür ein, und „Ich weiß es nicht" ist
     eine richtige Antwort.
+19. **Die Randtasten fehlen im Lernpfad** (6.2). `+ * # < > ^ ´` und die
+    Umschalt- und AltGr-Ebene der Zahlenreihe kommen nie dran, darunter das
+    Eurozeichen.
+
+    **Entscheidung des Nutzers vom 2026-09-27: bewusst weglassen.** Der Punkt
+    steht hier, damit die Lücke eine Entscheidung bleibt. Wer sie später füllen
+    will, braucht ungefähr eine Lektion für die alltäglichen Zeichen
+    (`+ * % & = ' < > _` und `€`) — die Exoten (`§ ° µ ² ³`, geschweifte
+    Klammern) lohnen für ein Kind nicht.
+
+    Die Totentasten `^` und `´` sind dabei ein eigenes Thema und keine bloße
+    Ergänzung: Sie erzeugen erst mit dem nächsten Anschlag ein Zeichen. Das
+    bricht die Annahme „eine Taste, ein Zeichen", auf der `typing-engine.ts`
+    aufbaut — wer sie aufnimmt, fasst die Tippmechanik an, nicht nur die
+    Lektionsliste.
 
 ---
 
